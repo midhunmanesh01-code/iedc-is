@@ -73,31 +73,31 @@ export const Footer: React.FC = () => {
   }
 
   return (
-    <footer className="relative bg-[#070809] border-t border-white/10 pt-16 pb-12 overflow-hidden">
+    <footer className="relative bg-[#0C0D0E] border-t border-white/10 pt-16 pb-12 overflow-hidden">
       {/* Decorative Top Accent Line */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#B8FF00]/40 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#FF5500]/40 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-white/10">
           {/* Column 1: Brand & Organizer Identity */}
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-8 h-8 bg-[#0F1217] border border-white/20">
-                <span className="font-mono text-xs font-bold text-[#B8FF00]">IS</span>
+              <div className="flex items-center justify-center w-8 h-8 bg-[#131518] border border-white/20">
+                <span className="font-mono text-xs font-bold text-[#FF5500]">IS</span>
               </div>
-              <span className="font-['Space_Grotesk'] font-bold text-xl tracking-tight text-white">
+              <span className="font-display font-bold text-xl tracking-tight text-white">
                 {EVENT_CONFIG.name}
               </span>
             </div>
 
-            <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
-              Organized by <strong className="text-slate-200">{EVENT_CONFIG.organizer}</strong> –{' '}
+            <p className="text-sm text-zinc-400 max-w-sm leading-relaxed">
+              Organized by <strong className="text-zinc-200">{EVENT_CONFIG.organizer}</strong> –{' '}
               {EVENT_CONFIG.organizerFull}. Fostering hands-on technological entrepreneurship, rapid prototyping, and student innovation.
             </p>
 
             <div className="pt-2 flex items-center gap-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
-              <span className="font-mono text-xs text-slate-400">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#FF5500] animate-pulse" />
+              <span className="font-mono text-xs text-zinc-400">
                 24-Hour Student Ideathon Initiative
               </span>
             </div>
@@ -105,7 +105,7 @@ export const Footer: React.FC = () => {
 
           {/* Column 2: Quick Navigation */}
           <div className="lg:col-span-3 space-y-3">
-            <div className="font-mono text-xs uppercase tracking-[0.2em] text-[#B8FF00] font-semibold">
+            <div className="font-mono text-xs uppercase tracking-[0.2em] text-[#FF5500] font-semibold">
               // Navigation
             </div>
             <ul className="space-y-2 font-mono text-xs">
@@ -117,7 +117,7 @@ export const Footer: React.FC = () => {
                       e.preventDefault()
                       scrollTo(link.href)
                     }}
-                    className="text-slate-400 hover:text-white hover:underline transition-colors"
+                    className="text-zinc-400 hover:text-white hover:underline transition-colors"
                   >
                     {link.label}
                   </a>
@@ -128,19 +128,19 @@ export const Footer: React.FC = () => {
 
           {/* Column 3: Contact & Campus Information */}
           <div className="lg:col-span-4 space-y-3">
-            <div className="font-mono text-xs uppercase tracking-[0.2em] text-[#B8FF00] font-semibold">
+            <div className="font-mono text-xs uppercase tracking-[0.2em] text-[#FF5500] font-semibold">
               // Contact & Campus
             </div>
-            <ul className="space-y-2.5 text-xs text-slate-400">
+            <ul className="space-y-2.5 text-xs text-zinc-400">
               <li className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" />
                 <span>{EVENT_CONFIG.contact.address}</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-slate-500 shrink-0" />
+                <Mail className="w-4 h-4 text-zinc-500 shrink-0" />
                 <a
                   href={`mailto:${EVENT_CONFIG.contact.email}`}
-                  className="hover:text-[#B8FF00] transition-colors"
+                  className="hover:text-[#FF5500] transition-colors"
                 >
                   {EVENT_CONFIG.contact.email}
                 </a>
@@ -149,7 +149,7 @@ export const Footer: React.FC = () => {
 
             {/* Social Channels */}
             <div className="pt-3">
-              <div className="font-mono text-[11px] uppercase tracking-wider text-slate-500 mb-2">
+              <div className="font-mono text-[11px] uppercase tracking-wider text-zinc-500 mb-2">
                 Connect With IEDC CEC
               </div>
               <div className="flex items-center gap-2">
@@ -160,7 +160,7 @@ export const Footer: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="p-2 bg-[#0F1217] border border-white/10 hover:border-[#B8FF00]/50 hover:text-[#B8FF00] text-slate-400 transition-colors rounded-xs focus-visible:outline-2 focus-visible:outline-[#B8FF00]"
+                    className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-[#131518] border border-white/10 hover:border-[#FF5500]/50 hover:text-[#FF5500] text-zinc-400 transition-all rounded-xs focus-visible:outline-2 focus-visible:outline-[#FF5500] active:scale-95"
                   >
                     {getSocialIcon(social.iconName)}
                   </a>
@@ -171,7 +171,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar: Copyright & Back to Top */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
           <div>
             © {EVENT_CONFIG.edition} {EVENT_CONFIG.organizer}. All rights reserved.
           </div>
@@ -181,7 +181,7 @@ export const Footer: React.FC = () => {
             <button
               type="button"
               onClick={handleBackToTop}
-              className="inline-flex items-center gap-1.5 text-slate-400 hover:text-[#B8FF00] transition-colors p-1 focus-visible:outline-2 focus-visible:outline-[#B8FF00]"
+              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-[#FF5500] transition-colors p-1 focus-visible:outline-2 focus-visible:outline-[#FF5500]"
               aria-label="Back to top"
             >
               <span>TOP</span>

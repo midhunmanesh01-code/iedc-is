@@ -39,7 +39,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses =
-    'inline-flex items-center justify-center font-mono font-medium tracking-wide uppercase transition-all duration-200 select-none cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B8FF00] disabled:cursor-not-allowed disabled:opacity-50'
+    'inline-flex items-center justify-center font-mono font-medium tracking-wide uppercase transition-all duration-200 select-none cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF5500] disabled:cursor-not-allowed disabled:opacity-50'
 
   const sizeClasses: Record<ButtonSize, string> = {
     sm: 'text-xs px-3.5 py-1.5 gap-1.5 rounded-xs tracking-wider',
@@ -49,13 +49,13 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantClasses: Record<ButtonVariant, string> = {
     primary:
-      'bg-[#B8FF00] text-black font-semibold hover:bg-[#CCFF00] active:translate-y-[1px] shadow-[0_0_15px_rgba(184,255,0,0.25)] hover:shadow-[0_0_22px_rgba(184,255,0,0.4)]',
+      'bg-[#FF5500] text-white font-semibold hover:bg-[#FF6B1A] active:translate-y-[1px] shadow-[0_0_18px_rgba(255,85,0,0.35)] hover:shadow-[0_0_26px_rgba(255,85,0,0.5)]',
     secondary:
-      'bg-[#0F1217] text-white border border-white/10 hover:border-[#B8FF00]/40 hover:bg-[#151921] active:translate-y-[1px]',
+      'bg-[#131518] text-white border border-white/10 hover:border-[#FF5500]/50 hover:bg-[#1A1D22] active:translate-y-[1px]',
     outline:
-      'bg-transparent text-[#B8FF00] border border-[#B8FF00]/60 hover:bg-[#B8FF00] hover:text-black active:translate-y-[1px]',
+      'bg-transparent text-[#FF5500] border border-[#FF5500]/60 hover:bg-[#FF5500] hover:text-white active:translate-y-[1px]',
     ghost:
-      'bg-transparent text-slate-300 hover:text-[#B8FF00] hover:bg-white/5 active:translate-y-[1px]',
+      'bg-transparent text-slate-300 hover:text-[#FF5500] hover:bg-white/5 active:translate-y-[1px]',
   }
 
   const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`

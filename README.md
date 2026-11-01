@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-7.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Lenis](https://img.shields.io/badge/Lenis-Smooth_Scroll-000000?style=flat-square)](https://github.com/darkroomengineering/lenis)
-[![License: MIT](https://img.shields.io/badge/License-MIT-B8FF00?style=flat-square&logoColor=black)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-FF5500?style=flat-square&logoColor=white)](./LICENSE)
 
 ---
 
@@ -15,7 +15,7 @@
 
 **IDEA SPRINT 2026** is an intensive 24-hour student ideathon engineered to challenge multidisciplinary undergraduate teams to transform hypotheses and raw concepts into viable, defensible venture prototypes.
 
-This repository contains the production-ready frontend microsite architecture. Built with an editorial dark-tech aesthetic, the platform features high-contrast typography, subtle technical grid overlays, electric lime accents (`#B8FF00`), hardware-accelerated smooth scrolling, and complete modular section decoupling.
+This repository contains the production-ready frontend microsite architecture. Built with an adaptive industrial-tech aesthetic, the platform features high-contrast typography, subtle technical grid overlays, international safety orange (`#FF5500`), solar amber (`#F59E0B`), electric cyan (`#38BDF8`), and emerald accents, hardware-accelerated smooth scrolling, and complete modular section decoupling.
 
 ---
 
@@ -34,7 +34,7 @@ src/
 │   ├── common/              # Universal shared components
 │   │   ├── Button.tsx       # Polymorphic button/anchor with variants & loading state
 │   │   ├── Container.tsx    # Responsive grid container with optional tech borders
-│   │   ├── Preloader.tsx    # Initial brand loading splash screen
+│   │   ├── Preloader.tsx    # Minimalist cinematic launch sequence with WebGL MagicRings & Idea2026
 │   │   └── SectionHeading.tsx # High-contrast editorial headers with mono tags
 │   │
 │   ├── layout/              # Structural layout components
@@ -44,7 +44,8 @@ src/
 │   │
 │   └── ui/                  # Atom-level primitives
 │       ├── Badge.tsx        # Technical status badges and pills
-│       └── Card.tsx         # Dark surface card with optional corner crosshairs
+│       ├── Card.tsx         # Dark surface card with optional corner crosshairs
+│       └── MagicRings/      # React Bits WebGL2 concentric energy rings shader component
 │
 ├── sections/                # Independent, self-contained event sections
 │   ├── Hero/
@@ -151,10 +152,13 @@ The styling foundation is defined using Tailwind CSS v4 design tokens in [`src/s
 
 | Token | Value | Role |
 | :--- | :--- | :--- |
-| `--color-background` | `#08090A` | Deep charcoal primary canvas |
-| `--color-surface` | `#0F1217` | Card & panel background layer |
-| `--color-surface-subtle` | `#151921` | Secondary surface hover state |
-| `--color-accent` | `#B8FF00` | Electric lime high-contrast accent |
+| `--color-background` | `#0C0D0E` | Deep matte carbon primary canvas |
+| `--color-surface` | `#131518` | Elevated card & panel surface layer |
+| `--color-surface-subtle` | `#191C21` | Secondary surface hover state |
+| `--color-accent` | `#FF5500` | International safety orange brand accent |
+| `--color-accent-amber` | `#F59E0B` | Solar amber milestone & prize accent |
+| `--color-accent-cyan` | `#38BDF8` | Technical cyan architecture accent |
+| `--color-accent-emerald` | `#10B981` | Verification & live admittance accent |
 | `--color-border-subtle` | `rgba(255, 255, 255, 0.07)` | Controlled 1px borders |
 | `--font-sans` | `Plus Jakarta Sans` | Primary editorial body copy |
 | `--font-display` | `Space Grotesk` | High-impact headings |

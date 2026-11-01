@@ -15,7 +15,7 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   const variantClasses: Record<BadgeVariant, string> = {
-    accent: 'bg-[#B8FF00]/10 text-[#B8FF00] border-[#B8FF00]/30',
+    accent: 'bg-[#FF5500]/15 text-[#FF5500] border-[#FF5500]/35 font-semibold',
     neutral: 'bg-white/5 text-slate-300 border-white/10',
     outline: 'bg-transparent text-slate-400 border-white/15',
     warning: 'bg-amber-500/10 text-amber-300 border-amber-500/30',

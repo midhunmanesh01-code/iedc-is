@@ -111,46 +111,46 @@ export const RegistrationForm: React.FC = () => {
       <div
         role="region"
         aria-live="polite"
-        className="p-8 bg-[#0F1217] border border-[#B8FF00]/40 text-left space-y-6"
+        className="p-8 bg-[#131518] border border-emerald-500/40 text-left space-y-6 rounded-xs"
       >
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-[#B8FF00]/10 border border-[#B8FF00]/30 rounded-xs">
-            <CheckCircle2 className="w-6 h-6 text-[#B8FF00]" />
+          <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-xs">
+            <CheckCircle2 className="w-6 h-6 text-emerald-400" />
           </div>
           <div>
-            <h3 className="font-['Space_Grotesk'] font-bold text-2xl text-white">
+            <h3 className="font-display font-bold text-2xl text-white">
               Registration Draft Recorded!
             </h3>
-            <p className="font-mono text-xs text-[#B8FF00] uppercase tracking-wider">
+            <p className="font-mono text-xs text-emerald-400 uppercase tracking-wider font-semibold">
               STATUS: PRE-REGISTERED // CONFIRMATION PENDING
             </p>
           </div>
         </div>
 
-        <p className="text-sm text-slate-300 leading-relaxed">
+        <p className="text-sm text-zinc-300 leading-relaxed">
           Thank you for registering team <strong className="text-white">"{submittedTeam.teamName}"</strong> for IDEA SPRINT 2026. Your team lead details have been validated by the client-side system.
         </p>
 
         {/* Confirmation Summary Card */}
-        <div className="p-4 bg-[#08090A] border border-white/10 rounded-xs font-mono text-xs space-y-2">
+        <div className="p-4 bg-[#0C0D0E] border border-white/10 rounded-xs font-mono text-xs space-y-2">
           <div className="flex justify-between border-b border-white/10 pb-2">
-            <span className="text-slate-400">Team Leader:</span>
+            <span className="text-zinc-400">Team Leader:</span>
             <span className="text-white font-medium">{submittedTeam.fullName}</span>
           </div>
           <div className="flex justify-between border-b border-white/10 pb-2">
-            <span className="text-slate-400">Email:</span>
+            <span className="text-zinc-400">Email:</span>
             <span className="text-white font-medium">{submittedTeam.email}</span>
           </div>
           <div className="flex justify-between border-b border-white/10 pb-2">
-            <span className="text-slate-400">Institution:</span>
+            <span className="text-zinc-400">Institution:</span>
             <span className="text-white font-medium">{submittedTeam.institution}</span>
           </div>
           <div className="flex justify-between border-b border-white/10 pb-2">
-            <span className="text-slate-400">Track:</span>
-            <span className="text-[#B8FF00] font-medium">{submittedTeam.primaryDomain}</span>
+            <span className="text-zinc-400">Track:</span>
+            <span className="text-[#FF5500] font-medium">{submittedTeam.primaryDomain}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-400">Squad Size:</span>
+            <span className="text-zinc-400">Squad Size:</span>
             <span className="text-white font-medium">{submittedTeam.teamSize} Members</span>
           </div>
         </div>
@@ -173,25 +173,25 @@ export const RegistrationForm: React.FC = () => {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="p-6 sm:p-8 bg-[#0F1217] border border-white/10 space-y-6 text-left"
+      className="p-4 sm:p-8 bg-[#131518] border border-white/10 space-y-6 text-left rounded-xs"
     >
       <div className="border-b border-white/10 pb-4">
-        <h3 className="font-['Space_Grotesk'] font-bold text-xl sm:text-2xl text-white">
+        <h3 className="font-display font-bold text-xl sm:text-2xl text-white">
           Team Registration Application
         </h3>
-        <p className="font-mono text-xs text-slate-400 mt-1">
+        <p className="font-mono text-xs text-zinc-400 mt-1">
           Complete the form below to register your squad for IDEA SPRINT 2026.
         </p>
       </div>
 
       {/* Team Leader Contact Information */}
       <div>
-        <div className="font-mono text-xs uppercase tracking-wider text-[#B8FF00] font-semibold mb-3">
+        <div className="font-mono text-xs uppercase tracking-wider text-[#FF5500] font-semibold mb-3">
           // 01. Team Leader Information
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="reg-fullName" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-fullName" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Full Name *
             </label>
             <input
@@ -199,12 +199,13 @@ export const RegistrationForm: React.FC = () => {
               name="fullName"
               type="text"
               autoComplete="name"
+              enterKeyHint="next"
               required
               value={formData.fullName}
               onChange={handleChange}
               aria-invalid={!!errors.fullName}
               aria-describedby={errors.fullName ? 'fullName-error' : undefined}
-              className={`w-full bg-[#08090A] border text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#B8FF00] ${
+              className={`w-full bg-[#0C0D0E] border text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5500] ${
                 errors.fullName ? 'border-red-500' : 'border-white/15 hover:border-white/30'
               }`}
               placeholder="e.g. Maya Chen"
@@ -217,20 +218,22 @@ export const RegistrationForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="reg-email" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-email" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Official Email Address *
             </label>
             <input
               id="reg-email"
               name="email"
               type="email"
+              inputMode="email"
               autoComplete="email"
+              enterKeyHint="next"
               required
               value={formData.email}
               onChange={handleChange}
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'email-error' : undefined}
-              className={`w-full bg-[#08090A] border text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#B8FF00] ${
+              className={`w-full bg-[#0C0D0E] border text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5500] ${
                 errors.email ? 'border-red-500' : 'border-white/15 hover:border-white/30'
               }`}
               placeholder="e.g. name@ceconline.edu"
@@ -243,20 +246,22 @@ export const RegistrationForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="reg-phone" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-phone" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Phone Number (WhatsApp) *
             </label>
             <input
               id="reg-phone"
               name="phone"
               type="tel"
+              inputMode="tel"
               autoComplete="tel"
+              enterKeyHint="next"
               required
               value={formData.phone}
               onChange={handleChange}
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? 'phone-error' : undefined}
-              className={`w-full bg-[#08090A] border text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#B8FF00] ${
+              className={`w-full bg-[#0C0D0E] border text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5500] ${
                 errors.phone ? 'border-red-500' : 'border-white/15 hover:border-white/30'
               }`}
               placeholder="+91 98765 43210"
@@ -269,7 +274,7 @@ export const RegistrationForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="reg-institution" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-institution" className="block text-xs font-mono text-zinc-300 mb-1.5">
               College / Institution *
             </label>
             <input
@@ -277,12 +282,13 @@ export const RegistrationForm: React.FC = () => {
               name="institution"
               type="text"
               autoComplete="organization"
+              enterKeyHint="next"
               required
               value={formData.institution}
               onChange={handleChange}
               aria-invalid={!!errors.institution}
               aria-describedby={errors.institution ? 'institution-error' : undefined}
-              className={`w-full bg-[#08090A] border text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#B8FF00] ${
+              className={`w-full bg-[#0C0D0E] border text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5500] ${
                 errors.institution ? 'border-red-500' : 'border-white/15 hover:border-white/30'
               }`}
               placeholder="e.g. College of Engineering Chengannur"
@@ -295,19 +301,20 @@ export const RegistrationForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="reg-department" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-department" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Department / Branch *
             </label>
             <input
               id="reg-department"
               name="department"
               type="text"
+              enterKeyHint="next"
               required
               value={formData.department}
               onChange={handleChange}
               aria-invalid={!!errors.department}
               aria-describedby={errors.department ? 'department-error' : undefined}
-              className={`w-full bg-[#08090A] border text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#B8FF00] ${
+              className={`w-full bg-[#0C0D0E] border text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5500] ${
                 errors.department ? 'border-red-500' : 'border-white/15 hover:border-white/30'
               }`}
               placeholder="e.g. Computer Science & Engineering"
@@ -320,7 +327,7 @@ export const RegistrationForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="reg-yearOfStudy" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-yearOfStudy" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Year of Study *
             </label>
             <select
@@ -328,7 +335,7 @@ export const RegistrationForm: React.FC = () => {
               name="yearOfStudy"
               value={formData.yearOfStudy}
               onChange={handleChange}
-              className="w-full bg-[#08090A] border border-white/15 text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors hover:border-white/30 focus-visible:outline-2 focus-visible:outline-[#B8FF00]"
+              className="w-full bg-[#0C0D0E] border border-white/15 text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors hover:border-white/30 focus-visible:outline-2 focus-visible:outline-[#FF5500]"
             >
               <option value="1st Year">1st Year (Freshman)</option>
               <option value="2nd Year">2nd Year (Sophomore)</option>
@@ -342,24 +349,25 @@ export const RegistrationForm: React.FC = () => {
 
       {/* Squad & Track Information */}
       <div className="pt-2">
-        <div className="font-mono text-xs uppercase tracking-wider text-[#B8FF00] font-semibold mb-3">
+        <div className="font-mono text-xs uppercase tracking-wider text-sky-400 font-semibold mb-3">
           // 02. Squad & Innovation Track
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="reg-teamName" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-teamName" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Team Name *
             </label>
             <input
               id="reg-teamName"
               name="teamName"
               type="text"
+              enterKeyHint="next"
               required
               value={formData.teamName}
               onChange={handleChange}
               aria-invalid={!!errors.teamName}
               aria-describedby={errors.teamName ? 'teamName-error' : undefined}
-              className={`w-full bg-[#08090A] border text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#B8FF00] ${
+              className={`w-full bg-[#0C0D0E] border text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5500] ${
                 errors.teamName ? 'border-red-500' : 'border-white/15 hover:border-white/30'
               }`}
               placeholder="e.g. Quantum Pioneers"
@@ -372,7 +380,7 @@ export const RegistrationForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="reg-teamSize" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-teamSize" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Total Team Size (2 - 4 Members) *
             </label>
             <select
@@ -380,7 +388,7 @@ export const RegistrationForm: React.FC = () => {
               name="teamSize"
               value={formData.teamSize}
               onChange={handleChange}
-              className="w-full bg-[#08090A] border border-white/15 text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors hover:border-white/30 focus-visible:outline-2 focus-visible:outline-[#B8FF00]"
+              className="w-full bg-[#0C0D0E] border border-white/15 text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors hover:border-white/30 focus-visible:outline-2 focus-visible:outline-[#FF5500]"
             >
               <option value={2}>2 Members</option>
               <option value={3}>3 Members</option>
@@ -389,7 +397,7 @@ export const RegistrationForm: React.FC = () => {
           </div>
 
           <div className="sm:col-span-2">
-            <label htmlFor="reg-primaryDomain" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-primaryDomain" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Primary Innovation Track / Domain *
             </label>
             <select
@@ -397,7 +405,7 @@ export const RegistrationForm: React.FC = () => {
               name="primaryDomain"
               value={formData.primaryDomain}
               onChange={handleChange}
-              className="w-full bg-[#08090A] border border-white/15 text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors hover:border-white/30 focus-visible:outline-2 focus-visible:outline-[#B8FF00]"
+              className="w-full bg-[#0C0D0E] border border-white/15 text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors hover:border-white/30 focus-visible:outline-2 focus-visible:outline-[#FF5500]"
             >
               <option value="AI & Machine Learning">AI & Machine Learning</option>
               <option value="CleanTech & Energy">CleanTech & Energy</option>
@@ -408,16 +416,17 @@ export const RegistrationForm: React.FC = () => {
           </div>
 
           <div className="sm:col-span-2">
-            <label htmlFor="reg-ideaSummary" className="block text-xs font-mono text-slate-300 mb-1.5">
+            <label htmlFor="reg-ideaSummary" className="block text-xs font-mono text-zinc-300 mb-1.5">
               Preliminary Concept or Problem Thesis (Optional)
             </label>
             <textarea
               id="reg-ideaSummary"
               name="ideaSummary"
               rows={3}
+              enterKeyHint="done"
               value={formData.ideaSummary}
               onChange={handleChange}
-              className="w-full bg-[#08090A] border border-white/15 text-sm text-white px-3.5 py-2.5 rounded-xs transition-colors hover:border-white/30 focus-visible:outline-2 focus-visible:outline-[#B8FF00]"
+              className="w-full bg-[#0C0D0E] border border-white/15 text-base sm:text-sm text-white px-3.5 py-3 sm:py-2.5 rounded-xs transition-colors hover:border-white/30 focus-visible:outline-2 focus-visible:outline-[#FF5500]"
               placeholder="Briefly state the challenge your squad intends to tackle (can be refined during the sprint)..."
             />
           </div>
@@ -433,9 +442,9 @@ export const RegistrationForm: React.FC = () => {
             type="checkbox"
             checked={formData.agreedToRules}
             onChange={handleChange}
-            className="w-4 h-4 mt-0.5 rounded-xs accent-[#B8FF00] bg-[#08090A] border border-white/20 focus-visible:outline-2 focus-visible:outline-[#B8FF00]"
+            className="w-4 h-4 mt-0.5 rounded-xs accent-[#FF5500] bg-[#0C0D0E] border border-white/20 focus-visible:outline-2 focus-visible:outline-[#FF5500]"
           />
-          <span className="text-xs text-slate-300 leading-relaxed">
+          <span className="text-xs text-zinc-300 leading-relaxed">
             I confirm that all squad members are active undergraduate/graduate students, and we agree to abide by the IEDC BOOTCAMP CEC code of conduct, intellectual integrity guidelines, and sprint schedule.
           </span>
         </label>
@@ -449,7 +458,7 @@ export const RegistrationForm: React.FC = () => {
 
       {/* Submit Button */}
       <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-        <span className="font-mono text-[11px] text-slate-500">
+        <span className="font-mono text-[11px] text-zinc-500">
           Client-side validation enabled • No credentials stored
         </span>
 
@@ -459,6 +468,7 @@ export const RegistrationForm: React.FC = () => {
           size="lg"
           isLoading={isSubmitting}
           rightIcon={<ArrowRight className="w-4 h-4" />}
+          className="w-full sm:w-auto min-h-[48px] justify-center active:scale-[0.98]"
         >
           Submit Team Application
         </Button>

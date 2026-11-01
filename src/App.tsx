@@ -10,7 +10,7 @@ import { Registration } from '@/sections/Registration'
 export const App: React.FC = () => {
   return (
     <>
-      <Preloader minDisplayTime={600} />
+      <Preloader />
       <PageLayout>
         <Hero />
         <About />

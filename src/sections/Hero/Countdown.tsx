@@ -31,38 +31,38 @@ export const Countdown: React.FC = () => {
             </>
           ) : isCompleted ? (
             <>
-              <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-ping" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[#B8FF00] font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#FF5500] animate-ping" />
+              <span className="font-mono text-xs uppercase tracking-widest text-[#FF5500] font-medium">
                 Sprint Active // 24H Clock Running
               </span>
             </>
           ) : (
             <>
-              <span className="w-2 h-2 rounded-full bg-[#B8FF00] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[#B8FF00] font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#FF5500] animate-pulse" />
+              <span className="font-mono text-xs uppercase tracking-widest text-[#FF5500] font-medium">
                 T-Minus to Sprint Kickoff
               </span>
             </>
           )}
         </div>
 
-        <div className="flex items-center gap-1.5 text-slate-500 text-xs font-mono">
+        <div className="flex items-center gap-1.5 text-zinc-500 text-xs font-mono">
           <Clock className="w-3.5 h-3.5" />
           <span>24H SPRINT</span>
         </div>
       </div>
 
       {/* Numerical Counter Grid */}
-      <div className="grid grid-cols-4 gap-2 sm:gap-3 bg-[#0F1217] border border-white/10 p-3 sm:p-4 rounded-xs">
+      <div className="grid grid-cols-4 gap-1.5 sm:gap-3 bg-[#131518] border border-white/10 p-2 sm:p-4 rounded-xs">
         {timeUnits.map((unit) => (
           <div
             key={unit.label}
-            className="flex flex-col items-center justify-center p-2.5 sm:p-3 bg-[#08090A] border border-white/5 relative group"
+            className="flex flex-col items-center justify-center p-2 sm:p-3 bg-[#0C0D0E] border border-white/5 relative group"
           >
-            <div className="font-mono text-2xl sm:text-4xl font-bold tracking-tight text-white group-hover:text-[#B8FF00] transition-colors">
+            <div className="font-mono text-xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white group-hover:text-[#FF5500] transition-colors">
               {unit.value}
             </div>
-            <div className="font-mono text-[10px] sm:text-xs uppercase tracking-wider text-slate-400 mt-1">
+            <div className="font-mono text-[9px] sm:text-xs uppercase tracking-wider text-zinc-400 mt-0.5 sm:mt-1">
               {unit.label}
             </div>
 
@@ -75,7 +75,7 @@ export const Countdown: React.FC = () => {
 
       {/* Explanatory notice when date is pending */}
       {isPending && (
-        <div className="mt-3 flex items-start gap-2 text-xs font-mono text-slate-400 bg-white/[0.02] border border-white/5 px-3 py-2 rounded-xs">
+        <div className="mt-3 flex items-start gap-2 text-xs font-mono text-zinc-400 bg-white/[0.02] border border-white/5 px-3 py-2 rounded-xs">
           <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
           <span>
             Target schedule is currently under final review by the organizing committee. Countdown initiates upon date announcement.
@@ -84,8 +84,8 @@ export const Countdown: React.FC = () => {
       )}
 
       {!isPending && EVENT_CONFIG.startDate && (
-        <div className="mt-3 flex items-center gap-2 text-xs font-mono text-slate-400">
-          <Calendar className="w-3.5 h-3.5 text-[#B8FF00]" />
+        <div className="mt-3 flex items-center gap-2 text-xs font-mono text-zinc-400">
+          <Calendar className="w-3.5 h-3.5 text-[#FF5500]" />
           <span>Sprint Date: {new Date(EVENT_CONFIG.startDate).toLocaleDateString()}</span>
         </div>
       )}
