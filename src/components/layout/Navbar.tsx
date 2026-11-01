@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
 import { NAVIGATION_LINKS, NAV_CONFIG } from '@/config/navigation'
 import { Button } from '@/components/common/Button'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
@@ -35,7 +36,7 @@ export const Navbar: React.FC = () => {
       >
         <nav
           aria-label="Main navigation"
-          className={`mx-auto flex flex-col transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`mx-auto flex flex-col transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isScrolled || isMobileMenuOpen
               ? 'bg-[#131518]/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 py-2 px-4 sm:px-5'
               : 'bg-transparent border-transparent py-3 sm:py-4 px-0'
@@ -109,6 +110,7 @@ export const Navbar: React.FC = () => {
 
             {/* Right Column: Action CTA & Mobile Hamburger */}
             <div className="flex items-center justify-end gap-2.5">
+              {/* Desktop-only Action CTA */}
               <div className="hidden md:flex items-center">
                 <Button
                   variant="primary"
@@ -130,17 +132,17 @@ export const Navbar: React.FC = () => {
                   aria-expanded={isMobileMenuOpen}
                   aria-controls="mobile-navigation"
                   aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-                  className="text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors focus:outline-none flex items-center justify-center overflow-hidden relative w-8 h-8"
+                  className="text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors focus:outline-none flex items-center justify-center overflow-hidden relative w-8 h-8 cursor-pointer"
                 >
                   <div
-                    className={`absolute transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    className={`absolute transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isMobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
                     }`}
                   >
                     <X className="w-4 h-4 text-white" />
                   </div>
                   <div
-                    className={`absolute transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    className={`absolute transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isMobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
                     }`}
                   >
@@ -151,46 +153,73 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile Navigation Drawer */}
-          <div
-            id="mobile-navigation"
-            className={`grid transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden ${
-              isMobileMenuOpen ? 'grid-rows-[1fr] opacity-100 mt-3' : 'grid-rows-[0fr] opacity-0 mt-0 pointer-events-none'
-            }`}
-          >
-            <div className="overflow-hidden">
-              <div className="flex flex-col space-y-1 pt-3 pb-2 border-t border-white/10">
-                {NAVIGATION_LINKS.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    className="block px-3.5 py-2 font-mono text-sm uppercase tracking-wider text-zinc-300 hover:text-[#FF5500] hover:bg-white/5 rounded-xl transition-all duration-200"
-                  >
-                    <span>{link.label}</span>
-                    {link.badge && (
-                      <span className="ml-2 px-1.5 py-0.5 text-[10px] font-mono tracking-tight bg-[#FF5500]/15 text-[#FF5500] border border-[#FF5500]/30 rounded-xs">
-                        {link.badge}
-                      </span>
-                    )}
-                  </a>
-                ))}
+          {/* Smooth Fluid Motion Mobile Navigation Drawer */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div
+                id="mobile-navigation"
+                key="mobile-drawer"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{
+                  opacity: 1,
+                  height: 'auto',
+                  transition: {
+                    height: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
+                    opacity: { duration: 0.28, ease: 'easeOut' },
+                  },
+                }}
+                exit={{
+                  opacity: 0,
+                  height: 0,
+                  transition: {
+                    height: { duration: 0.26, ease: [0.32, 0, 0.67, 0] },
+                    opacity: { duration: 0.18, ease: 'easeIn' },
+                  },
+                }}
+                className="overflow-hidden md:hidden"
+              >
+                <motion.div
+                  initial={{ y: -8, opacity: 0 }}
+                  animate={{
+                    y: 0,
+                    opacity: 1,
+                    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: 0.05 },
+                  }}
+                  exit={{ y: -8, opacity: 0, transition: { duration: 0.18 } }}
+                  className="flex flex-col space-y-1 pt-3 pb-2 border-t border-white/10"
+                >
+                  {NAVIGATION_LINKS.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={(e) => handleNavClick(e, link.href)}
+                      className="block px-3.5 py-2 font-mono text-sm uppercase tracking-wider text-zinc-300 hover:text-[#FF5500] hover:bg-white/5 rounded-xl transition-all duration-200"
+                    >
+                      <span>{link.label}</span>
+                      {link.badge && (
+                        <span className="ml-2 px-1.5 py-0.5 text-[10px] font-mono tracking-tight bg-[#FF5500]/15 text-[#FF5500] border border-[#FF5500]/30 rounded-xs">
+                          {link.badge}
+                        </span>
+                      )}
+                    </a>
+                  ))}
 
-                <div className="pt-2 px-1">
-                  <Button
-                    variant="primary"
-                    size="md"
-                    href={NAV_CONFIG.ctaHref}
-                    onClick={(e) => handleNavClick(e, NAV_CONFIG.ctaHref)}
-                    className="w-full justify-center !rounded-xl"
-                    rightIcon={<ArrowUpRight className="w-4 h-4" />}
-                  >
-                    {NAV_CONFIG.ctaText}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <div className="pt-2 px-1">
+                    <Button
+                      variant="primary"
+                      size="md"
+                      href={NAV_CONFIG.ctaHref}
+                      onClick={(e) => handleNavClick(e, NAV_CONFIG.ctaHref)}
+                      className="w-full justify-center !rounded-xl"
+                      rightIcon={<ArrowUpRight className="w-4 h-4" />}
+                    >
+                      {NAV_CONFIG.ctaText}
+                    </Button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </nav>
       </div>
     </header>

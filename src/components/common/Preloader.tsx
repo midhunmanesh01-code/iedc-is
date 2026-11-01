@@ -74,12 +74,12 @@ export const Preloader: React.FC<PreloaderProps> = ({
           speed={1.05}
           lineThickness={1.8}
           glow={1.3}
-          baseRadius={0.40}
+          baseRadius={0.4}
           radiusStep={0.075}
           expansion={0.06}
           taper={1.15}
           tilt={0}
-          spin={0.10}
+          spin={0.1}
           dispersion={0}
           grain={0}
           opacity={0.94}
@@ -99,7 +99,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
       />
 
       {/* Center Content: Optically Balanced for Mobile & Desktop in Orbitron */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4 max-w-[90vw]">
+      <div className="relative z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4 max-w-[96vw]">
         <div
           className={`flex flex-col items-center justify-center text-center loader-glow-container transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isEntered
@@ -107,17 +107,17 @@ export const Preloader: React.FC<PreloaderProps> = ({
               : 'opacity-0 scale-90 blur-sm translate-y-2'
           }`}
         >
-          {/* IDEA SPRINT with calibrated mobile sizing and optical centering */}
+          {/* IDEA SPRINT with larger high-impact mobile sizing */}
           <span
-            className="loader-text-shimmer text-xl xs:text-2xl sm:text-3xl md:text-5xl font-black uppercase tracking-[0.16em] pl-[0.16em] leading-tight select-none"
+            className="loader-text-shimmer text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-[0.12em] sm:tracking-[0.14em] pl-[0.12em] sm:pl-[0.14em] leading-tight select-none whitespace-nowrap"
             style={{ fontFamily: '"Orbitron", sans-serif' }}
           >
             IDEA SPRINT
           </span>
 
-          {/* 2026 in luminous warm gold-to-amber transition */}
+          {/* 2026 with larger mobile scale */}
           <span
-            className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF9900] via-[#FFB800] to-[#FFD54F] text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-black tracking-[0.2em] pl-[0.2em] drop-shadow-[0_0_30px_rgba(255,184,0,0.65)] mt-1.5 sm:mt-2 leading-none select-none"
+            className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF9900] via-[#FFB800] to-[#FFD54F] text-5xl sm:text-6xl md:text-7xl font-black tracking-[0.14em] sm:tracking-[0.16em] pl-[0.14em] sm:pl-[0.16em] drop-shadow-[0_0_30px_rgba(255,184,0,0.65)] mt-1.5 sm:mt-2 leading-none select-none whitespace-nowrap"
             style={{ fontFamily: '"Orbitron", sans-serif' }}
           >
             2026
