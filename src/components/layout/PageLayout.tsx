@@ -1,7 +1,6 @@
 import React from 'react'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
-import { MobileBottomNav } from './MobileBottomNav'
 
 export interface PageLayoutProps {
   readonly children: React.ReactNode
@@ -32,12 +31,11 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
 
       <Navbar />
 
-      <main id="main-content" className="flex-1 relative z-10 pt-16 sm:pt-20 pb-20 md:pb-0">
+      <main id="main-content" className="flex-1 relative z-10 pt-16 sm:pt-20">
         {children}
       </main>
 
       <Footer />
-      <MobileBottomNav />
     </div>
   )
 }

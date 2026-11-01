@@ -3,6 +3,7 @@ import { Globe, Mail, MapPin, ArrowUp } from 'lucide-react'
 import { EVENT_CONFIG } from '@/config/event'
 import { NAVIGATION_LINKS } from '@/config/navigation'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
+import iedcLogo from '@/assets/logos/iedc-logo-2.png'
 
 const InstagramIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
   <svg
@@ -73,7 +74,7 @@ export const Footer: React.FC = () => {
   }
 
   return (
-    <footer className="relative bg-[#0C0D0E] border-t border-white/10 pt-16 pb-12 overflow-hidden">
+    <footer id="contact" className="relative bg-[#0C0D0E] border-t border-white/10 pt-16 pb-12 overflow-hidden">
       {/* Decorative Top Accent Line */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#FF5500]/40 to-transparent" />
 
@@ -82,9 +83,11 @@ export const Footer: React.FC = () => {
           {/* Column 1: Brand & Organizer Identity */}
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-8 h-8 bg-[#131518] border border-white/20">
-                <span className="font-mono text-xs font-bold text-[#FF5500]">IS</span>
-              </div>
+              <img
+                src={iedcLogo}
+                alt="IEDC BOOTCAMP CEC Logo"
+                className="h-8 w-auto object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+              />
               <span className="font-display font-bold text-xl tracking-tight text-white">
                 {EVENT_CONFIG.name}
               </span>

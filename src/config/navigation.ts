@@ -8,8 +8,8 @@ export const NAVIGATION_LINKS: readonly NavItem[] = [
   { label: 'Overview', href: '#hero' },
   { label: 'About', href: '#about' },
   { label: 'Schedule', href: '#schedule' },
-  { label: 'Idea Forge', href: '#idea-forge', badge: 'Interactive' },
-  { label: 'Register', href: '#register' },
+  { label: 'Idea Forge', href: '#idea-forge' },
+  { label: 'FAQs', href: '#faq' },
 ] as const
 
 export const NAV_CONFIG = {

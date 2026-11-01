@@ -15,7 +15,7 @@ export const Registration: React.FC = () => {
     >
       <Container size="default">
         <SectionHeading
-          tag="04 // APPLICATION TERMINAL"
+          tag="05 // APPLICATION TERMINAL"
           title="Secure Your Squad's Slot."
           subtitle="Registrations for IDEA SPRINT 2026 are evaluated on team composition and initial innovation intent. Complete the verified client application below."
         />
