@@ -12,8 +12,23 @@ export const Navbar: React.FC = () => {
   const { scrollTo } = useSmoothScroll()
 
   useEffect(() => {
+    let ticking = false
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY
+          setIsScrolled((prev) => {
+            // Hysteresis dead-zone to prevent boundary jittering on mobile/touch scroll:
+            // Shrinks when scrolled past 48px, expands back only above 20px
+            if (!prev && scrollY > 48) return true
+            if (prev && scrollY < 20) return false
+            return prev
+          })
+          ticking = false
+        })
+        ticking = true
+      }
     }
 
     handleScroll()
@@ -28,22 +43,30 @@ export const Navbar: React.FC = () => {
   }
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 flex justify-center pointer-events-none pt-3 sm:pt-4 px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 left-0 w-full z-50 flex justify-center pointer-events-none pt-2.5 sm:pt-4 px-3.5 sm:px-6 lg:px-8 transform-gpu">
       <div
-        className={`pointer-events-auto relative w-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`pointer-events-auto relative w-full transition-[max-width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isScrolled ? 'max-w-3xl' : 'max-w-7xl'
         }`}
       >
         <nav
           aria-label="Main navigation"
-          className={`mx-auto flex flex-col transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            isScrolled || isMobileMenuOpen
-              ? 'bg-[#131518]/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 py-2 px-4 sm:px-5'
-              : 'bg-transparent border-transparent py-3 sm:py-4 px-0'
+          className={`relative mx-auto flex flex-col transition-[padding,border-radius] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isScrolled
+              ? 'py-2 px-3.5 sm:px-5'
+              : 'py-2.5 sm:py-3.5 px-3 sm:px-5'
           } ${
             isMobileMenuOpen ? 'rounded-[24px]' : 'rounded-[32px]'
           }`}
         >
+          {/* Hardware-Accelerated Glassmorphic Capsule Background */}
+          <div
+            className={`absolute inset-0 rounded-[inherit] -z-10 pointer-events-none transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              isScrolled || isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+            } bg-[#131518]/90 backdrop-blur-md md:backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50`}
+            aria-hidden="true"
+          />
+
           {/* Top Navbar Row: 3-column balanced grid */}
           <div className="grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center w-full">
             {/* Left Column: Brand Logo & Identifier (Restored to exact original position aligned with page content) */}
@@ -51,22 +74,20 @@ export const Navbar: React.FC = () => {
               <a
                 href="#hero"
                 onClick={(e) => handleNavClick(e, '#hero')}
-                className={`flex items-center group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5500] p-1 rounded-xs shrink-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                  isScrolled ? 'gap-0' : 'gap-3'
+                className={`flex items-center group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5500] p-1 rounded-xs shrink-0 transition-[gap] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  isScrolled ? 'gap-0' : 'gap-2.5 sm:gap-3'
                 }`}
                 aria-label="IDEA SPRINT 2026 by IEDC BOOTCAMP CEC"
               >
                 <img
                   src={iedcLogo}
                   alt="IEDC BOOTCAMP CEC Logo"
-                  className={`w-auto object-contain transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] ${
-                    isScrolled ? 'h-7 sm:h-8' : 'h-8 sm:h-9 md:h-10'
-                  }`}
+                  className="w-auto object-contain transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] h-7.5 sm:h-8 md:h-9"
                 />
 
                 {/* Brand text: collapses away on scroll so the capsule stays compact */}
                 <div
-                  className={`flex flex-col -space-y-0.5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden ${
+                  className={`flex flex-col -space-y-0.5 transition-[max-width,opacity,transform] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden will-change-[max-width,opacity,transform] ${
                     isScrolled
                       ? 'max-w-0 opacity-0 -translate-x-2 pointer-events-none'
                       : 'max-w-[220px] opacity-100 translate-x-0'
