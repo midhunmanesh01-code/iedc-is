@@ -1,42 +1,48 @@
-import React, { useState } from 'react'
+import React, { useRef } from 'react'
 
 export const SprintReactor: React.FC = () => {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const containerRef = useRef<HTMLDivElement>(null)
 
+  // High-efficiency 60/120fps direct DOM tilt (0 React re-renders on mousemove)
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
+    const el = containerRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
     const x = (e.clientX - rect.left) / rect.width - 0.5
     const y = (e.clientY - rect.top) / rect.height - 0.5
-    setTilt({ x: x * 14, y: -y * 14 })
+    el.style.transform = `perspective(1000px) rotateX(${-y * 15}deg) rotateY(${x * 15}deg)`
   }
 
   const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 })
+    const el = containerRef.current
+    if (!el) return
+    el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)'
   }
 
   return (
     <div
+      ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full max-w-[440px] sm:max-w-[480px] lg:max-w-[520px] aspect-square flex items-center justify-center select-none cursor-crosshair mx-auto"
+      className="relative w-full max-w-[430px] sm:max-w-[470px] lg:max-w-[510px] aspect-square flex items-center justify-center select-none cursor-crosshair mx-auto will-change-transform"
       style={{
-        transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
-        transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
+        transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
       }}
       aria-label="24H Sprint Reactor Gyroscope"
       role="img"
     >
-      {/* Seamless Ambient Radial Glows (No Box, Blends with Canvas) */}
+      {/* Seamless Ambient Radial Glows (No Box, Blends naturally into #102b52 canvas) */}
       <div
-        className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,201,40,0.18)_0%,rgba(89,214,232,0.1)_40%,transparent_70%)] blur-2xl pointer-events-none -z-10 animate-core-pulse"
+        className="absolute inset-4 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,201,40,0.18)_0%,rgba(89,214,232,0.1)_40%,transparent_70%)] blur-2xl pointer-events-none -z-10 animate-core-pulse"
         aria-hidden="true"
       />
       <div
-        className="absolute -inset-10 rounded-full bg-[radial-gradient(circle_at_center,rgba(89,214,232,0.1)_0%,transparent_65%)] blur-3xl pointer-events-none -z-20"
+        className="absolute -inset-8 rounded-full bg-[radial-gradient(circle_at_center,rgba(89,214,232,0.1)_0%,transparent_65%)] blur-3xl pointer-events-none -z-20"
         aria-hidden="true"
       />
 
-      {/* Main Vector Gyroscope */}
+      {/* Main Kinetic Gyroscope Rig */}
       <div className="relative w-full h-full flex items-center justify-center animate-reactor-float">
         <svg
           viewBox="0 0 540 540"
@@ -45,98 +51,85 @@ export const SprintReactor: React.FC = () => {
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            {/* Core Gold Glow */}
-            <filter id="reactor-gold-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            {/* Lightweight High-Efficiency Glow Filter */}
+            <filter id="reactor-gold-glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
 
-            {/* Cyan Filament Glow */}
             <filter id="reactor-cyan-glow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
 
-            {/* Core Gradient */}
+            {/* Radiant Fusion Core Gradient */}
             <radialGradient id="fusion-core-grad" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="#ffffff" />
-              <stop offset="35%" stopColor="#ffc928" />
-              <stop offset="75%" stopColor="#d99b10" />
+              <stop offset="30%" stopColor="#ffc928" />
+              <stop offset="70%" stopColor="#d99b10" />
               <stop offset="100%" stopColor="#163866" />
             </radialGradient>
-
-            {/* Track Subtle Gradient */}
-            <linearGradient id="orbit-grad-cyan" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#59d6e8" stopOpacity="0.8" />
-              <stop offset="50%" stopColor="#59d6e8" stopOpacity="0.1" />
-              <stop offset="100%" stopColor="#59d6e8" stopOpacity="0.8" />
-            </linearGradient>
           </defs>
 
-          {/* Background Blueprint Coordinate Grid Filaments (Seamless Fade) */}
-          <g stroke="#59d6e8" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="3 6">
+          {/* Blueprint Axis Guide Lines & Crosshairs (Stationary) */}
+          <g stroke="#59d6e8" strokeOpacity="0.14" strokeWidth="1" strokeDasharray="3 6">
             <line x1="270" y1="20" x2="270" y2="520" />
             <line x1="20" y1="270" x2="520" y2="270" />
-            <circle cx="270" cy="270" r="260" strokeDasharray="2 8" />
+            <circle cx="270" cy="270" r="255" strokeDasharray="2 8" />
           </g>
 
           {/* ======================================================== */}
-          {/* RING 1: Outermost Telemetry Track (Clockwise Slow)       */}
+          {/* RING 1: Outermost Telemetry Orbit (Clockwise Slow)       */}
           {/* ======================================================== */}
           <g className="animate-spin-cw-slow" style={{ transformOrigin: '270px 270px' }}>
-            {/* Base Dashed Telemetry Ring */}
             <circle
               cx="270"
               cy="270"
-              r="235"
+              r="234"
               stroke="#59d6e8"
-              strokeOpacity="0.3"
+              strokeOpacity="0.25"
               strokeWidth="1.2"
               strokeDasharray="4 8"
             />
-
-            {/* Corner Framing Brackets */}
+            {/* Cardinal Framing Brackets */}
             <path
-              d="M 270 35 A 235 235 0 0 1 370 57"
+              d="M 270 36 A 234 234 0 0 1 360 56"
               stroke="#59d6e8"
               strokeWidth="2.5"
               strokeLinecap="round"
               filter="url(#reactor-cyan-glow)"
             />
             <path
-              d="M 270 505 A 235 235 0 0 1 170 483"
+              d="M 270 504 A 234 234 0 0 1 180 484"
               stroke="#59d6e8"
               strokeWidth="2.5"
               strokeLinecap="round"
               filter="url(#reactor-cyan-glow)"
             />
-
-            {/* Cardinal Coordinate Markers */}
-            <text x="270" y="26" fill="#59d6e8" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="middle" letterSpacing="0.2em" opacity="0.8">
-              [00:00H • SPRINT_START]
-            </text>
-            <text x="515" y="274" fill="#59d6e8" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="middle" letterSpacing="0.2em" opacity="0.8">
-              [06:00H]
-            </text>
-            <text x="270" y="522" fill="#59d6e8" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="middle" letterSpacing="0.2em" opacity="0.8">
-              [12:00H • MIDPOINT]
-            </text>
-            <text x="25" y="274" fill="#59d6e8" fontSize="9" fontFamily="JetBrains Mono, monospace" textAnchor="middle" letterSpacing="0.2em" opacity="0.8">
-              [18:00H]
-            </text>
+            <path
+              d="M 36 270 A 234 234 0 0 1 56 180"
+              stroke="#59d6e8"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <path
+              d="M 504 270 A 234 234 0 0 1 484 360"
+              stroke="#59d6e8"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
           </g>
 
           {/* ======================================================== */}
-          {/* RING 2: 24H Sprint Milestones Orbit (Counter-Clockwise) */}
+          {/* RING 2: 24H Sprint Milestone Track (Counter-Clockwise)   */}
           {/* ======================================================== */}
           <g className="animate-spin-ccw-slow" style={{ transformOrigin: '270px 270px' }}>
-            {/* Gold Orbit Track */}
             <circle
               cx="270"
               cy="270"
@@ -146,56 +139,39 @@ export const SprintReactor: React.FC = () => {
               strokeWidth="1.5"
               strokeDasharray="14 6 4 6"
             />
-
-            {/* Secondary Concentric Track */}
             <circle
               cx="270"
               cy="270"
               r="180"
               stroke="#59d6e8"
-              strokeOpacity="0.2"
+              strokeOpacity="0.18"
               strokeWidth="1"
               strokeDasharray="2 6"
             />
 
-            {/* --- Node 1: DRAFT (Top: 0°) --- */}
+            {/* Orbiting Milestone Nodes (Clean Glowing Markers) */}
+            {/* 00H Node (Top) */}
             <g transform="translate(270, 82)">
               <circle cx="0" cy="0" r="10" fill="#102b52" stroke="#ffc928" strokeWidth="2" filter="url(#reactor-gold-glow)" />
               <circle cx="0" cy="0" r="4" fill="#ffc928" />
-              <rect x="-35" y="-24" width="70" height="15" rx="3" fill="#163866" stroke="#ffc928" strokeWidth="1" opacity="0.9" />
-              <text x="0" y="-13" fill="#ffc928" fontSize="8" fontFamily="JetBrains Mono, monospace" textAnchor="middle" fontWeight="bold">
-                0H • DRAFT
-              </text>
             </g>
 
-            {/* --- Node 2: BUILD (Right: 90°) --- */}
+            {/* 08H Node (Right) */}
             <g transform="translate(458, 270)">
               <circle cx="0" cy="0" r="10" fill="#102b52" stroke="#ffffff" strokeWidth="2" />
               <circle cx="0" cy="0" r="4" fill="#ffffff" />
-              <rect x="-35" y="12" width="70" height="15" rx="3" fill="#163866" stroke="#ffffff" strokeWidth="1" opacity="0.9" />
-              <text x="0" y="23" fill="#ffffff" fontSize="8" fontFamily="JetBrains Mono, monospace" textAnchor="middle" fontWeight="bold">
-                8H • BUILD
-              </text>
             </g>
 
-            {/* --- Node 3: TEST (Bottom: 180°) --- */}
+            {/* 16H Node (Bottom) */}
             <g transform="translate(270, 458)">
               <circle cx="0" cy="0" r="10" fill="#102b52" stroke="#59d6e8" strokeWidth="2" filter="url(#reactor-cyan-glow)" />
               <circle cx="0" cy="0" r="4" fill="#59d6e8" />
-              <rect x="-35" y="12" width="70" height="15" rx="3" fill="#163866" stroke="#59d6e8" strokeWidth="1" opacity="0.9" />
-              <text x="0" y="23" fill="#59d6e8" fontSize="8" fontFamily="JetBrains Mono, monospace" textAnchor="middle" fontWeight="bold">
-                16H • TEST
-              </text>
             </g>
 
-            {/* --- Node 4: PITCH / STARTUP (Left: 270°) --- */}
+            {/* 24H Node (Left) */}
             <g transform="translate(82, 270)">
               <circle cx="0" cy="0" r="10" fill="#102b52" stroke="#ffc928" strokeWidth="2" filter="url(#reactor-gold-glow)" />
               <circle cx="0" cy="0" r="4" fill="#ffc928" />
-              <rect x="-38" y="-24" width="76" height="15" rx="3" fill="#163866" stroke="#ffc928" strokeWidth="1" opacity="0.9" />
-              <text x="0" y="-13" fill="#ffc928" fontSize="8" fontFamily="JetBrains Mono, monospace" textAnchor="middle" fontWeight="bold">
-                24H • PITCH
-              </text>
             </g>
           </g>
 
@@ -294,7 +270,7 @@ export const SprintReactor: React.FC = () => {
             <line x1="250" y1="270" x2="290" y2="270" stroke="#102b52" strokeWidth="2" strokeLinecap="round" />
             <line x1="270" y1="250" x2="270" y2="290" stroke="#102b52" strokeWidth="2" strokeLinecap="round" />
 
-            {/* Center Monogram / Text */}
+            {/* Center Monogram */}
             <text
               x="270"
               y="274"
