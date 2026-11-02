@@ -46,7 +46,7 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
       <Container size="default">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Left Column: Authentic Blueprint Editorial Title, Details & CTAs */}
-          <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-left">
+          <div className="order-2 lg:order-1 lg:col-span-7 space-y-5 sm:space-y-6 text-left">
             {/* Pill Badge */}
             <motion.div
               initial={{ opacity: 0, y: -12 }}
@@ -92,7 +92,7 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
                 initial={{ opacity: 0, y: 16 }}
                 animate={hasStarted ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
                 transition={{ duration: 1.2, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="font-mono text-xs sm:text-sm lg:text-base text-[#c4daf2] font-normal max-w-xl leading-relaxed pt-2"
+                className="hidden sm:block font-mono text-xs sm:text-sm lg:text-base text-[#c4daf2] font-normal max-w-xl leading-relaxed pt-2"
               >
                 From initial sketch to viable prototype. A 24-hour innovation sprint where teams draft, build, and pitch ideas to mentors and a live jury.
               </motion.p>
@@ -113,7 +113,7 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
                 rightIcon={<ArrowRight className="w-4 h-4" />}
                 className="w-full sm:w-auto active:scale-[0.98] !rounded-full px-7 py-3.5 font-mono font-bold text-sm tracking-wider shadow-[0_0_20px_rgba(255,201,40,0.3)] hover:shadow-[0_0_25px_rgba(255,201,40,0.5)] transition-shadow"
               >
-                JOIN THE SPRINT &gt;
+                JOIN THE SPRINT
               </Button>
 
               <Button
@@ -133,7 +133,7 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
             initial={{ opacity: 0, scale: 0.92 }}
             animate={hasStarted ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
             transition={{ duration: 1.4, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5 flex justify-center lg:justify-end mt-6 lg:mt-0 relative"
+            className="order-1 lg:order-2 lg:col-span-5 flex justify-center lg:justify-end mb-2 lg:mb-0 relative"
           >
             <SprintReactor />
           </motion.div>

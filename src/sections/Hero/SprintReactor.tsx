@@ -28,7 +28,7 @@ export const SprintReactor: React.FC = () => {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full max-w-[440px] sm:max-w-[480px] lg:max-w-[520px] aspect-square flex items-center justify-center select-none cursor-crosshair mx-auto will-change-transform"
+      className="relative w-full max-w-[310px] sm:max-w-[440px] lg:max-w-[520px] aspect-square flex items-center justify-center select-none cursor-crosshair mx-auto will-change-transform"
       style={{
         transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
         transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
