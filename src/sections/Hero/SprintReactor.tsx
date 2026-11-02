@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { motion } from 'motion/react'
 
 export const SprintReactor: React.FC = () => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
@@ -36,32 +35,6 @@ export const SprintReactor: React.FC = () => {
         className="absolute -inset-10 rounded-full bg-[radial-gradient(circle_at_center,rgba(89,214,232,0.1)_0%,transparent_65%)] blur-3xl pointer-events-none -z-20"
         aria-hidden="true"
       />
-
-      {/* Floating Ambient HUD Tag - Top Right */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 1 }}
-        className="absolute -top-1 right-2 sm:top-2 sm:right-0 z-20 flex items-center gap-2 px-3 py-1 bg-[#163866]/60 border border-[#59d6e8]/30 rounded-full backdrop-blur-md shadow-[0_0_15px_rgba(89,214,232,0.15)]"
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-ping" />
-        <span className="font-mono text-[10px] sm:text-xs text-[#59d6e8] tracking-widest uppercase font-semibold">
-          SYS.CYCLE: [24H_ACTIVE]
-        </span>
-      </motion.div>
-
-      {/* Floating Ambient HUD Tag - Bottom Left */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.0, duration: 1 }}
-        className="absolute -bottom-1 left-2 sm:bottom-2 sm:left-0 z-20 flex items-center gap-2 px-3 py-1 bg-[#163866]/60 border border-[#ffc928]/30 rounded-full backdrop-blur-md shadow-[0_0_15px_rgba(255,201,40,0.15)]"
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928] animate-pulse" />
-        <span className="font-mono text-[10px] sm:text-xs text-[#ffc928] tracking-widest uppercase font-semibold">
-          SPRINT: [DRAFT ➔ STARTUP]
-        </span>
-      </motion.div>
 
       {/* Main Vector Gyroscope */}
       <div className="relative w-full h-full flex items-center justify-center animate-reactor-float">

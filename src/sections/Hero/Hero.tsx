@@ -3,7 +3,7 @@ import { motion } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/common/Button'
 import { Container } from '@/components/common/Container'
-import { BlueprintSchematic } from './BlueprintSchematic'
+import { SprintReactor } from './SprintReactor'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
 
 export interface HeroProps {
@@ -128,14 +128,14 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
             </motion.div>
           </div>
 
-          {/* Right Column: Engineering Blueprint Lightbulb Schematic */}
+          {/* Right Column: 24H Sprint Reactor Gyroscope (Organic, Borderless) */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={hasStarted ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={hasStarted ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.92 }}
             transition={{ duration: 1.4, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5 flex justify-center lg:justify-end mt-4 lg:mt-0"
+            className="lg:col-span-5 flex justify-center lg:justify-end mt-6 lg:mt-0 relative"
           >
-            <BlueprintSchematic />
+            <SprintReactor />
           </motion.div>
         </div>
       </Container>
