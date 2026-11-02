@@ -11,9 +11,9 @@ const FOOTER_NAV_LEFT = [
 ] as const
 
 const FOOTER_NAV_RIGHT = [
-  { label: 'Idea Forge', href: '#idea-forge', isGold: false },
-  { label: 'FAQs', href: '#faq', isGold: false },
-  { label: 'Register', href: '#register', isGold: true },
+  { label: 'Idea Forge', href: '#idea-forge' },
+  { label: 'FAQs', href: '#faq' },
+  { label: 'Register', href: '#register' },
 ] as const
 
 const InstagramIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
@@ -173,12 +173,12 @@ export const Footer: React.FC = () => {
                         e.preventDefault()
                         scrollTo(link.href)
                       }}
-                      className="group flex items-center justify-between py-2.5 sm:py-3 border-b border-white/10 hover:border-white/25 transition-all duration-200"
+                      className="group flex items-center justify-between py-2.5 sm:py-3 border-b border-white/10 hover:border-[#ffc928]/40 transition-all duration-200 cursor-pointer"
                     >
-                      <span className="font-sans font-medium text-sm sm:text-base text-zinc-200 group-hover:text-white tracking-tight transition-colors">
+                      <span className="font-sans font-medium text-sm sm:text-base text-zinc-200 group-hover:text-[#ffc928] tracking-tight transition-colors">
                         {link.label}
                       </span>
-                      <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-white transition-all duration-200 group-hover:translate-x-1" />
+                      <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-[#ffc928] transition-all duration-200 group-hover:translate-x-1" />
                     </a>
                   </li>
                 ))}
@@ -193,28 +193,12 @@ export const Footer: React.FC = () => {
                         e.preventDefault()
                         scrollTo(link.href)
                       }}
-                      className={`group flex items-center justify-between py-2.5 sm:py-3 border-b transition-all duration-200 ${
-                        link.isGold
-                          ? 'border-white/10 hover:border-[#ffc928]/40'
-                          : 'border-white/10 hover:border-white/25'
-                      }`}
+                      className="group flex items-center justify-between py-2.5 sm:py-3 border-b border-white/10 hover:border-[#ffc928]/40 transition-all duration-200 cursor-pointer"
                     >
-                      <span
-                        className={`font-sans text-sm sm:text-base tracking-tight transition-colors ${
-                          link.isGold
-                            ? 'text-[#ffc928] font-bold group-hover:text-[#ffd65c]'
-                            : 'font-medium text-zinc-200 group-hover:text-white'
-                        }`}
-                      >
+                      <span className="font-sans font-medium text-sm sm:text-base text-zinc-200 group-hover:text-[#ffc928] tracking-tight transition-colors">
                         {link.label}
                       </span>
-                      <ArrowRight
-                        className={`w-4 h-4 transition-all duration-200 group-hover:translate-x-1 ${
-                          link.isGold
-                            ? 'text-[#ffc928]'
-                            : 'text-zinc-500 group-hover:text-white'
-                        }`}
-                      />
+                      <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-[#ffc928] transition-all duration-200 group-hover:translate-x-1" />
                     </a>
                   </li>
                 ))}
