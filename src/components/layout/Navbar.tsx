@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { Menu, X, ArrowUpRight, ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { NAVIGATION_LINKS, NAV_CONFIG } from '@/config/navigation'
 import { Button } from '@/components/common/Button'
@@ -9,6 +9,7 @@ import iedcLogo from '@/assets/logos/iedc-logo-2.png'
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [clickedHref, setClickedHref] = useState<string | null>(null)
   const { scrollTo } = useSmoothScroll()
 
   useEffect(() => {
@@ -38,8 +39,16 @@ export const Navbar: React.FC = () => {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
-    setIsMobileMenuOpen(false)
-    scrollTo(href)
+    if (isMobileMenuOpen) {
+      setClickedHref(href)
+      setTimeout(() => {
+        setIsMobileMenuOpen(false)
+        scrollTo(href)
+        setTimeout(() => setClickedHref(null), 350)
+      }, 150)
+    } else {
+      scrollTo(href)
+    }
   }
 
   return (
@@ -51,12 +60,10 @@ export const Navbar: React.FC = () => {
       >
         <nav
           aria-label="Main navigation"
-          className={`relative mx-auto flex flex-col transition-[padding,border-radius] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`relative mx-auto flex flex-col transition-[padding] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-[32px] ${
             isScrolled
               ? 'py-2 px-3.5 sm:px-5'
               : 'py-2.5 sm:py-3.5 px-3 sm:px-5'
-          } ${
-            isMobileMenuOpen ? 'rounded-[24px]' : 'rounded-[32px]'
           }`}
         >
           {/* Desktop Glassmorphic Capsule Background: visible on desktop when scrolled */}
@@ -68,28 +75,6 @@ export const Navbar: React.FC = () => {
             }`}
             aria-hidden="true"
           />
-
-          {/* Mobile Glassmorphic Capsule Background with Smooth Fluid Opening & Closing Transition */}
-          <AnimatePresence>
-            {isMobileMenuOpen && (
-              <motion.div
-                key="mobile-nav-bg"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
-                }}
-                exit={{
-                  opacity: 0,
-                  scale: 0.98,
-                  transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
-                }}
-                className="md:hidden absolute inset-0 rounded-[24px] -z-10 pointer-events-none bg-[#131518]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50"
-                aria-hidden="true"
-              />
-            )}
-          </AnimatePresence>
 
           {/* Top Navbar Row: 3-column balanced grid */}
           <div className="grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center w-full">
@@ -179,83 +164,95 @@ export const Navbar: React.FC = () => {
                   aria-expanded={isMobileMenuOpen}
                   aria-controls="mobile-navigation"
                   aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-                  className="text-white p-2.5 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 transition-colors focus:outline-none flex items-center justify-center overflow-hidden relative w-12 h-12 cursor-pointer shrink-0"
+                  className="text-white p-2.5 rounded-full bg-white/10 hover:bg-[#ffc928]/15 hover:text-[#ffc928] border border-white/10 hover:border-[#ffc928]/40 active:bg-white/30 transition-all duration-200 focus:outline-none flex items-center justify-center overflow-hidden relative w-12 h-12 cursor-pointer shrink-0"
                 >
                   <div
                     className={`absolute transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isMobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
                     }`}
                   >
-                    <X className="w-6 h-6 text-white" />
+                    <X className="w-6 h-6" />
                   </div>
                   <div
                     className={`absolute transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isMobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
                     }`}
                   >
-                    <Menu className="w-6 h-6 text-white" />
+                    <Menu className="w-6 h-6" />
                   </div>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Smooth Fluid Motion Mobile Navigation Drawer */}
+          {/* Mobile Navigation Dropdown Box with Full Opening & Closing ("Going Back") Animation */}
           <AnimatePresence>
             {isMobileMenuOpen && (
               <motion.div
                 id="mobile-navigation"
                 key="mobile-drawer"
-                initial={{ opacity: 0, height: 0 }}
+                initial={{ opacity: 0, height: 0, y: -12, scale: 0.97 }}
                 animate={{
                   opacity: 1,
                   height: 'auto',
+                  y: 0,
+                  scale: 1,
                   transition: {
-                    height: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
-                    opacity: { duration: 0.28, ease: 'easeOut' },
+                    height: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+                    y: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+                    scale: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+                    opacity: { duration: 0.25, ease: 'easeOut' },
                   },
                 }}
                 exit={{
                   opacity: 0,
                   height: 0,
+                  y: -14,
+                  scale: 0.97,
                   transition: {
-                    height: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
-                    opacity: { duration: 0.22, ease: 'easeInOut' },
+                    height: { duration: 0.32, ease: [0.16, 1, 0.3, 1] },
+                    y: { duration: 0.32, ease: [0.16, 1, 0.3, 1] },
+                    scale: { duration: 0.32, ease: [0.16, 1, 0.3, 1] },
+                    opacity: { duration: 0.28, ease: 'easeInOut' },
                   },
                 }}
-                className="overflow-hidden md:hidden"
+                style={{ transformOrigin: 'top center' }}
+                className="overflow-hidden md:hidden mt-2 rounded-[24px] bg-[#131518]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/60 origin-top"
               >
-                <motion.div
-                  initial={{ y: -10, opacity: 0 }}
-                  animate={{
-                    y: 0,
-                    opacity: 1,
-                    transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1], delay: 0.05 },
-                  }}
-                  exit={{
-                    y: -10,
-                    opacity: 0,
-                    transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
-                  }}
-                  className="flex flex-col space-y-1 pt-3 pb-2 border-t border-white/10"
-                >
-                  {NAVIGATION_LINKS.map((link) => (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      onClick={(e) => handleNavClick(e, link.href)}
-                      className="block px-3.5 py-2 font-mono text-sm uppercase tracking-wider text-zinc-300 hover:text-[#ffc928] hover:bg-white/5 rounded-xl transition-all duration-200"
-                    >
-                      <span>{link.label}</span>
-                      {link.badge && (
-                        <span className="ml-2 px-1.5 py-0.5 text-[10px] font-mono tracking-tight bg-[#ffc928]/15 text-[#ffc928] border border-[#ffc928]/30 rounded-xs">
-                          {link.badge}
-                        </span>
-                      )}
-                    </a>
-                  ))}
+                <div className="flex flex-col space-y-1.5 p-3.5">
+                  {NAVIGATION_LINKS.map((link) => {
+                    const isSelected = clickedHref === link.href
+                    return (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        onClick={(e) => handleNavClick(e, link.href)}
+                        className={`group flex items-center justify-between px-3.5 py-2.5 font-mono text-sm uppercase tracking-wider rounded-xl transition-all duration-200 border cursor-pointer active:scale-[0.99] ${
+                          isSelected
+                            ? 'bg-[#ffc928]/15 border-[#ffc928]/50 text-[#ffc928] shadow-[0_0_16px_rgba(255,201,40,0.2)]'
+                            : 'border-transparent text-zinc-300 hover:text-[#ffc928] hover:bg-[#ffc928]/10 hover:border-[#ffc928]/30 hover:shadow-[0_0_16px_rgba(255,201,40,0.12)] active:bg-[#ffc928]/15 active:text-[#ffc928] active:border-[#ffc928]/40'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold">{link.label}</span>
+                          {link.badge && (
+                            <span className="px-1.5 py-0.5 text-[10px] font-mono tracking-tight bg-[#ffc928]/15 text-[#ffc928] border border-[#ffc928]/30 rounded-xs">
+                              {link.badge}
+                            </span>
+                          )}
+                        </div>
+                        <ArrowRight
+                          className={`w-4 h-4 transition-all duration-200 ${
+                            isSelected
+                              ? 'text-[#ffc928] translate-x-1'
+                              : 'text-zinc-500 group-hover:text-[#ffc928] group-active:text-[#ffc928] group-hover:translate-x-1 group-active:translate-x-1'
+                          }`}
+                        />
+                      </a>
+                    )
+                  })}
 
-                  <div className="pt-2 px-1">
+                  <div className="pt-2">
                     <Button
                       variant="primary"
                       size="md"
@@ -267,7 +264,7 @@ export const Navbar: React.FC = () => {
                       {NAV_CONFIG.ctaText}
                     </Button>
                   </div>
-                </motion.div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
