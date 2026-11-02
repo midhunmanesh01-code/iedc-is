@@ -62,8 +62,8 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
 
             {/* Kinetic Stacked Headline styled after PRODDEC */}
             <div className="space-y-3">
-              <h1 className="font-heading text-5xl sm:text-7xl md:text-8xl lg:text-[5.6rem] xl:text-[7.2rem] 2xl:text-[8.4rem] leading-[0.88] font-black uppercase tracking-tighter">
-                <div className="overflow-hidden py-1">
+              <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-[5.6rem] xl:text-[7.2rem] 2xl:text-[8.4rem] leading-[0.88] font-black uppercase tracking-tighter">
+                <div className="overflow-hidden py-1.5 sm:py-1">
                   <motion.div
                     initial={{ y: '125%', opacity: 0, skewY: 3 }}
                     animate={hasStarted ? { y: 0, opacity: 1, skewY: 0 } : { y: '125%', opacity: 0, skewY: 3 }}
@@ -74,7 +74,7 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
                     <span className="text-white hover:text-white/90 transition-all">Build</span>
                   </motion.div>
                 </div>
-                <div className="overflow-hidden py-1">
+                <div className="overflow-hidden py-1.5 sm:py-1">
                   <motion.div
                     initial={{ y: '125%', opacity: 0, skewY: 3 }}
                     animate={hasStarted ? { y: 0, opacity: 1, skewY: 0 } : { y: '125%', opacity: 0, skewY: 3 }}
