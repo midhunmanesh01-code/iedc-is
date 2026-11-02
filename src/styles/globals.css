@@ -124,14 +124,30 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(89, 214, 232, 0.25) 20%,
-    #ffc928 48%,
-    #59d6e8 54%,
-    rgba(89, 214, 232, 0.25) 80%,
+    rgba(89, 214, 232, 0.15) 15%,
+    #ffc928 42%,
+    #ffffff 50%,
+    #59d6e8 58%,
+    rgba(89, 214, 232, 0.15) 85%,
     transparent 100%
   );
   background-size: 200% 100%;
-  animation: beam-sweep 5s linear infinite;
+  animation: beam-sweep 4.5s linear infinite;
+}
+
+.footer-glow-line-soft {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 201, 40, 0.1) 25%,
+    rgba(255, 201, 40, 0.5) 45%,
+    rgba(89, 214, 232, 0.5) 55%,
+    rgba(89, 214, 232, 0.1) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: beam-sweep 4.5s linear infinite;
+  filter: blur(8px);
 }
 
 /* Technical Blueprint Scrollbar */

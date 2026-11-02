@@ -129,19 +129,28 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-xs sm:text-sm text-zinc-400 max-w-sm leading-relaxed font-mono">
-              Organized by <strong className="text-zinc-100 font-semibold">{EVENT_CONFIG.organizer}</strong> –{' '}
-              {EVENT_CONFIG.organizerFull}. Fostering hands-on technological entrepreneurship, rapid prototyping, and student innovation.
+              Organized by <strong className="text-zinc-100 font-semibold">{EVENT_CONFIG.organizer}</strong>, College of Engineering Chengannur. Fostering student innovation and rapid prototyping.
             </p>
 
-            {/* Live Beacon Status Indicator */}
-            <div className="inline-flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 hover:border-[#ffc928]/40 transition-colors">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffc928] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#ffc928] shadow-[0_0_10px_#ffc928]" />
-              </span>
-              <span className="font-mono text-xs uppercase tracking-wider text-zinc-300 font-medium">
-                24H SPRINT • ADMISSION STANDBY
-              </span>
+            {/* Social Channels with Animated Micro-Interactions */}
+            <div className="pt-1">
+              <div className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 mb-2.5">
+                Connect With IEDC CEC
+              </div>
+              <div className="flex items-center gap-2.5">
+                {EVENT_CONFIG.socials.map((social) => (
+                  <a
+                    key={social.id}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="group relative min-w-[42px] min-h-[42px] flex items-center justify-center bg-white/[0.04] hover:bg-[#ffc928]/10 border border-white/10 hover:border-[#ffc928]/60 text-zinc-300 hover:text-[#ffc928] rounded-xl transition-all duration-300 transform-gpu hover:-translate-y-1 hover:shadow-[0_8px_20px_-4px_rgba(255,201,40,0.3)] active:scale-95 focus-visible:outline-2 focus-visible:outline-[#ffc928] cursor-pointer"
+                  >
+                    {getSocialIcon(social.iconName)}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -220,27 +229,6 @@ export const Footer: React.FC = () => {
                 </div>
               </li>
             </ul>
-
-            {/* Social Channels with Animated Micro-Interactions */}
-            <div className="pt-2">
-              <div className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 mb-2.5">
-                Connect With IEDC CEC
-              </div>
-              <div className="flex items-center gap-2.5">
-                {EVENT_CONFIG.socials.map((social) => (
-                  <a
-                    key={social.id}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    className="group relative min-w-[42px] min-h-[42px] flex items-center justify-center bg-white/[0.04] hover:bg-[#ffc928]/10 border border-white/10 hover:border-[#ffc928]/60 text-zinc-300 hover:text-[#ffc928] rounded-xl transition-all duration-300 transform-gpu hover:-translate-y-1 hover:shadow-[0_8px_20px_-4px_rgba(255,201,40,0.3)] active:scale-95 focus-visible:outline-2 focus-visible:outline-[#ffc928] cursor-pointer"
-                  >
-                    {getSocialIcon(social.iconName)}
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 
