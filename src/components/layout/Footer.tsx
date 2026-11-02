@@ -1,9 +1,20 @@
-import React, { useState } from 'react'
-import { Globe, Mail, MapPin, ArrowUp, ChevronRight, Check, Copy } from 'lucide-react'
+import React from 'react'
+import { Globe, Mail, MapPin, ArrowUp, ExternalLink, Heart, ArrowRight } from 'lucide-react'
 import { EVENT_CONFIG } from '@/config/event'
-import { NAVIGATION_LINKS } from '@/config/navigation'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
 import iedcLogo from '@/assets/logos/iedc-logo-2.png'
+
+const FOOTER_NAV_LEFT = [
+  { label: 'Overview', href: '#hero' },
+  { label: 'About', href: '#about' },
+  { label: 'Schedule', href: '#schedule' },
+] as const
+
+const FOOTER_NAV_RIGHT = [
+  { label: 'Idea Forge', href: '#idea-forge', isGold: false },
+  { label: 'FAQs', href: '#faq', isGold: false },
+  { label: 'Register', href: '#register', isGold: true },
+] as const
 
 const InstagramIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
   <svg
@@ -52,7 +63,6 @@ const TwitterXIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' 
 
 export const Footer: React.FC = () => {
   const { scrollTo } = useSmoothScroll()
-  const [copiedEmail, setCopiedEmail] = useState(false)
 
   const getSocialIcon = (iconName: string) => {
     switch (iconName) {
@@ -72,14 +82,6 @@ export const Footer: React.FC = () => {
 
   const handleBackToTop = () => {
     scrollTo('#hero', -100)
-  }
-
-  const handleCopyEmail = (e: React.MouseEvent) => {
-    e.preventDefault()
-    navigator.clipboard.writeText(EVENT_CONFIG.contact.email).then(() => {
-      setCopiedEmail(true)
-      setTimeout(() => setCopiedEmail(false), 2000)
-    }).catch(() => {})
   }
 
   return (
@@ -111,7 +113,7 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 pb-12 sm:pb-16 border-b border-white/10">
           {/* Column 1: Brand & Organizer Identity */}
-          <div className="lg:col-span-5 space-y-5">
+          <div className="lg:col-span-4 space-y-5">
             <div className="flex items-center gap-3 group cursor-pointer w-fit" onClick={handleBackToTop}>
               <img
                 src={iedcLogo}
@@ -155,80 +157,107 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Column 2: Quick Navigation */}
-          <div className="lg:col-span-3 space-y-4">
-            <div className="font-mono text-xs uppercase tracking-[0.2em] text-[#ffc928] font-bold flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-[#ffc928] rounded-full" />
+          <div className="lg:col-span-4 space-y-4">
+            <div className="font-mono text-sm uppercase tracking-[0.2em] text-[#ffc928] font-bold flex items-center gap-2.5">
+              <span className="w-2 h-2 bg-[#ffc928] rounded-full" />
               <span>NAVIGATION</span>
             </div>
 
-            <ul className="space-y-2.5 font-mono text-xs">
-              {NAVIGATION_LINKS.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      scrollTo(link.href)
-                    }}
-                    className="group inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-all duration-200"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5 text-[#59d6e8] opacity-0 -translate-x-1.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
-                    <span className="group-hover:translate-x-0.5 group-hover:text-[#ffc928] transition-all duration-200">
-                      {link.label}
-                    </span>
-                    {link.badge && (
-                      <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-mono tracking-tight bg-[#ffc928]/15 text-[#ffc928] border border-[#ffc928]/30 rounded-xs">
-                        {link.badge}
+            <div className="grid grid-cols-2 gap-x-6 sm:gap-x-8">
+              <ul>
+                {FOOTER_NAV_LEFT.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        scrollTo(link.href)
+                      }}
+                      className="group flex items-center justify-between py-2.5 sm:py-3 border-b border-white/10 hover:border-white/25 transition-all duration-200"
+                    >
+                      <span className="font-sans font-medium text-sm sm:text-base text-zinc-200 group-hover:text-white tracking-tight transition-colors">
+                        {link.label}
                       </span>
-                    )}
-                  </a>
-                </li>
-              ))}
-            </ul>
+                      <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-white transition-all duration-200 group-hover:translate-x-1" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+
+              <ul>
+                {FOOTER_NAV_RIGHT.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        scrollTo(link.href)
+                      }}
+                      className={`group flex items-center justify-between py-2.5 sm:py-3 border-b transition-all duration-200 ${
+                        link.isGold
+                          ? 'border-white/10 hover:border-[#ffc928]/40'
+                          : 'border-white/10 hover:border-white/25'
+                      }`}
+                    >
+                      <span
+                        className={`font-sans text-sm sm:text-base tracking-tight transition-colors ${
+                          link.isGold
+                            ? 'text-[#ffc928] font-bold group-hover:text-[#ffd65c]'
+                            : 'font-medium text-zinc-200 group-hover:text-white'
+                        }`}
+                      >
+                        {link.label}
+                      </span>
+                      <ArrowRight
+                        className={`w-4 h-4 transition-all duration-200 group-hover:translate-x-1 ${
+                          link.isGold
+                            ? 'text-[#ffc928]'
+                            : 'text-zinc-500 group-hover:text-white'
+                        }`}
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          {/* Column 3: Contact, Venue & Social Channels */}
+          {/* Column 3: Venue & Map Location */}
           <div className="lg:col-span-4 space-y-4">
-            <div className="font-mono text-xs uppercase tracking-[0.2em] text-[#ffc928] font-bold flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-[#ffc928] rounded-full" />
-              <span>CONTACT & VENUE</span>
+            <div className="font-mono text-sm uppercase tracking-[0.2em] text-[#ffc928] font-bold flex items-center gap-2.5">
+              <span className="w-2 h-2 bg-[#ffc928] rounded-full" />
+              <span>VENUE & LOCATION</span>
             </div>
 
-            <ul className="space-y-3 text-xs text-zinc-400 font-mono">
-              <li className="flex items-start gap-3">
-                <div className="p-1.5 rounded-md bg-white/[0.04] border border-white/10 text-[#59d6e8] shrink-0 mt-0.5">
-                  <MapPin className="w-3.5 h-3.5" />
-                </div>
-                <span className="leading-relaxed">{EVENT_CONFIG.contact.address}</span>
-              </li>
+            <div className="flex items-start gap-3 text-sm text-zinc-400 font-mono">
+              <div className="p-1.5 rounded-md bg-white/[0.04] border border-white/10 text-[#59d6e8] shrink-0 mt-0.5">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <span className="leading-relaxed text-zinc-300">
+                {EVENT_CONFIG.contact.address}
+              </span>
+            </div>
 
-              <li className="flex items-center gap-3">
-                <div className="p-1.5 rounded-md bg-white/[0.04] border border-white/10 text-[#59d6e8] shrink-0">
-                  <Mail className="w-3.5 h-3.5" />
-                </div>
-                <div className="flex items-center gap-2">
-                  <a
-                    href={`mailto:${EVENT_CONFIG.contact.email}`}
-                    className="hover:text-[#ffc928] transition-colors font-medium text-zinc-300"
-                  >
-                    {EVENT_CONFIG.contact.email}
-                  </a>
-                  <button
-                    type="button"
-                    onClick={handleCopyEmail}
-                    className="p-1 rounded text-zinc-500 hover:text-white transition-colors"
-                    title="Copy Email"
-                    aria-label="Copy Email address"
-                  >
-                    {copiedEmail ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    ) : (
-                      <Copy className="w-3.5 h-3.5" />
-                    )}
-                  </button>
-                </div>
-              </li>
-            </ul>
+            {/* Compact Embedded Map */}
+            <div className="relative rounded-xl overflow-hidden border border-white/10 group bg-zinc-950 shadow-inner">
+              <iframe
+                title="College of Engineering Chengannur Map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.845899452777!2d76.61519907487224!3d9.317274790737225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0622667d8a6b19%3A0x334fb9e831622bde!2sCollege%20of%20Engineering%20Chengannur!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
+                className="w-full h-32 sm:h-36 border-0 opacity-80 contrast-125 invert-[0.9] hue-rotate-180 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <a
+                href="https://maps.google.com/?q=College+of+Engineering+Chengannur"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-black/85 hover:bg-[#ffc928] text-zinc-300 hover:text-black border border-white/20 hover:border-[#ffc928] font-mono text-xs font-semibold backdrop-blur-xs transition-all duration-200 cursor-pointer shadow-sm"
+                aria-label="Open College of Engineering Chengannur in Google Maps"
+              >
+                <span>DIRECTIONS</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         </div>
 
@@ -239,8 +268,13 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-[11px] text-zinc-500 hidden sm:inline">
-              Engineered for Student Builders
+            <span className="text-[11px] text-zinc-400 font-mono inline-flex items-center gap-1.5">
+              <span>Built with</span>
+              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline shrink-0" aria-label="love" />
+              <span>by</span>
+              <span className="text-zinc-200 font-medium hover:text-[#ffc928] transition-colors">
+                Midhun Manesh
+              </span>
             </span>
             <button
               type="button"
