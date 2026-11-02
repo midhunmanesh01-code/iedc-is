@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { Preloader } from '@/components/common/Preloader'
 import { Hero } from '@/sections/Hero'
@@ -10,11 +10,13 @@ import { FAQ } from '@/sections/FAQ'
 import { Registration } from '@/sections/Registration'
 
 export const App: React.FC = () => {
+  const [isReady, setIsReady] = useState(false)
+
   return (
     <>
-      <Preloader />
+      <Preloader onComplete={() => setIsReady(true)} />
       <PageLayout>
-        <Hero />
+        <Hero isReady={isReady} />
         <CountdownSection />
         <About />
         <Schedule />

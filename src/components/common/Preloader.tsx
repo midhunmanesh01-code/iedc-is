@@ -37,19 +37,24 @@ export const Preloader: React.FC<PreloaderProps> = ({
       setIsEntered(true)
     }, 60)
 
-    // Ending transition
+    // Ending transition: fade preloader out
     const fadeTimer = setTimeout(() => {
       setIsFading(true)
     }, activeDuration)
 
+    // Notify ready once the screen has cleared sufficiently (250ms into fade)
+    const readyTimer = setTimeout(() => {
+      onComplete?.()
+    }, activeDuration + 250)
+
     const unmountTimer = setTimeout(() => {
       setIsUnmounted(true)
-      onComplete?.()
     }, activeDuration + 600)
 
     return () => {
       clearTimeout(enterTimer)
       clearTimeout(fadeTimer)
+      clearTimeout(readyTimer)
       clearTimeout(unmountTimer)
     }
   }, [activeDuration, isUnmounted, onComplete])
