@@ -17,13 +17,6 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
         Skip to main content
       </a>
 
-      {/* Atmospheric Theme Image Background Texture */}
-      <div
-        className="fixed inset-0 pointer-events-none bg-cover bg-center bg-no-repeat opacity-15 mix-blend-screen z-0"
-        style={{ backgroundImage: 'url(/theme.jpeg)' }}
-        aria-hidden="true"
-      />
-
       {/* Precision Engineering Blueprint Grid Overlay */}
       <div
         className="fixed inset-0 pointer-events-none bg-blueprint-grid opacity-75 z-0"

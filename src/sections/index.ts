@@ -1,4 +1,5 @@
 export * from './Hero'
+export * from './Countdown'
 export * from './About'
 export * from './Schedule'
 export * from './Interactive'

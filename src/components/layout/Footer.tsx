@@ -156,12 +156,12 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-7 sm:gap-10 lg:gap-12 pb-7 sm:pb-16 border-b border-white/10">
           {/* Column 1: Brand & Organizer Identity */}
-          <div className="lg:col-span-4 space-y-5">
-            <div className="flex items-center gap-3 group cursor-pointer w-fit" onClick={handleBackToTop}>
+          <div className="lg:col-span-4 flex flex-col">
+            <div className="flex items-center gap-3.5 group cursor-pointer w-fit mb-6 sm:mb-5" onClick={handleBackToTop}>
               <img
                 src={iedcLogo}
                 alt="IEDC BOOTCAMP CEC Logo"
-                className="h-9 sm:h-10 w-auto object-contain transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_4px_16px_rgba(255,201,40,0.2)]"
+                className="h-10 sm:h-10 w-auto object-contain transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_4px_16px_rgba(255,201,40,0.2)]"
               />
               <div className="flex flex-col -space-y-0.5">
                 <span className="font-display font-black text-xl sm:text-2xl tracking-tight text-white group-hover:text-[#ffc928] transition-colors">
@@ -173,7 +173,7 @@ export const Footer: React.FC = () => {
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-sm leading-relaxed font-mono">
+            <p className="text-xs sm:text-sm text-zinc-400 max-w-sm leading-relaxed font-mono mb-5 sm:mb-5">
               Organized by <strong className="text-zinc-100 font-semibold">{EVENT_CONFIG.organizer}</strong>, College of Engineering Chengannur. Fostering student innovation and rapid prototyping.
             </p>
 
