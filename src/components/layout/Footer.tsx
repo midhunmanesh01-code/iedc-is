@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Globe, Mail, MapPin, ArrowUp, ExternalLink, Heart, ArrowRight } from 'lucide-react'
 import { EVENT_CONFIG } from '@/config/event'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
@@ -63,6 +63,16 @@ const TwitterXIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' 
 
 export const Footer: React.FC = () => {
   const { scrollTo } = useSmoothScroll()
+  const [clickedHref, setClickedHref] = useState<string | null>(null)
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+    e.preventDefault()
+    setClickedHref(href)
+    scrollTo(href)
+    setTimeout(() => {
+      setClickedHref((current) => (current === href ? null : current))
+    }, 1000)
+  }
 
   const getSocialIcon = (iconName: string) => {
     switch (iconName) {
@@ -88,7 +98,7 @@ export const Footer: React.FC = () => {
     <footer
       id="contact"
       aria-label="Site Footer"
-      className="relative bg-black text-zinc-100 pt-16 sm:pt-20 pb-12 overflow-hidden border-t border-white/10"
+      className="relative bg-black text-zinc-100 pt-10 sm:pt-20 pb-7 sm:pb-12 overflow-hidden border-t border-white/10"
     >
       {/* Animated Glowing Top Border Beam */}
       <div className="absolute top-0 left-0 right-0 h-[2px] footer-glow-line pointer-events-none z-10" aria-hidden="true" />
@@ -111,7 +121,7 @@ export const Footer: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 pb-12 sm:pb-16 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-7 sm:gap-10 lg:gap-12 pb-7 sm:pb-16 border-b border-white/10">
           {/* Column 1: Brand & Organizer Identity */}
           <div className="lg:col-span-4 space-y-5">
             <div className="flex items-center gap-3 group cursor-pointer w-fit" onClick={handleBackToTop}>
@@ -165,65 +175,105 @@ export const Footer: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-x-6 sm:gap-x-8">
               <ul>
-                {FOOTER_NAV_LEFT.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        scrollTo(link.href)
-                      }}
-                      className="group flex items-center justify-between py-2.5 sm:py-3 border-b border-white/10 hover:border-[#ffc928]/40 transition-all duration-200 cursor-pointer"
-                    >
-                      <span className="font-sans font-medium text-sm sm:text-base text-zinc-200 group-hover:text-[#ffc928] tracking-tight transition-colors">
-                        {link.label}
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-[#ffc928] transition-all duration-200 group-hover:translate-x-1" />
-                    </a>
-                  </li>
-                ))}
+                {FOOTER_NAV_LEFT.map((link) => {
+                  const isSelected = clickedHref === link.href
+                  return (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        onClick={(e) => handleNavClick(e, link.href)}
+                        className={`group flex items-center justify-between py-2.5 sm:py-3 border-b transition-all duration-200 cursor-pointer active:scale-[0.99] ${
+                          isSelected
+                            ? 'border-[#ffc928]/60 text-[#ffc928]'
+                            : 'border-white/10 hover:border-[#ffc928]/40 active:border-[#ffc928]/60'
+                        }`}
+                      >
+                        <span
+                          className={`font-sans font-medium text-sm sm:text-base tracking-tight transition-colors ${
+                            isSelected
+                              ? 'text-[#ffc928]'
+                              : 'text-zinc-200 group-hover:text-[#ffc928] group-active:text-[#ffc928]'
+                          }`}
+                        >
+                          {link.label}
+                        </span>
+                        <ArrowRight
+                          className={`w-4 h-4 transition-all duration-200 ${
+                            isSelected
+                              ? 'text-[#ffc928] translate-x-1'
+                              : 'text-zinc-500 group-hover:text-[#ffc928] group-active:text-[#ffc928] group-hover:translate-x-1 group-active:translate-x-1'
+                          }`}
+                        />
+                      </a>
+                    </li>
+                  )
+                })}
               </ul>
 
               <ul>
-                {FOOTER_NAV_RIGHT.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        scrollTo(link.href)
-                      }}
-                      className="group flex items-center justify-between py-2.5 sm:py-3 border-b border-white/10 hover:border-[#ffc928]/40 transition-all duration-200 cursor-pointer"
-                    >
-                      <span className="font-sans font-medium text-sm sm:text-base text-zinc-200 group-hover:text-[#ffc928] tracking-tight transition-colors">
-                        {link.label}
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-[#ffc928] transition-all duration-200 group-hover:translate-x-1" />
-                    </a>
-                  </li>
-                ))}
+                {FOOTER_NAV_RIGHT.map((link) => {
+                  const isSelected = clickedHref === link.href
+                  return (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        onClick={(e) => handleNavClick(e, link.href)}
+                        className={`group flex items-center justify-between py-2.5 sm:py-3 border-b transition-all duration-200 cursor-pointer active:scale-[0.99] ${
+                          isSelected
+                            ? 'border-[#ffc928]/60 text-[#ffc928]'
+                            : 'border-white/10 hover:border-[#ffc928]/40 active:border-[#ffc928]/60'
+                        }`}
+                      >
+                        <span
+                          className={`font-sans font-medium text-sm sm:text-base tracking-tight transition-colors ${
+                            isSelected
+                              ? 'text-[#ffc928]'
+                              : 'text-zinc-200 group-hover:text-[#ffc928] group-active:text-[#ffc928]'
+                          }`}
+                        >
+                          {link.label}
+                        </span>
+                        <ArrowRight
+                          className={`w-4 h-4 transition-all duration-200 ${
+                            isSelected
+                              ? 'text-[#ffc928] translate-x-1'
+                              : 'text-zinc-500 group-hover:text-[#ffc928] group-active:text-[#ffc928] group-hover:translate-x-1 group-active:translate-x-1'
+                          }`}
+                        />
+                      </a>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           </div>
 
           {/* Column 3: Venue & Map Location */}
-          <div className="lg:col-span-4 space-y-4">
+          <div className="lg:col-span-4 space-y-3 sm:space-y-4">
             <div className="font-mono text-sm uppercase tracking-[0.2em] text-[#ffc928] font-bold flex items-center gap-2.5">
               <span className="w-2 h-2 bg-[#ffc928] rounded-full" />
               <span>VENUE & LOCATION</span>
             </div>
 
-            <div className="flex items-start gap-3 text-sm text-zinc-400 font-mono">
-              <div className="p-1.5 rounded-md bg-white/[0.04] border border-white/10 text-[#59d6e8] shrink-0 mt-0.5">
+            {/* Clickable Address Redirecting to Google Maps */}
+            <a
+              href="https://maps.google.com/?q=College+of+Engineering+Chengannur"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/address flex items-start gap-3 text-sm font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer"
+              title="Open College of Engineering Chengannur in Google Maps"
+              aria-label="Open College of Engineering Chengannur in Google Maps"
+            >
+              <div className="p-1.5 rounded-md bg-white/[0.04] border border-white/10 group-hover/address:border-[#ffc928]/50 text-[#59d6e8] group-hover/address:text-[#ffc928] shrink-0 mt-0.5 transition-colors">
                 <MapPin className="w-4 h-4" />
               </div>
-              <span className="leading-relaxed text-zinc-300">
+              <span className="leading-relaxed group-hover/address:text-[#ffc928] transition-colors">
                 {EVENT_CONFIG.contact.address}
               </span>
-            </div>
+            </a>
 
-            {/* Compact Embedded Map */}
-            <div className="relative rounded-xl overflow-hidden border border-white/10 group bg-zinc-950 shadow-inner">
+            {/* Embedded Map (Hidden on mobile) */}
+            <div className="hidden sm:block relative rounded-xl overflow-hidden border border-white/10 group bg-zinc-950 shadow-inner">
               <iframe
                 title="College of Engineering Chengannur Map"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.845899452777!2d76.61519907487224!3d9.317274790737225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0622667d8a6b19%3A0x334fb9e831622bde!2sCollege%20of%20Engineering%20Chengannur!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
@@ -245,21 +295,10 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Interactive Back to Top */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
-          <div>
-            © {EVENT_CONFIG.edition} {EVENT_CONFIG.organizer}. All rights reserved.
-          </div>
-
-          <div className="flex items-center gap-4">
-            <span className="text-[11px] text-zinc-400 font-mono inline-flex items-center gap-1.5">
-              <span>Built with</span>
-              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline shrink-0" aria-label="love" />
-              <span>by</span>
-              <span className="text-zinc-200 font-medium hover:text-[#ffc928] transition-colors">
-                Midhun Manesh
-              </span>
-            </span>
+        {/* Bottom Bar: Copyright, Creator Credit & Interactive Back to Top */}
+        <div className="pt-6 sm:pt-8 flex flex-col sm:grid sm:grid-cols-3 items-center gap-4 text-xs font-mono text-zinc-500">
+          {/* Back to Top (Top-right on mobile, Far-right on desktop) */}
+          <div className="order-1 sm:order-3 flex justify-end w-full">
             <button
               type="button"
               onClick={handleBackToTop}
@@ -269,6 +308,23 @@ export const Footer: React.FC = () => {
               <span>BACK TO TOP</span>
               <ArrowUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
             </button>
+          </div>
+
+          {/* Built With Credit (Center on both mobile and desktop) */}
+          <div className="order-2 sm:order-2 flex justify-center w-full">
+            <span className="text-[11px] text-zinc-400 font-mono inline-flex items-center gap-1.5">
+              <span>Built with</span>
+              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline shrink-0" aria-label="love" />
+              <span>by</span>
+              <span className="text-zinc-200 font-medium hover:text-[#ffc928] transition-colors">
+                Midhun Manesh
+              </span>
+            </span>
+          </div>
+
+          {/* Copyright (Bottom centered on mobile, Left-aligned on desktop) */}
+          <div className="order-3 sm:order-1 text-center sm:text-left w-full text-zinc-500">
+            © {EVENT_CONFIG.edition} {EVENT_CONFIG.organizer}. All rights reserved.
           </div>
         </div>
       </div>
