@@ -37,7 +37,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
       setIsEntered(true)
     }, 60)
 
-    // Ending transition (untouched)
+    // Ending transition
     const fadeTimer = setTimeout(() => {
       setIsFading(true)
     }, activeDuration)
@@ -60,15 +60,18 @@ export const Preloader: React.FC<PreloaderProps> = ({
     <div
       role="status"
       aria-label="Loading IDEA SPRINT 2026"
-      className={`fixed inset-0 w-full h-[100dvh] z-[9999] flex items-center justify-center bg-[#0C0D0E] pointer-events-none select-none overflow-hidden touch-none overscroll-none transition-all duration-600 ease-out will-change-[transform,opacity] ${
+      className={`fixed inset-0 w-full h-[100dvh] z-[9999] flex items-center justify-center bg-[#102b52] pointer-events-none select-none overflow-hidden touch-none overscroll-none transition-all duration-600 ease-out will-change-[transform,opacity] ${
         isFading ? 'opacity-0 scale-105 filter blur-xs' : 'opacity-100 scale-100'
       }`}
     >
-      {/* Fullscreen MagicRings Canvas with Luminous Solar Amber Rings */}
+      {/* Precision Blueprint Grid in Loader */}
+      <div className="absolute inset-0 bg-blueprint-grid opacity-40 pointer-events-none" aria-hidden="true" />
+
+      {/* Fullscreen MagicRings Canvas with Blueprint Drafting Gold & Cyan Rings */}
       <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
         <MagicRings
-          color="#FFD166"
-          colorTwo="#FF9E2C"
+          color="#ffc928"
+          colorTwo="#59d6e8"
           ringCount={7}
           motion="pulse"
           speed={1.05}
@@ -82,7 +85,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
           spin={0.1}
           dispersion={0}
           grain={0}
-          opacity={0.94}
+          opacity={0.92}
           interactive={false}
           followMouse={false}
           clickBurst={false}
@@ -92,13 +95,13 @@ export const Preloader: React.FC<PreloaderProps> = ({
         />
       </div>
 
-      {/* Subtle Cinematic Vignette for Center Contrast */}
+      {/* Center Vignette */}
       <div
-        className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,rgba(12,13,14,0.7)_100%)]"
+        className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_35%,rgba(16,43,82,0.85)_100%)]"
         aria-hidden="true"
       />
 
-      {/* Center Content: Optically Balanced for Mobile & Desktop in Orbitron */}
+      {/* Center Content: Balanced Orbitron Blueprint Branding */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4 max-w-[96vw]">
         <div
           className={`flex flex-col items-center justify-center text-center loader-glow-container transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
@@ -107,7 +110,6 @@ export const Preloader: React.FC<PreloaderProps> = ({
               : 'opacity-0 scale-90 blur-sm translate-y-2'
           }`}
         >
-          {/* IDEA SPRINT with larger high-impact mobile sizing */}
           <span
             className="loader-text-shimmer text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-[0.12em] sm:tracking-[0.14em] pl-[0.12em] sm:pl-[0.14em] leading-tight select-none whitespace-nowrap"
             style={{ fontFamily: '"Orbitron", sans-serif' }}
@@ -115,12 +117,15 @@ export const Preloader: React.FC<PreloaderProps> = ({
             IDEA SPRINT
           </span>
 
-          {/* 2026 with larger mobile scale */}
           <span
-            className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF9900] via-[#FFB800] to-[#FFD54F] text-5xl sm:text-6xl md:text-7xl font-black tracking-[0.14em] sm:tracking-[0.16em] pl-[0.14em] sm:pl-[0.16em] drop-shadow-[0_0_30px_rgba(255,184,0,0.65)] mt-1.5 sm:mt-2 leading-none select-none whitespace-nowrap"
+            className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffc928] via-[#ffd766] to-[#59d6e8] text-5xl sm:text-6xl md:text-7xl font-black tracking-[0.14em] sm:tracking-[0.16em] pl-[0.14em] sm:pl-[0.16em] drop-shadow-[0_0_30px_rgba(255,201,40,0.65)] mt-1.5 sm:mt-2 leading-none select-none whitespace-nowrap"
             style={{ fontFamily: '"Orbitron", sans-serif' }}
           >
             2026
+          </span>
+
+          <span className="font-mono text-xs uppercase tracking-widest text-[#59d6e8] mt-3">
+            IEDC BOOTCAMP · CEC
           </span>
         </div>
       </div>

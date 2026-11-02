@@ -1,9 +1,9 @@
 import React from 'react'
-import { ArrowRight, Terminal, Sparkles, ShieldCheck, MapPin, Clock, Trophy, Users, CheckCircle2 } from 'lucide-react'
-import { EVENT_CONFIG } from '@/config/event'
+import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/common/Button'
 import { Container } from '@/components/common/Container'
 import { Countdown } from './Countdown'
+import { BlueprintSchematic } from './BlueprintSchematic'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
 
 export const Hero: React.FC = () => {
@@ -14,73 +14,46 @@ export const Hero: React.FC = () => {
     scrollTo('#register')
   }
 
-  const handleLearnMoreClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleScheduleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
-    scrollTo('#about')
+    scrollTo('#schedule')
   }
 
   return (
     <section
       id="hero"
       aria-label="Hero section"
-      className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center py-6 sm:py-16 lg:py-24 overflow-hidden border-b border-white/5"
+      className="relative min-h-[calc(100dvh-4.5rem)] flex items-center justify-center py-8 sm:py-14 lg:py-18 overflow-hidden border-b border-[#59d6e8]/20"
     >
       <Container size="default">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
-          {/* Left Column: Event Intel, Title & CTAs */}
-          <div className="lg:col-span-7 space-y-4 sm:space-y-8 text-left">
-            {/* Organizer Tag / Identity Badge */}
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-[#131518] border border-white/10 rounded-xs">
-              <span className="w-2 h-2 bg-[#FF5500]" />
-              <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider sm:tracking-widest text-[#FF5500] font-semibold">
-                {EVENT_CONFIG.organizer} PRESENTS
-              </span>
-              <span className="text-white/20">|</span>
-              <span className="font-mono text-[10px] sm:text-xs uppercase tracking-wider text-zinc-400">
-                24H HACKATHON
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Authentic Blueprint Editorial Title, Details & CTAs from Theme.jpeg */}
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#163866]/80 border border-[#59d6e8]/30 rounded-xs">
+              <span className="w-2 h-2 rounded-full bg-[#ffc928] shadow-[0_0_8px_#ffc928]" />
+              <span className="font-mono text-xs uppercase tracking-widest text-[#59d6e8] font-bold">
+                IEDC BOOTCAMP CEC • 24H SPRINT
               </span>
             </div>
 
-            {/* Editorial Title */}
+            {/* Headline from Theme.jpeg: "From napkin sketch to real startup." */}
             <div className="space-y-2">
-              <h1 className="text-3xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight text-white font-display leading-[1.08]">
-                IDEA SPRINT <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5500] via-[#FF7A1A] to-[#FFAA00]">
-                  2026
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-[4.2rem] font-black tracking-tight text-white font-display leading-[1.08]">
+                From napkin sketch <br />
+                <span className="relative inline-block text-[#ffc928] mt-1">
+                  to real startup.
+                  {/* Blueprint Underline Bar from Theme.jpeg */}
+                  <span className="absolute -bottom-1 sm:-bottom-2 left-0 right-0 h-[3px] sm:h-[4px] bg-[#ffc928] rounded-full shadow-[0_0_12px_rgba(255,201,40,0.5)]" />
                 </span>
-                <span className="text-[#FF5500]">.</span>
               </h1>
-              <p className="text-sm sm:text-lg lg:text-xl text-zinc-300 font-normal max-w-xl leading-relaxed pt-1 sm:pt-2">
-                A 24-hour sprint engineered for student builders, innovators, and thinkers to translate speculative concepts into high-impact ventures.
+
+              {/* Subtitle from Theme.jpeg */}
+              <p className="font-mono text-xs sm:text-sm lg:text-base text-[#c4daf2] font-normal max-w-xl leading-relaxed pt-2">
+                A 24-hour innovation sprint where teams draft, build and pitch ideas to mentors and a live jury. Bring a problem.
               </p>
             </div>
 
-            {/* Mobile-First Adaptive Quick Intel Chips Bar */}
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1 -mx-4 px-4 sm:mx-0 sm:px-0">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#131518] border border-white/10 rounded-full text-xs font-mono text-zinc-300 whitespace-nowrap shrink-0">
-                <MapPin className="w-3.5 h-3.5 text-sky-400" />
-                <span>CEC Chengannur</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#131518] border border-white/10 rounded-full text-xs font-mono text-zinc-300 whitespace-nowrap shrink-0">
-                <Clock className="w-3.5 h-3.5 text-[#FF5500]" />
-                <span>24-Hour Non-Stop</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#131518] border border-white/10 rounded-full text-xs font-mono text-zinc-300 whitespace-nowrap shrink-0">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>₹50,000+ Prize Pool</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#131518] border border-white/10 rounded-full text-xs font-mono text-zinc-300 whitespace-nowrap shrink-0">
-                <Users className="w-3.5 h-3.5 text-emerald-400" />
-                <span>2–4 Per Squad</span>
-              </div>
-            </div>
-
-            {/* Live Countdown Component */}
-            <div className="pt-1 sm:pt-2">
-              <Countdown />
-            </div>
-
-            {/* Call To Actions */}
+            {/* CTAs from Theme.jpeg */}
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
               <Button
                 variant="primary"
@@ -88,115 +61,109 @@ export const Hero: React.FC = () => {
                 href="#register"
                 onClick={handleRegisterClick}
                 rightIcon={<ArrowRight className="w-4 h-4" />}
-                className="w-full sm:w-auto active:scale-[0.98]"
+                className="w-full sm:w-auto active:scale-[0.98] !rounded-md px-6 py-3 font-mono font-bold text-sm tracking-wider"
               >
-                Register Your Team
+                JOIN THE SPRINT &gt;
               </Button>
 
               <Button
                 variant="secondary"
                 size="lg"
-                href="#about"
-                onClick={handleLearnMoreClick}
-                className="w-full sm:w-auto active:scale-[0.98]"
+                href="#schedule"
+                onClick={handleScheduleClick}
+                className="w-full sm:w-auto active:scale-[0.98] !rounded-md px-6 py-3 font-mono font-bold text-sm border-white/60 hover:border-[#ffc928] text-white"
               >
-                Explore Sprint Details
+                VIEW SCHEDULE
               </Button>
             </div>
 
-            {/* Micro Credibility Badges with Adaptive Signals */}
-            <div className="pt-3 sm:pt-4 flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-mono text-zinc-400">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Official IEDC CEC Event</span>
+            {/* Stats Bar from Theme.jpeg */}
+            <div className="pt-3 border-t border-[#59d6e8]/20 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 font-mono">
+              <div className="p-2 sm:p-2.5 bg-[#163866]/60 border border-[#59d6e8]/20 rounded-xs">
+                <div className="text-xl sm:text-2xl font-black text-[#ffc928]">24H</div>
+                <div className="text-[10px] sm:text-xs text-[#a0c4e8] uppercase">non-stop build</div>
               </div>
-              <div className="flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-amber-400" />
-                <span>Mentorship & Cash Prizes</span>
+              <div className="p-2 sm:p-2.5 bg-[#163866]/60 border border-[#59d6e8]/20 rounded-xs">
+                <div className="text-xl sm:text-2xl font-black text-[#ffc928]">100+</div>
+                <div className="text-[10px] sm:text-xs text-[#a0c4e8] uppercase">innovators</div>
               </div>
+              <div className="p-2 sm:p-2.5 bg-[#163866]/60 border border-[#59d6e8]/20 rounded-xs">
+                <div className="text-xl sm:text-2xl font-black text-[#ffc928]">5</div>
+                <div className="text-[10px] sm:text-xs text-[#a0c4e8] uppercase">idea tracks</div>
+              </div>
+              <div className="p-2 sm:p-2.5 bg-[#163866]/60 border border-[#59d6e8]/20 rounded-xs">
+                <div className="text-xl sm:text-2xl font-black text-[#ffc928]">[₹50K+]</div>
+                <div className="text-[10px] sm:text-xs text-[#a0c4e8] uppercase">prize pool</div>
+              </div>
+            </div>
+
+            {/* SPRINT PROGRESS Milestone Tracker from Theme.jpeg */}
+            <div className="pt-2">
+              <div className="font-mono text-[10px] sm:text-xs text-[#59d6e8] uppercase tracking-widest font-bold mb-2">
+                SPRINT PROGRESS
+              </div>
+              <div className="relative flex items-center justify-between max-w-lg">
+                {/* Background Line */}
+                <div className="absolute left-3 right-3 top-2.5 h-[2px] bg-[#59d6e8]/30 -z-0" />
+                {/* Active Progress Line (from SKETCH to BUILD) */}
+                <div className="absolute left-3 w-1/3 top-2.5 h-[2px] bg-[#ffc928] -z-0 shadow-[0_0_8px_#ffc928]" />
+
+                {/* Step 1: SKETCH */}
+                <div className="flex flex-col items-center relative z-10">
+                  <span className="w-5 h-5 rounded-full bg-[#ffc928] border-2 border-[#102b52] flex items-center justify-center shadow-[0_0_10px_#ffc928]">
+                    <span className="w-2 h-2 rounded-full bg-[#102b52]" />
+                  </span>
+                  <span className="font-mono text-[9px] sm:text-[10px] text-[#ffc928] font-bold mt-1">
+                    SKETCH
+                  </span>
+                </div>
+
+                {/* Step 2: BUILD */}
+                <div className="flex flex-col items-center relative z-10">
+                  <span className="w-5 h-5 rounded-full bg-[#ffc928] border-2 border-[#102b52] flex items-center justify-center shadow-[0_0_10px_#ffc928]">
+                    <span className="w-2 h-2 rounded-full bg-[#102b52]" />
+                  </span>
+                  <span className="font-mono text-[9px] sm:text-[10px] text-[#ffc928] font-bold mt-1">
+                    BUILD
+                  </span>
+                </div>
+
+                {/* Step 3: TEST */}
+                <div className="flex flex-col items-center relative z-10">
+                  <span className="w-5 h-5 rounded-full bg-[#163866] border-2 border-[#59d6e8] flex items-center justify-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#59d6e8]/50" />
+                  </span>
+                  <span className="font-mono text-[9px] sm:text-[10px] text-[#a0c4e8] mt-1">
+                    TEST
+                  </span>
+                </div>
+
+                {/* Step 4: PITCH */}
+                <div className="flex flex-col items-center relative z-10">
+                  <span className="w-5 h-5 rounded-full bg-[#163866] border-2 border-[#59d6e8] flex items-center justify-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#59d6e8]/50" />
+                  </span>
+                  <span className="font-mono text-[9px] sm:text-[10px] text-[#a0c4e8] mt-1">
+                    PITCH
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Countdown Integration */}
+            <div className="pt-2">
+              <Countdown />
             </div>
           </div>
 
-          {/* Right Column: Holographic Cyber Sprint Pass */}
+          {/* Right Column: Engineering Blueprint Lightbulb Schematic from Theme.jpeg */}
           <div className="lg:col-span-5 flex justify-center lg:justify-end mt-4 lg:mt-0">
-            <div className="relative w-full max-w-md bg-[#131518] border border-white/15 p-5 sm:p-6 flex flex-col justify-between overflow-hidden group shadow-2xl rounded-xs">
-              {/* Technical Grid Overlay Inside Card */}
-              <div
-                className="absolute inset-0 bg-grid-pattern opacity-25 pointer-events-none"
-                aria-hidden="true"
-              />
-
-              {/* Decorative Header Bar */}
-              <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#FF5500]/80" />
-                  <span className="ml-2 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
-                    ACCESS.PASS // 2026.SYS
-                  </span>
-                </div>
-                <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 border border-emerald-500/30 rounded-xs flex items-center gap-1 font-semibold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  ADMISSION OPEN
-                </span>
-              </div>
-
-              {/* Center Content: Cyber Event Credential */}
-              <div className="relative z-10 flex flex-col items-center justify-center my-auto py-6 sm:py-8 text-center space-y-4">
-                <div className="relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 border border-dashed border-[#FF5500]/40 group-hover:border-[#FF5500] transition-colors rounded-xs">
-                  <div className="w-12 h-12 border border-[#FF5500] rotate-45 flex items-center justify-center animate-[spin_16s_linear_infinite]">
-                    <div className="w-5 h-5 bg-[#FFAA00]/20 -rotate-45" />
-                  </div>
-                  <Sparkles className="absolute text-amber-400 w-5 h-5 animate-pulse" />
-                </div>
-
-                <div className="space-y-1">
-                  <div className="font-mono text-[10px] text-amber-400 uppercase tracking-widest font-semibold">
-                    COLLEGE OF ENGINEERING CHENGANNUR
-                  </div>
-                  <div className="font-display font-bold text-xl sm:text-2xl text-white">
-                    24-HOUR SPRINT ARENA
-                  </div>
-                  <p className="font-mono text-xs text-zinc-400 max-w-xs mx-auto">
-                    Full access pass for registered teams: Hardware workbench, mentor checkpoints, food & power desks.
-                  </p>
-                </div>
-
-                {/* Key Pass Specs */}
-                <div className="grid grid-cols-3 gap-2 w-full pt-2 font-mono text-center">
-                  <div className="p-2 bg-[#0C0D0E] border border-white/5 rounded-xs">
-                    <div className="text-[10px] text-zinc-500 uppercase">TEAMS</div>
-                    <div className="text-sm font-bold text-[#FF5500]">30 SQUADS</div>
-                  </div>
-                  <div className="p-2 bg-[#0C0D0E] border border-white/5 rounded-xs">
-                    <div className="text-[10px] text-zinc-500 uppercase">ENTRY</div>
-                    <div className="text-sm font-bold text-amber-300">FREE (0 INR)</div>
-                  </div>
-                  <div className="p-2 bg-[#0C0D0E] border border-white/5 rounded-xs">
-                    <div className="text-[10px] text-zinc-500 uppercase">STATUS</div>
-                    <div className="text-sm font-bold text-emerald-400 flex items-center justify-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> VERIFIED
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Decorative Technical Footer Bar */}
-              <div className="relative z-10 flex items-center justify-between border-t border-white/10 pt-3 font-mono text-[10px] text-zinc-500">
-                <span className="tracking-widest">ID: CEC-IS-2026-LIVE</span>
-                <span className="text-[#FF5500] font-semibold">IEDC BOOTCAMP</span>
-              </div>
-
-              {/* Corner Markers */}
-              <span className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[#FF5500]" />
-              <span className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[#FF5500]" />
-              <span className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[#FF5500]" />
-              <span className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[#FF5500]" />
-            </div>
+            <BlueprintSchematic />
           </div>
         </div>
       </Container>
     </section>
   )
 }
+
+export default Hero

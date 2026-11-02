@@ -71,28 +71,28 @@ export const IdeaForge: React.FC = () => {
     switch (domain) {
       case 'CleanTech & Energy':
         return {
-          active: 'bg-emerald-500 text-black border-emerald-400 font-bold shadow-sm',
-          badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+          active: 'bg-emerald-400 text-[#102b52] border-emerald-300 font-bold shadow-md',
+          badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
         }
       case 'Healthcare & Assistive':
         return {
-          active: 'bg-rose-500 text-white border-rose-400 font-bold shadow-sm',
-          badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+          active: 'bg-rose-400 text-[#102b52] border-rose-300 font-bold shadow-md',
+          badge: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
         }
       case 'AI & Machine Learning':
         return {
-          active: 'bg-sky-500 text-black border-sky-400 font-bold shadow-sm',
-          badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+          active: 'bg-[#59d6e8] text-[#102b52] border-[#59d6e8] font-bold shadow-md',
+          badge: 'bg-[#59d6e8]/20 text-[#59d6e8] border-[#59d6e8]/40',
         }
       case 'Fintech & Open Commerce':
         return {
-          active: 'bg-amber-500 text-black border-amber-400 font-bold shadow-sm',
-          badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+          active: 'bg-[#ffc928] text-[#102b52] border-[#ffc928] font-bold shadow-md',
+          badge: 'bg-[#ffc928]/20 text-[#ffc928] border-[#ffc928]/40',
         }
       default:
         return {
-          active: 'bg-[#FF5500] text-white border-[#FF5500] font-bold shadow-sm',
-          badge: 'bg-[#FF5500]/15 text-[#FF5500] border-[#FF5500]/30',
+          active: 'bg-[#ffc928] text-[#102b52] border-[#ffc928] font-bold shadow-md',
+          badge: 'bg-[#ffc928]/20 text-[#ffc928] border-[#ffc928]/40',
         }
     }
   }
@@ -117,28 +117,28 @@ export const IdeaForge: React.FC = () => {
     <section
       id="idea-forge"
       aria-label="Idea Forge Interactive Experience"
-      className="py-16 sm:py-20 lg:py-28 relative border-b border-white/5 bg-[#0C0D0E]"
+      className="py-16 sm:py-20 lg:py-28 relative border-b border-[#59d6e8]/20 bg-[#102b52]"
     >
       <Container size="default">
         <SectionHeading
-          tag="03 // INTERACTIVE LAB"
+          tag="SPRINT TRACKS & IDEATION"
           title="IDEA FORGE: Spark Your Direction."
           subtitle="A dedicated ideation workbench. Explore sample problem hooks, stress constraints, and spark initial brainstorm vectors for your sprint team."
         />
 
         {/* Workbench Container */}
-        <div className="bg-[#131518] border border-white/10 p-4 sm:p-8 lg:p-10 relative overflow-hidden rounded-xs">
+        <div className="bg-[#163866] border border-[#59d6e8]/30 p-4 sm:p-8 lg:p-10 relative overflow-hidden rounded-xs shadow-2xl">
           {/* Top Workbench Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-white/10 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-[#59d6e8]/25 gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-[#FF5500]/15 border border-[#FF5500]/30 rounded-xs shrink-0">
-                <Flame className="w-5 h-5 text-[#FF5500]" />
+              <div className="p-2.5 bg-[#ffc928]/20 border border-[#ffc928]/40 rounded-xs shrink-0">
+                <Flame className="w-5 h-5 text-[#ffc928]" />
               </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-bold font-display text-white">
                   Sprint Seed Generator
                 </h3>
-                <span className="font-mono text-xs text-zinc-400 block sm:inline">
+                <span className="font-mono text-xs text-[#a0c0e0] block sm:inline">
                   Interactive brainstorming catalyst for prospective teams
                 </span>
               </div>
@@ -150,16 +150,16 @@ export const IdeaForge: React.FC = () => {
               onClick={handleRandomize}
               isLoading={isSpinning}
               leftIcon={<RefreshCw className={`w-3.5 h-3.5 ${isSpinning ? 'animate-spin' : ''}`} />}
-              className="w-full sm:w-auto justify-center min-h-[44px] active:scale-[0.98]"
+              className="w-full sm:w-auto justify-center min-h-[44px] active:scale-[0.98] font-bold"
             >
               Roll New Seed
             </Button>
           </div>
 
-          {/* Domain Filter Pills: Adaptive Color Coding on Mobile & Desktop */}
+          {/* Domain Filter Pills */}
           <div className="pt-5 flex flex-nowrap overflow-x-auto scrollbar-none pb-2 gap-2 items-center -mx-4 px-4 sm:mx-0 sm:px-0">
-            <span className="font-mono text-xs uppercase tracking-wider text-zinc-400 shrink-0 mr-1 flex items-center gap-1.5">
-              <Target className="w-3.5 h-3.5 text-[#FF5500]" /> Domain:
+            <span className="font-mono text-xs uppercase tracking-wider text-[#59d6e8] font-bold shrink-0 mr-1 flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5 text-[#ffc928]" /> Tracks:
             </span>
             {domains.map((domain) => {
               const isActive = activeDomain === domain
@@ -173,10 +173,10 @@ export const IdeaForge: React.FC = () => {
                     setActiveDomain(domain)
                     setSelectedSeedIndex(0)
                   }}
-                  className={`px-3.5 py-2 text-xs font-mono rounded-full border transition-all shrink-0 min-h-[38px] active:scale-95 ${
+                  className={`px-3.5 py-2 text-xs font-mono rounded-full border transition-all shrink-0 min-h-[38px] active:scale-95 cursor-pointer ${
                     isActive
                       ? style.active
-                      : 'bg-white/5 text-zinc-300 border-white/10 hover:text-white hover:border-white/20'
+                      : 'bg-[#102b52]/90 text-zinc-200 border-[#59d6e8]/25 hover:text-white hover:border-[#ffc928]/50'
                   }`}
                 >
                   {domain}
@@ -206,7 +206,7 @@ export const IdeaForge: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/10 rounded-xs text-xs font-mono text-zinc-300 hover:text-white transition-colors shrink-0 self-start sm:self-auto min-h-[38px]"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#102b52] hover:bg-[#102b52]/80 active:bg-[#102b52] border border-[#59d6e8]/30 rounded-xs text-xs font-mono text-zinc-200 hover:text-white transition-colors shrink-0 self-start sm:self-auto min-h-[38px] cursor-pointer"
                   title="Copy seed brief"
                   aria-label="Copy seed brief to clipboard"
                 >
@@ -217,38 +217,38 @@ export const IdeaForge: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-zinc-400" />
+                      <Copy className="w-3.5 h-3.5 text-[#59d6e8]" />
                       <span>Copy Brief</span>
                     </>
                   )}
                 </button>
               </div>
 
-              <div className="space-y-4">
-                <div className="p-4 bg-[#0C0D0E] border border-white/10 rounded-xs">
-                  <div className="font-mono text-xs text-[#FF5500] uppercase font-semibold mb-1">
+              <div className="space-y-4 font-mono">
+                <div className="p-4 bg-[#102b52] border border-[#59d6e8]/25 rounded-xs shadow-inner">
+                  <div className="font-mono text-xs text-[#ffc928] uppercase font-bold mb-1">
                     [1] The Core Problem Vector:
                   </div>
-                  <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
+                  <p className="text-sm sm:text-base text-zinc-100 leading-relaxed">
                     {currentSeed.problemStatement}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 bg-[#0C0D0E] border border-white/10 rounded-xs">
-                    <div className="font-mono text-xs text-sky-400 uppercase font-semibold mb-1">
+                  <div className="p-4 bg-[#102b52] border border-[#59d6e8]/25 rounded-xs shadow-inner">
+                    <div className="font-mono text-xs text-[#59d6e8] uppercase font-bold mb-1">
                       [2] Target Cohort:
                     </div>
-                    <p className="text-xs sm:text-sm text-zinc-300">
+                    <p className="text-xs sm:text-sm text-zinc-200">
                       {currentSeed.targetAudience}
                     </p>
                   </div>
 
-                  <div className="p-4 bg-[#0C0D0E] border border-white/10 rounded-xs">
-                    <div className="font-mono text-xs text-amber-400 uppercase font-semibold mb-1">
+                  <div className="p-4 bg-[#102b52] border border-[#59d6e8]/25 rounded-xs shadow-inner">
+                    <div className="font-mono text-xs text-[#ffc928] uppercase font-bold mb-1">
                       [3] Real-World Constraint:
                     </div>
-                    <p className="text-xs sm:text-sm text-zinc-300">
+                    <p className="text-xs sm:text-sm text-zinc-200">
                       {currentSeed.constraint}
                     </p>
                   </div>
@@ -256,17 +256,17 @@ export const IdeaForge: React.FC = () => {
               </div>
             </div>
 
-            {/* Sidebar / Future Feature Reservation */}
+            {/* Sidebar */}
             <div className="lg:col-span-4 flex flex-col gap-4">
-              <Card className="bg-[#0C0D0E]" withCrosshairs>
-                <div className="flex items-center gap-2 mb-2 font-mono text-xs text-amber-400 font-semibold">
-                  <Sparkles className="w-4 h-4 text-amber-400" />
+              <Card className="bg-[#102b52] border-[#59d6e8]/30" withCrosshairs>
+                <div className="flex items-center gap-2 mb-2 font-mono text-xs text-[#ffc928] font-bold">
+                  <Sparkles className="w-4 h-4 text-[#ffc928]" />
                   <span>FUTURE EXPANSION</span>
                 </div>
                 <h5 className="font-display font-bold text-white text-base mb-1">
                   AI Brainstorm Engine
                 </h5>
-                <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+                <p className="text-xs text-[#a0c0e0] leading-relaxed mb-4 font-mono">
                   In Stage 2, Idea Forge will connect to an interactive prompt generator with custom evaluation rubrics for registered participants.
                 </p>
                 <Button
@@ -280,7 +280,7 @@ export const IdeaForge: React.FC = () => {
                 </Button>
               </Card>
 
-              <div className="p-4 border border-dashed border-white/15 bg-white/[0.01] rounded-xs text-xs font-mono text-zinc-500">
+              <div className="p-4 border border-dashed border-[#59d6e8]/30 bg-[#102b52]/50 rounded-xs text-xs font-mono text-[#59d6e8]/70">
                 <span>SLOT: EXPERIMENTATION POD // CEC-IS26</span>
               </div>
             </div>
@@ -290,3 +290,5 @@ export const IdeaForge: React.FC = () => {
     </section>
   )
 }
+
+export default IdeaForge

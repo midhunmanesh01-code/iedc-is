@@ -1,6 +1,6 @@
 import React from 'react'
 
-export type BadgeVariant = 'accent' | 'neutral' | 'outline' | 'warning'
+export type BadgeVariant = 'accent' | 'neutral' | 'outline' | 'warning' | 'cyan'
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   readonly variant?: BadgeVariant
@@ -15,10 +15,11 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   const variantClasses: Record<BadgeVariant, string> = {
-    accent: 'bg-[#FF5500]/15 text-[#FF5500] border-[#FF5500]/35 font-semibold',
-    neutral: 'bg-white/5 text-slate-300 border-white/10',
-    outline: 'bg-transparent text-slate-400 border-white/15',
-    warning: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
+    accent: 'bg-[#ffc928]/15 text-[#ffc928] border-[#ffc928]/40 font-semibold',
+    cyan: 'bg-[#59d6e8]/15 text-[#59d6e8] border-[#59d6e8]/40 font-semibold',
+    neutral: 'bg-[#102b52]/80 text-[#f5f7fa] border-[#59d6e8]/25',
+    outline: 'bg-transparent text-[#59d6e8] border-[#59d6e8]/35',
+    warning: 'bg-amber-500/15 text-[#ffc928] border-[#ffc928]/40',
   }
 
   return (

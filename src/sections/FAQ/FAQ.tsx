@@ -67,11 +67,11 @@ export const FAQ: React.FC = () => {
     <section
       id="faq"
       aria-label="Frequently Asked Questions"
-      className="py-16 sm:py-20 lg:py-28 relative border-b border-white/5 bg-[#0C0D0E]"
+      className="py-16 sm:py-20 lg:py-28 relative border-b border-[#59d6e8]/20 bg-[#102b52]/90"
     >
       <Container size="default">
         <SectionHeading
-          tag="04 // KNOWLEDGE PROTOCOL"
+          tag="FREQUENTLY ASKED QUESTIONS"
           title="Everything You Need to Know."
           subtitle="Answers to common questions regarding eligibility, evaluation rubrics, mentorship, and sprint logistics."
         />
@@ -85,8 +85,8 @@ export const FAQ: React.FC = () => {
                 key={faq.id}
                 className={`rounded-xs border transition-all duration-300 overflow-hidden ${
                   isOpen
-                    ? 'bg-[#131518] border-[#FF5500]/40 shadow-lg shadow-black/40'
-                    : 'bg-[#131518]/60 border-white/10 hover:border-white/20 hover:bg-[#131518]'
+                    ? 'bg-[#163866] border-[#ffc928]/60 shadow-lg shadow-[#102b52]/80'
+                    : 'bg-[#163866]/70 border-[#59d6e8]/25 hover:border-[#ffc928]/40 hover:bg-[#163866]'
                 }`}
               >
                 <button
@@ -94,14 +94,14 @@ export const FAQ: React.FC = () => {
                   onClick={() => toggleItem(faq.id)}
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${faq.id}`}
-                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5500]"
+                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffc928] cursor-pointer"
                 >
                   <div className="flex items-center gap-3 pr-4">
                     <span
                       className={`font-mono text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-xs border transition-colors ${
                         isOpen
-                          ? 'bg-[#FF5500]/15 text-[#FF5500] border-[#FF5500]/30'
-                          : 'bg-white/5 text-zinc-400 border-white/10'
+                          ? 'bg-[#ffc928]/20 text-[#ffc928] border-[#ffc928]/40 font-bold'
+                          : 'bg-[#102b52] text-[#59d6e8] border-[#59d6e8]/30'
                       }`}
                     >
                       {faq.category}
@@ -112,8 +112,8 @@ export const FAQ: React.FC = () => {
                   </div>
 
                   <div
-                    className={`p-1.5 rounded-xs transition-transform duration-300 text-zinc-400 ${
-                      isOpen ? 'rotate-180 text-[#FF5500]' : 'text-zinc-500'
+                    className={`p-1.5 rounded-xs transition-transform duration-300 ${
+                      isOpen ? 'rotate-180 text-[#ffc928]' : 'text-[#59d6e8]'
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -127,7 +127,7 @@ export const FAQ: React.FC = () => {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <div className="px-4 pb-5 sm:px-5 pt-1 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-white/5">
+                    <div className="px-4 pb-5 sm:px-5 pt-1 text-xs sm:text-sm text-[#c4daf2] leading-relaxed border-t border-[#59d6e8]/20 font-mono">
                       {faq.answer}
                     </div>
                   </div>
@@ -138,14 +138,14 @@ export const FAQ: React.FC = () => {
         </div>
 
         {/* Support Help Strip */}
-        <div className="mt-10 max-w-3xl mx-auto p-4 bg-[#131518]/70 border border-white/10 rounded-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2.5 text-zinc-300">
-            <HelpCircle className="w-4 h-4 text-[#FF5500] shrink-0" />
+        <div className="mt-10 max-w-3xl mx-auto p-4 bg-[#163866] border border-[#59d6e8]/30 rounded-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-md">
+          <div className="flex items-center gap-2.5 text-zinc-200">
+            <HelpCircle className="w-4 h-4 text-[#ffc928] shrink-0" />
             <span>Have a specific question not covered here?</span>
           </div>
           <a
             href={`mailto:${EVENT_CONFIG.contact.email}`}
-            className="font-mono text-xs text-[#FF5500] hover:text-[#FF6B1A] hover:underline flex items-center gap-1.5 shrink-0"
+            className="font-mono text-xs text-[#ffc928] hover:text-[#ffb700] hover:underline flex items-center gap-1.5 shrink-0 font-bold"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Ask Team IEDC CEC
@@ -155,3 +155,5 @@ export const FAQ: React.FC = () => {
     </section>
   )
 }
+
+export default FAQ

@@ -1,19 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0c0d0e;
-  --color-surface: #131518;
-  --color-surface-subtle: #191c21;
-  --color-surface-elevated: #20242a;
-  --color-accent: #ff5500;
-  --color-accent-hover: #ff6b1a;
-  --color-accent-dim: #e04b00;
-  --color-accent-amber: #f59e0b;
-  --color-accent-cyan: #38bdf8;
+  --color-background: #102b52;
+  --color-surface: #163866;
+  --color-surface-subtle: #122f59;
+  --color-surface-elevated: #1d467e;
+  --color-accent: #ffc928;
+  --color-accent-hover: #ffb700;
+  --color-accent-dim: #e5b019;
+  --color-accent-amber: #ffc928;
+  --color-accent-cyan: #59d6e8;
   --color-accent-emerald: #10b981;
-  --color-border-subtle: rgba(255, 255, 255, 0.07);
-  --color-border-medium: rgba(255, 255, 255, 0.14);
-  --color-border-accent: rgba(255, 85, 0, 0.4);
+  --color-blueprint-navy: #102b52;
+  --color-technical-blue: #163866;
+  --color-drafting-gold: #ffc928;
+  --color-cyan: #59d6e8;
+  --color-blueprint-white: #f5f7fa;
+  --color-border-subtle: rgba(89, 214, 232, 0.15);
+  --color-border-medium: rgba(89, 214, 232, 0.3);
+  --color-border-accent: rgba(255, 201, 40, 0.5);
 
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
@@ -21,16 +26,18 @@
 }
 
 :root {
-  --color-bg-primary: #0c0d0e;
-  --color-bg-secondary: #131518;
-  --color-bg-surface: #191c21;
-  --color-accent-primary: #ff5500;
-  --color-accent-amber: #f59e0b;
-  --color-accent-cyan: #38bdf8;
+  --color-bg-primary: #102b52;
+  --color-bg-secondary: #163866;
+  --color-bg-surface: #122f59;
+  --color-accent-primary: #ffc928;
+  --color-accent-amber: #ffc928;
+  --color-accent-cyan: #59d6e8;
   --color-accent-emerald: #10b981;
-  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-default: rgba(89, 214, 232, 0.2);
+  --brand-color: #ffc928;
 
   color-scheme: dark;
+  accent-color: #ffc928;
 }
 
 /* Mobile-First Touch & Gestures */
@@ -38,6 +45,8 @@ html,
 body {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  background-color: #102b52;
+  color: #f5f7fa;
 }
 
 /* Mobile Chip / Horizontal Carousel Scrollbar Utility */
@@ -61,13 +70,13 @@ body {
   font-family: "Orbitron", system-ui, -apple-system, sans-serif;
 }
 
-/* Cinematic Warm Gold & Amber Shimmer & Glow for Loader */
+/* Blueprint Drafting Gold & Cyan Shimmer & Glow for Loader */
 @keyframes loader-glow-pulse {
   0%, 100% {
-    filter: drop-shadow(0 0 20px rgba(255, 184, 0, 0.4)) drop-shadow(0 0 40px rgba(255, 140, 0, 0.2));
+    filter: drop-shadow(0 0 20px rgba(255, 201, 40, 0.45)) drop-shadow(0 0 40px rgba(89, 214, 232, 0.25));
   }
   50% {
-    filter: drop-shadow(0 0 35px rgba(255, 184, 0, 0.7)) drop-shadow(0 0 65px rgba(255, 140, 0, 0.35));
+    filter: drop-shadow(0 0 35px rgba(255, 201, 40, 0.75)) drop-shadow(0 0 65px rgba(89, 214, 232, 0.45));
   }
 }
 
@@ -84,10 +93,10 @@ body {
   background: linear-gradient(
     110deg,
     #ffffff 20%,
-    #ffffff 35%,
-    #ffe6a7 48%,
-    #ffb800 55%,
-    #ffffff 68%,
+    #f5f7fa 35%,
+    #fff2b2 48%,
+    #ffc928 55%,
+    #59d6e8 68%,
     #ffffff 100%
   );
   background-size: 250% 100%;
@@ -101,41 +110,76 @@ body {
   animation: loader-glow-pulse 2s ease-in-out infinite;
 }
 
-/* Custom Scrollbar for Sleek Tech Aesthetic */
+/* Footer Animated Border Beam */
+@keyframes beam-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.footer-glow-line {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(89, 214, 232, 0.25) 20%,
+    #ffc928 48%,
+    #59d6e8 54%,
+    rgba(89, 214, 232, 0.25) 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: beam-sweep 5s linear infinite;
+}
+
+/* Technical Blueprint Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0c0d0e;
+  background: #102b52;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #25282e;
+  background: #1e4577;
   border-radius: 4px;
+  border: 1px solid rgba(89, 214, 232, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #363a43;
+  background: #ffc928;
 }
 
-/* Subtle Technical Grid Background */
+/* Authentic Engineering Blueprint Grid Background */
+.bg-blueprint-grid {
+  background-color: #102b52;
+  background-size: 60px 60px, 60px 60px, 12px 12px, 12px 12px;
+  background-image: 
+    linear-gradient(to right, rgba(89, 214, 232, 0.16) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(89, 214, 232, 0.16) 1px, transparent 1px),
+    linear-gradient(to right, rgba(89, 214, 232, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(89, 214, 232, 0.05) 1px, transparent 1px);
+}
+
 .bg-grid-pattern {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(89, 214, 232, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(89, 214, 232, 0.12) 1px, transparent 1px);
 }
 
 .bg-dot-pattern {
   background-size: 24px 24px;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(89, 214, 232, 0.2) 1px, transparent 1px);
 }
 
 /* Smooth Focus States for Keyboard Navigation */
 :focus-visible {
-  outline: 2px solid #ff5500;
+  outline: 2px solid #ffc928;
   outline-offset: 2px;
 }
 

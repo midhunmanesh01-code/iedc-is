@@ -39,7 +39,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses =
-    'inline-flex items-center justify-center font-mono font-medium tracking-wide uppercase transition-all duration-200 select-none cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF5500] disabled:cursor-not-allowed disabled:opacity-50'
+    'inline-flex items-center justify-center font-mono font-medium tracking-wide uppercase transition-all duration-200 select-none cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffc928] disabled:cursor-not-allowed disabled:opacity-50'
 
   const sizeClasses: Record<ButtonSize, string> = {
     sm: 'text-xs px-3.5 py-1.5 gap-1.5 rounded-xs tracking-wider',
@@ -49,13 +49,13 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantClasses: Record<ButtonVariant, string> = {
     primary:
-      'bg-[#FF5500] text-white font-semibold hover:bg-[#FF6B1A] active:translate-y-[1px] shadow-[0_0_18px_rgba(255,85,0,0.35)] hover:shadow-[0_0_26px_rgba(255,85,0,0.5)]',
+      'bg-[#ffc928] text-[#102b52] font-bold hover:bg-[#ffb700] active:translate-y-[1px] shadow-[0_0_18px_rgba(255,201,40,0.35)] hover:shadow-[0_0_26px_rgba(255,201,40,0.55)]',
     secondary:
-      'bg-[#131518] text-white border border-white/10 hover:border-[#FF5500]/50 hover:bg-[#1A1D22] active:translate-y-[1px]',
+      'bg-[#163866] text-[#f5f7fa] border border-[#59d6e8]/30 hover:border-[#ffc928]/80 hover:bg-[#1a447c] active:translate-y-[1px]',
     outline:
-      'bg-transparent text-[#FF5500] border border-[#FF5500]/60 hover:bg-[#FF5500] hover:text-white active:translate-y-[1px]',
+      'bg-transparent text-[#ffc928] border border-[#ffc928]/80 hover:bg-[#ffc928] hover:text-[#102b52] active:translate-y-[1px]',
     ghost:
-      'bg-transparent text-slate-300 hover:text-[#FF5500] hover:bg-white/5 active:translate-y-[1px]',
+      'bg-transparent text-[#f5f7fa] hover:text-[#ffc928] hover:bg-[#59d6e8]/10 active:translate-y-[1px]',
   }
 
   const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`
