@@ -59,17 +59,37 @@ export const Navbar: React.FC = () => {
             isMobileMenuOpen ? 'rounded-[24px]' : 'rounded-[32px]'
           }`}
         >
-          {/* Hardware-Accelerated Glassmorphic Capsule Background: visible on desktop when scrolled, or on mobile only when menu is open */}
+          {/* Desktop Glassmorphic Capsule Background: visible on desktop when scrolled */}
           <div
-            className={`absolute inset-0 rounded-[inherit] -z-10 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              isMobileMenuOpen
-                ? 'opacity-100 bg-[#131518]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50'
-                : isScrolled
-                ? 'hidden md:block md:opacity-100 bg-[#131518]/60 backdrop-blur-lg md:backdrop-blur-xl border border-white/10 shadow-xl shadow-black/40'
+            className={`hidden md:block absolute inset-0 rounded-[inherit] -z-10 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              isScrolled
+                ? 'opacity-100 bg-[#131518]/60 backdrop-blur-xl border border-white/10 shadow-xl shadow-black/40'
                 : 'opacity-0'
             }`}
             aria-hidden="true"
           />
+
+          {/* Mobile Glassmorphic Capsule Background with Smooth Fluid Opening & Closing Transition */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div
+                key="mobile-nav-bg"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
+                }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.98,
+                  transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
+                }}
+                className="md:hidden absolute inset-0 rounded-[24px] -z-10 pointer-events-none bg-[#131518]/95 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50"
+                aria-hidden="true"
+              />
+            )}
+          </AnimatePresence>
 
           {/* Top Navbar Row: 3-column balanced grid */}
           <div className="grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center w-full">
@@ -199,20 +219,24 @@ export const Navbar: React.FC = () => {
                   opacity: 0,
                   height: 0,
                   transition: {
-                    height: { duration: 0.26, ease: [0.32, 0, 0.67, 0] },
-                    opacity: { duration: 0.18, ease: 'easeIn' },
+                    height: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
+                    opacity: { duration: 0.22, ease: 'easeInOut' },
                   },
                 }}
                 className="overflow-hidden md:hidden"
               >
                 <motion.div
-                  initial={{ y: -8, opacity: 0 }}
+                  initial={{ y: -10, opacity: 0 }}
                   animate={{
                     y: 0,
                     opacity: 1,
-                    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1], delay: 0.05 },
+                    transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1], delay: 0.05 },
                   }}
-                  exit={{ y: -8, opacity: 0, transition: { duration: 0.18 } }}
+                  exit={{
+                    y: -10,
+                    opacity: 0,
+                    transition: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
+                  }}
                   className="flex flex-col space-y-1 pt-3 pb-2 border-t border-white/10"
                 >
                   {NAVIGATION_LINKS.map((link) => (
