@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Globe, Mail, MapPin, ArrowUp, ExternalLink, Heart, ArrowRight } from 'lucide-react'
 import { EVENT_CONFIG } from '@/config/event'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
@@ -64,6 +64,23 @@ const TwitterXIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' 
 export const Footer: React.FC = () => {
   const { scrollTo } = useSmoothScroll()
   const [clickedHref, setClickedHref] = useState<string | null>(null)
+  const footerRef = useRef<HTMLElement>(null)
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
+    if (e.pointerType === 'touch') return
+    const el = footerRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    el.style.setProperty('--cursor-x', `${e.clientX - rect.left}px`)
+    el.style.setProperty('--cursor-y', `${e.clientY - rect.top}px`)
+    el.style.setProperty('--spotlight-opacity', '1')
+  }
+
+  const handlePointerLeave = () => {
+    const el = footerRef.current
+    if (!el) return
+    el.style.setProperty('--spotlight-opacity', '0')
+  }
 
   const handleNavClick = (e: React.MouseEvent, href: string) => {
     e.preventDefault()
@@ -96,6 +113,9 @@ export const Footer: React.FC = () => {
 
   return (
     <footer
+      ref={footerRef}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
       id="contact"
       aria-label="Site Footer"
       className="relative bg-black text-zinc-100 pt-10 sm:pt-20 pb-7 sm:pb-12 overflow-hidden border-t border-white/10"
@@ -112,12 +132,25 @@ export const Footer: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Large Artistic Background Typographic Watermark */}
+      {/* Interactive Cursor-Revealed IEDC Typography (Desktop Only, Constrained to Columns 1 & 2 Before Venue/Map) */}
       <div
-        className="absolute -bottom-6 sm:-bottom-10 left-1/2 -translate-x-1/2 select-none pointer-events-none text-white/[0.025] font-display font-black text-6xl sm:text-8xl md:text-[11rem] tracking-[0.16em] uppercase whitespace-nowrap will-change-transform"
+        className="hidden lg:flex absolute top-0 bottom-16 left-0 w-[65%] max-w-5xl items-center justify-start pl-8 xl:pl-16 pointer-events-none select-none overflow-hidden z-0"
         aria-hidden="true"
       >
-        IDEA SPRINT
+        <div
+          className="font-display font-black text-8xl md:text-9xl lg:text-[11rem] xl:text-[13rem] tracking-[0.16em] uppercase leading-none whitespace-nowrap transition-opacity duration-200"
+          style={{
+            maskImage:
+              'radial-gradient(circle 240px at var(--cursor-x, -999px) var(--cursor-y, -999px), black 10%, transparent 100%)',
+            WebkitMaskImage:
+              'radial-gradient(circle 240px at var(--cursor-x, -999px) var(--cursor-y, -999px), black 10%, transparent 100%)',
+            opacity: 'var(--spotlight-opacity, 0)',
+          }}
+        >
+          <span className="bg-gradient-to-r from-[#ffc928] via-[#59d6e8] to-[#ffc928] bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(255,201,40,0.5)]">
+            IEDC
+          </span>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
