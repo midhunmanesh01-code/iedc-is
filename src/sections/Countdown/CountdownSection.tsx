@@ -31,7 +31,7 @@ export const CountdownSection: React.FC = () => {
     <section
       id="countdown"
       aria-label="Event Countdown"
-      className="relative py-16 sm:py-20 lg:py-24 border-b border-[#59d6e8]/20 bg-[#0d1e38] overflow-hidden"
+      className="relative py-16 sm:py-20 lg:py-24 border-b border-[#59d6e8]/20 bg-[#0d1e38] overflow-hidden rounded-t-[32px] sm:rounded-t-[48px] border-t border-[#59d6e8]/30 shadow-[0_-30px_70px_rgba(0,0,0,0.9)]"
     >
       {/* Background Technical Blueprint Grid */}
       <div className="absolute inset-0 bg-blueprint-grid opacity-[0.06] pointer-events-none" aria-hidden="true" />
