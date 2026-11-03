@@ -46,7 +46,7 @@ export const SprintReactor: React.FC = () => {
       onTouchMove={handleTouchMove}
       onTouchEnd={resetTilt}
       onTouchCancel={resetTilt}
-      className="relative w-full max-w-[350px] sm:max-w-[480px] lg:max-w-[550px] xl:max-w-[580px] aspect-square flex items-center justify-center select-none cursor-pointer mx-auto will-change-transform touch-none"
+      className="relative w-full max-w-[240px] xs:max-w-[270px] sm:max-w-[420px] lg:max-w-[550px] xl:max-w-[580px] aspect-square flex items-center justify-center select-none cursor-pointer mx-auto will-change-transform touch-none"
       style={{
         transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
         transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
