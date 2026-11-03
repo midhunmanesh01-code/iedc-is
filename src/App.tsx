@@ -17,14 +17,12 @@ export const App: React.FC = () => {
       <Preloader onComplete={() => setIsReady(true)} />
       <PageLayout>
         <Hero isReady={isReady} />
-        <div className="relative z-20">
-          <CountdownSection />
-          <About />
-          <Schedule />
-          <IdeaForge />
-          <FAQ />
-          <Registration />
-        </div>
+        <CountdownSection />
+        <About />
+        <Schedule />
+        <IdeaForge />
+        <FAQ />
+        <Registration />
       </PageLayout>
     </>
   )

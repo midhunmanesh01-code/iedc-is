@@ -8,7 +8,7 @@ export interface PageLayoutProps {
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
-    <div className="relative min-h-[100dvh] bg-[#102b52] text-[#f5f7fa] flex flex-col font-['Plus_Jakarta_Sans'] selection:bg-[#ffc928] selection:text-[#102b52] overflow-x-clip">
+    <div className="relative min-h-[100dvh] bg-[#102b52] text-[#f5f7fa] flex flex-col font-['Plus_Jakarta_Sans'] selection:bg-[#ffc928] selection:text-[#102b52] overflow-x-hidden">
       {/* Accessibility: Skip to Content */}
       <a
         href="#main-content"
