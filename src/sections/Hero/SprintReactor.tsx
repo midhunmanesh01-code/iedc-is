@@ -24,12 +24,9 @@ export const SprintReactor: React.FC = () => {
   }
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    applyTilt(e.clientX, e.clientY)
-  }
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (e.touches.length > 0) {
-      applyTilt(e.touches[0].clientX, e.touches[0].clientY)
+    // Only apply cursor tilt on desktop devices with hover and fine pointer
+    if (typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      applyTilt(e.clientX, e.clientY)
     }
   }
 
@@ -38,15 +35,7 @@ export const SprintReactor: React.FC = () => {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={resetTilt}
-      onTouchStart={(e) => {
-        if (e.touches.length > 0) {
-          applyTilt(e.touches[0].clientX, e.touches[0].clientY)
-        }
-      }}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={resetTilt}
-      onTouchCancel={resetTilt}
-      className="relative w-full max-w-[240px] xs:max-w-[270px] sm:max-w-[420px] lg:max-w-[550px] xl:max-w-[580px] aspect-square flex items-center justify-center select-none cursor-pointer mx-auto will-change-transform touch-none"
+      className="relative w-full max-w-[240px] xs:max-w-[270px] sm:max-w-[420px] lg:max-w-[550px] xl:max-w-[580px] aspect-square flex items-center justify-center select-none pointer-events-none lg:pointer-events-auto lg:cursor-pointer mx-auto will-change-transform touch-auto"
       style={{
         transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
         transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
