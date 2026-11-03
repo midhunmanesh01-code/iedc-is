@@ -112,10 +112,13 @@ body {
 
 @keyframes reactor-float {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) rotate(0deg);
   }
-  50% {
-    transform: translateY(-7px);
+  33% {
+    transform: translateY(-5px) rotate(0.5deg);
+  }
+  66% {
+    transform: translateY(-9px) rotate(-0.5deg);
   }
 }
 

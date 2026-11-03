@@ -43,7 +43,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
 
         {/* Blueprint coordinate markers */}
         <span className="absolute top-1 left-2 font-mono text-[9px] uppercase tracking-widest text-[#59d6e8]/40 hidden md:inline">
-          SYS.REF // BLUEPRINT-2026-IS
+          IDEA SPRINT · 2026
         </span>
         <span className="absolute top-1 right-2 font-mono text-[9px] uppercase tracking-widest text-[#ffc928]/50 hidden md:inline">
           IEDC BOOTCAMP · CEC
