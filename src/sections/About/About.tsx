@@ -1,164 +1,384 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
+import { motion, useInView } from 'motion/react'
 import { Rocket, Target, Users, Award, Lightbulb, Zap } from 'lucide-react'
 import { Container } from '@/components/common/Container'
-import { SectionHeading } from '@/components/common/SectionHeading'
-import { Card } from '@/components/ui/Card'
-import { Badge } from '@/components/ui/Badge'
+import { SplitText } from '@/components/ui/SplitText'
 import { EVENT_CONFIG } from '@/config/event'
 
+/* ── Animated counter ── */
+const AnimatedNumber: React.FC<{
+  readonly value: string
+  readonly color: string
+}> = ({ value, color }) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const [display, setDisplay] = useState('0')
+
+  useEffect(() => {
+    if (!isInView) return
+    const num = parseInt(value, 10)
+    if (isNaN(num)) {
+      setDisplay(value)
+      return
+    }
+    const duration = 1200
+    const start = performance.now()
+    const step = (now: number) => {
+      const elapsed = now - start
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplay(Math.round(eased * num).toString())
+      if (progress < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+  }, [isInView, value])
+
+  return (
+    <div ref={ref} className={`font-mono text-3xl sm:text-4xl lg:text-5xl font-black ${color}`}>
+      {isInView ? display : '0'}
+      {isInView && value.replace(/[0-9]/g, '')}
+    </div>
+  )
+}
+
+/* ── Pillar data ── */
+const pillars = [
+  {
+    icon: Zap,
+    title: '24-Hour Continuous Sprint',
+    desc: 'A relentless pressure-cooker environment where raw hypotheses transform into defensible venture concepts through rigorous iteration cycles.',
+    accent: '#ffc928',
+  },
+  {
+    icon: Target,
+    title: 'Problem-First Validation',
+    desc: 'We emphasize first-principles problem identification. Ideas are scored on tangible market pain points, viability, and real-world applicability.',
+    accent: '#59d6e8',
+  },
+  {
+    icon: Users,
+    title: 'Active Industry Mentorship',
+    desc: 'Scheduled checkpoints with seasoned entrepreneurs, domain specialists, and CEC alumni to stress-test your architecture and pitch.',
+    accent: '#59d6e8',
+  },
+  {
+    icon: Award,
+    title: 'Incubation & Seed Pathway',
+    desc: 'Winning ideas receive direct support from IEDC BOOTCAMP CEC, prototype grants, and priority access to state innovation pipelines.',
+    accent: '#ffc928',
+  },
+]
+
 export const About: React.FC = () => {
-  const highlights = [
-    {
-      icon: <Zap className="w-5 h-5 text-[#ffc928]" />,
-      number: '01',
-      title: '24-Hour Continuous Sprint',
-      description:
-        'A relentless pressure-cooker environment where raw hypotheses transform into defensible venture concepts through rigorous cycles.',
-      tag: 'SPEED & INTENSITY',
-      tagColor: 'text-[#ffc928]',
-    },
-    {
-      icon: <Target className="w-5 h-5 text-[#59d6e8]" />,
-      number: '02',
-      title: 'Problem-First Validation',
-      description:
-        'We emphasize first-principles problem identification. Ideas are scored on tangible market pain points, viability, and real-world applicability.',
-      tag: 'METHODOLOGY',
-      tagColor: 'text-[#59d6e8]',
-    },
-    {
-      icon: <Users className="w-5 h-5 text-[#59d6e8]" />,
-      number: '03',
-      title: 'Active Industry Mentorship',
-      description:
-        'Scheduled checkpoints with seasoned entrepreneurs, domain specialists, and CEC alumni to stress-test your architecture and pitch.',
-      tag: 'GUIDANCE',
-      tagColor: 'text-[#59d6e8]',
-    },
-    {
-      icon: <Award className="w-5 h-5 text-[#ffc928]" />,
-      number: '04',
-      title: 'Incubation & Seed Pathway',
-      description:
-        'Winning ideas receive direct support from IEDC BOOTCAMP CEC, prototype grants, and priority access to state innovation pipelines.',
-      tag: 'POST-SPRINT',
-      tagColor: 'text-[#ffc928]',
-    },
-  ]
+  const pillarsRef = useRef<HTMLDivElement>(null)
+  const isPillarsInView = useInView(pillarsRef, { once: true, margin: '-40px' })
 
   return (
     <section
       id="about"
       aria-label="About IDEA SPRINT 2026"
-      className="py-16 sm:py-20 lg:py-28 relative border-b border-[#59d6e8]/20 bg-[#102b52]/90"
+      className="relative py-20 sm:py-28 lg:py-36 overflow-hidden border-b border-[#59d6e8]/10"
     >
+      {/* ── Background layers ── */}
+      <div className="absolute inset-0 bg-[#0b1a30]" aria-hidden="true" />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          background: `
+            radial-gradient(ellipse 80% 60% at 15% 10%, rgba(89,214,232,0.08) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 50% at 85% 90%, rgba(255,201,40,0.06) 0%, transparent 50%),
+            radial-gradient(ellipse 40% 30% at 50% 50%, rgba(89,214,232,0.04) 0%, transparent 60%)
+          `,
+        }}
+      />
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        aria-hidden="true"
+        style={{
+          backgroundImage: `radial-gradient(circle 1px, rgba(89,214,232,0.8) 1px, transparent 1px)`,
+          backgroundSize: '32px 32px',
+        }}
+      />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none" aria-hidden="true">
+        <span className="font-display font-black text-[20vw] sm:text-[18vw] lg:text-[14vw] text-[#59d6e8]/[0.02] leading-none tracking-tighter">
+          IS26
+        </span>
+      </div>
+
       <Container size="default">
-        {/* Section Header */}
-        <SectionHeading
-          tag="MISSION & VISION"
-          title="Fostering the Next Wave of Breakthrough Concepts."
-          subtitle={`Organized by ${EVENT_CONFIG.organizer}, IDEA SPRINT 2026 is engineered to challenge student thinkers to bridge the gap between academic theory and practical startup ventures.`}
-        />
+        <div className="relative z-10">
 
-        {/* Vision & Purpose Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-          <div className="lg:col-span-7 bg-[#163866] border border-[#59d6e8]/30 p-6 sm:p-8 flex flex-col justify-between rounded-xs shadow-xl">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Badge variant="accent">PURPOSE & VISION</Badge>
-                <span className="font-mono text-xs text-[#59d6e8]/80">// CEC INCUBATION HUB</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-bold font-display text-white mb-4">
-                Why IDEA SPRINT 2026 matters.
-              </h3>
-              <p className="text-[#c4daf2] leading-relaxed text-sm sm:text-base mb-4 font-mono">
-                College ideathons are often reduced to slide presentations with no technological feasibility. IDEA SPRINT 2026 recalibrates this standard. Teams spend 24 continuous hours breaking down problems, consulting domain specialists, iterating value propositions, and crafting realistic prototypes.
-              </p>
-              <p className="text-[#a0c0e0] leading-relaxed text-sm font-mono">
-                Whether you are engineering IoT devices, AI solutions, sustainable clean-tech, or community platforms, your concept will be pushed beyond surface-level assumptions.
-              </p>
-            </div>
+          {/* ── Section header ── */}
+          <div className="mb-16 sm:mb-20">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center gap-3 mb-8"
+            >
+              <div className="w-10 h-px bg-[#ffc928]" />
+              <span className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#ffc928] font-bold">
+                Mission & Vision
+              </span>
+              <div className="flex-1 h-px bg-[#ffc928]/10 hidden sm:block" />
+            </motion.div>
 
-            <div className="mt-8 pt-6 border-t border-[#59d6e8]/25 grid grid-cols-3 gap-2 sm:gap-4 font-mono text-center sm:text-left">
-              <div className="bg-[#102b52] sm:bg-transparent p-2.5 sm:p-0 rounded-xs border sm:border-0 border-[#59d6e8]/20">
-                <div className="text-xl sm:text-2xl font-black text-[#ffc928]">24H</div>
-                <div className="text-[10px] sm:text-xs text-[#a0c0e0] uppercase">Non-Stop Sprint</div>
+            <SplitText
+              text="Fostering the Next Wave of Breakthrough Concepts."
+              tag="h2"
+              className="text-3xl sm:text-4xl lg:text-[3.4rem] font-display font-extrabold text-[#f5f7fa] tracking-tight leading-[1.1] max-w-4xl"
+              effect="rise"
+              splitType="words"
+              delay={60}
+              duration={0.9}
+              textAlign="left"
+              rootMargin="-60px"
+            />
+          </div>
+
+          {/* ── Mission & Vision cards ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 mb-16 sm:mb-24">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6 }}
+              className="relative group rounded-xl p-6 sm:p-8 lg:p-10 overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #0f2545 0%, #122d55 50%, #0d1f3d 100%)' }}
+            >
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[#ffc928]/[0.04] rounded-full blur-[80px] group-hover:bg-[#ffc928]/[0.08] transition-all duration-700 pointer-events-none" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-lg bg-[#ffc928]/10 border border-[#ffc928]/20 flex items-center justify-center">
+                    <Rocket className="w-5 h-5 text-[#ffc928]" />
+                  </div>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#ffc928] font-bold">Our Mission</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-[#f5f7fa] mb-4 leading-snug">
+                  Build the launchpad student ideas deserve.
+                </h3>
+                <p className="text-sm sm:text-[15px] text-[#9bbad6] leading-relaxed mb-3">
+                  To create a high-intensity environment where student ideas are stress-tested, refined, and transformed into ventures that matter — all within 24 hours of non-stop building.
+                </p>
+                <p className="text-xs sm:text-sm text-[#6e94b8] leading-relaxed">
+                  Organized by {EVENT_CONFIG.organizer}, we provide the critical initial catalyst that bridges academic theory and real-world execution.
+                </p>
               </div>
-              <div className="bg-[#102b52] sm:bg-transparent p-2.5 sm:p-0 rounded-xs border sm:border-0 border-[#59d6e8]/20">
-                <div className="text-xl sm:text-2xl font-black text-[#59d6e8]">100%</div>
-                <div className="text-[10px] sm:text-xs text-[#a0c0e0] uppercase">Student Led</div>
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-[#ffc928]/40 via-[#ffc928]/10 to-transparent" />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="relative group rounded-xl p-6 sm:p-8 lg:p-10 overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #0d2040 0%, #102848 50%, #0b1933 100%)' }}
+            >
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[#59d6e8]/[0.04] rounded-full blur-[80px] group-hover:bg-[#59d6e8]/[0.08] transition-all duration-700 pointer-events-none" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-lg bg-[#59d6e8]/10 border border-[#59d6e8]/20 flex items-center justify-center">
+                    <Lightbulb className="w-5 h-5 text-[#59d6e8]" />
+                  </div>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#59d6e8] font-bold">Our Vision</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-display font-bold text-[#f5f7fa] mb-4 leading-snug">
+                  Every student deserves a shot at building something real.
+                </h3>
+                <p className="text-sm sm:text-[15px] text-[#9bbad6] leading-relaxed mb-3">
+                  A future where every engineering student has the tools, mentorship, and confidence to turn bold ideas into working prototypes — regardless of their background or branch.
+                </p>
+                <p className="text-xs sm:text-sm text-[#6e94b8] leading-relaxed">
+                  Whether you're engineering IoT devices, AI solutions, sustainable clean-tech, or community platforms — your concept will be pushed beyond surface-level assumptions.
+                </p>
               </div>
-              <div className="bg-[#102b52] sm:bg-transparent p-2.5 sm:p-0 rounded-xs border sm:border-0 border-[#59d6e8]/20">
-                <div className="text-xl sm:text-2xl font-black text-white">CEC</div>
-                <div className="text-[10px] sm:text-xs text-[#a0c0e0] uppercase">Chengannur</div>
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-[#59d6e8]/40 via-[#59d6e8]/10 to-transparent" />
+            </motion.div>
+          </div>
+
+          {/* ── Stats strip ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-wrap items-center justify-center gap-8 sm:gap-12 lg:gap-20 mb-16 sm:mb-24 py-8 sm:py-10"
+          >
+            {[
+              { value: '24', suffix: 'H', label: 'Non-Stop Sprint', color: 'text-[#ffc928]' },
+              { value: '100', suffix: '%', label: 'Student Led', color: 'text-[#59d6e8]' },
+              { value: '∞', suffix: '', label: 'Ideas Welcome', color: 'text-[#f5f7fa]' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="flex items-baseline justify-center gap-0.5">
+                  <AnimatedNumber value={stat.value} color={stat.color} />
+                  {stat.suffix && (
+                    <span className={`font-mono text-lg sm:text-xl font-bold ${stat.color}`}>
+                      {stat.suffix}
+                    </span>
+                  )}
+                </div>
+                <div className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#6e94b8] mt-1.5">
+                  {stat.label}
+                </div>
               </div>
+            ))}
+          </motion.div>
+
+          {/* ── Sprint Pillars — editorial vertical list with timeline ── */}
+          <div ref={pillarsRef}>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center gap-3 mb-10 sm:mb-14"
+            >
+              <div className="w-10 h-px bg-[#59d6e8]" />
+              <span className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#59d6e8] font-bold">
+                Sprint Pillars
+              </span>
+              <div className="flex-1 h-px bg-[#59d6e8]/10 hidden sm:block" />
+            </motion.div>
+
+            <div className="space-y-0">
+              {pillars.map((pillar, i) => {
+                const Icon = pillar.icon
+                const isGold = pillar.accent === '#ffc928'
+                return (
+                  <motion.div
+                    key={pillar.title}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={isPillarsInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.5, delay: i * 0.12, ease: 'easeOut' }}
+                    className="group relative grid grid-cols-[auto_1fr] sm:grid-cols-[auto_auto_1fr] items-start gap-x-4 sm:gap-x-6 lg:gap-x-10"
+                  >
+                    {/* Timeline line + dot */}
+                    <div className="relative flex flex-col items-center self-stretch">
+                      <div
+                        className="w-3 h-3 rounded-full border-2 shrink-0 mt-1 z-10 transition-all duration-300 group-hover:scale-125"
+                        style={{
+                          borderColor: pillar.accent,
+                          backgroundColor: 'transparent',
+                          boxShadow: `0 0 0 3px ${pillar.accent}15`,
+                        }}
+                      />
+                      {i < pillars.length - 1 && (
+                        <div className="w-px flex-1 bg-gradient-to-b from-[#59d6e8]/20 to-[#59d6e8]/5" />
+                      )}
+                    </div>
+
+                    {/* Large number — hidden on small mobile, visible sm+ */}
+                    <div className="hidden sm:block">
+                      <span
+                        className="font-mono text-6xl lg:text-7xl font-black leading-none tracking-tighter transition-colors duration-300"
+                        style={{ color: `${pillar.accent}15` }}
+                      >
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    {/* Content */}
+                    <div className={`pb-10 sm:pb-14 ${i === pillars.length - 1 ? 'pb-0 sm:pb-0' : ''}`}>
+                      <div className="flex items-center gap-3 mb-2.5">
+                        <div
+                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                          style={{ backgroundColor: `${pillar.accent}12`, border: `1px solid ${pillar.accent}20` }}
+                        >
+                          <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" style={{ color: pillar.accent }} />
+                        </div>
+                        <h4 className="font-display font-bold text-lg sm:text-xl lg:text-2xl text-[#f5f7fa] group-hover:text-white transition-colors leading-tight">
+                          {pillar.title}
+                        </h4>
+                      </div>
+
+                      <p className="text-sm sm:text-[15px] text-[#7fa3c4] leading-relaxed max-w-xl group-hover:text-[#9bbad6] transition-colors pl-11 sm:pl-12">
+                        {pillar.desc}
+                      </p>
+
+                      {/* Accent tag */}
+                      <div className="mt-3 pl-11 sm:pl-12">
+                        <span
+                          className="inline-block font-mono text-[10px] uppercase tracking-[0.2em] font-bold px-2.5 py-1 rounded-full border transition-all duration-300 group-hover:border-opacity-50"
+                          style={{
+                            color: pillar.accent,
+                            borderColor: `${pillar.accent}20`,
+                            backgroundColor: `${pillar.accent}08`,
+                          }}
+                        >
+                          {isGold ? (i === 0 ? 'Speed & Intensity' : 'Post-Sprint') : (i === 1 ? 'Methodology' : 'Guidance')}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
 
-          <div className="lg:col-span-5 flex flex-col gap-4">
-            <Card className="flex-1 flex flex-col justify-center" withCrosshairs>
-              <div className="flex items-center gap-3 mb-3">
-                <Rocket className="w-5 h-5 text-[#ffc928]" />
-                <h4 className="font-display font-bold text-lg text-white">
+          {/* ── Bottom CTA banner ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.6 }}
+            className="mt-16 sm:mt-24 relative rounded-xl overflow-hidden"
+          >
+            <div
+              className="absolute inset-0"
+              style={{ background: 'linear-gradient(135deg, #132b50 0%, #0f2240 40%, #122a4d 100%)' }}
+            />
+            <div
+              className="absolute inset-0 opacity-30 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse 60% 80% at 0% 50%, rgba(255,201,40,0.08) 0%, transparent 60%)' }}
+            />
+
+            <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8 p-6 sm:p-8 lg:p-10">
+              <div className="shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ffc928]/20 to-[#ffc928]/5 border border-[#ffc928]/20 flex items-center justify-center">
+                <Rocket className="w-7 h-7 text-[#ffc928]" />
+              </div>
+
+              <div className="flex-1">
+                <h4 className="font-display font-bold text-lg sm:text-xl text-[#f5f7fa] mb-1.5">
                   From Campus to Market
                 </h4>
+                <p className="text-sm text-[#8aacc8] leading-relaxed">
+                  Engineers, designers, and strategists unite to form balanced squads. Winning teams receive direct support from {EVENT_CONFIG.organizer}, prototype grants, and priority access to state innovation pipelines.
+                </p>
               </div>
-              <p className="text-sm text-[#b0c8e8] leading-relaxed font-mono">
-                We believe some of the most impactful solutions originate in student labs and dorm rooms. Our goal is to provide the critical initial catalyst.
-              </p>
-            </Card>
 
-            <Card className="flex-1 flex flex-col justify-center">
-              <div className="flex items-center gap-3 mb-3">
-                <Lightbulb className="w-5 h-5 text-[#ffc928]" />
-                <h4 className="font-display font-bold text-lg text-white">
-                  Multi-Disciplinary Synergy
-                </h4>
-              </div>
-              <p className="text-sm text-[#b0c8e8] leading-relaxed font-mono">
-                Engineers, designers, problem solvers, and business strategists unite to form balanced squads capable of executing fast.
-              </p>
-            </Card>
-          </div>
-        </div>
-
-        {/* 4 Pillars / Highlights */}
-        <div>
-          <div className="font-mono text-xs uppercase tracking-[0.2em] text-[#59d6e8] mb-6 flex items-center gap-2 font-bold">
-            <span>// SPRINT PILLARS & HIGHLIGHTS</span>
-            <div className="flex-1 h-[1px] bg-[#59d6e8]/20" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {highlights.map((item) => (
-              <Card key={item.number} hoverEffect className="flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="p-2 bg-[#102b52] border border-[#59d6e8]/30 rounded-xs">
-                      {item.icon}
+              {/* Pipeline — desktop only */}
+              <div className="shrink-0 hidden lg:flex items-center gap-3">
+                {[
+                  { icon: Lightbulb, label: 'Ideate', color: '#59d6e8' },
+                  { icon: Zap, label: 'Build', color: '#ffc928' },
+                  { icon: Target, label: 'Launch', color: '#59d6e8' },
+                ].map((step, i) => (
+                  <React.Fragment key={step.label}>
+                    {i > 0 && (
+                      <div className="flex items-center gap-1">
+                        <div className="w-1 h-1 rounded-full bg-[#59d6e8]/30" />
+                        <div className="w-4 h-px bg-[#59d6e8]/20" />
+                        <div className="w-1 h-1 rounded-full bg-[#59d6e8]/30" />
+                      </div>
+                    )}
+                    <div className="text-center">
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-1.5"
+                        style={{ backgroundColor: `${step.color}10`, border: `1px solid ${step.color}15` }}
+                      >
+                        <step.icon className="w-4 h-4" style={{ color: step.color }} />
+                      </div>
+                      <span className="font-mono text-[10px] text-[#6e94b8] uppercase tracking-wider">{step.label}</span>
                     </div>
-                    <span className="font-mono text-xs font-bold text-[#59d6e8]">
-                      {item.number}
-                    </span>
-                  </div>
-
-                  <h4 className="text-lg font-bold font-display text-white mb-2">
-                    {item.title}
-                  </h4>
-
-                  <p className="text-xs sm:text-sm text-[#b0c8e8] leading-relaxed font-mono">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="mt-6 pt-3 border-t border-[#59d6e8]/20">
-                  <span className={`font-mono text-[10px] tracking-wider uppercase font-bold ${item.tagColor}`}>
-                    {item.tag}
-                  </span>
-                </div>
-              </Card>
-            ))}
-          </div>
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          </motion.div>
         </div>
       </Container>
     </section>
