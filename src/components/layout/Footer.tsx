@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Globe, Mail, MapPin, ArrowUp, ExternalLink, Heart, ArrowRight } from 'lucide-react'
 import { EVENT_CONFIG } from '@/config/event'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
@@ -65,6 +65,29 @@ export const Footer: React.FC = () => {
   const { scrollTo } = useSmoothScroll()
   const [clickedHref, setClickedHref] = useState<string | null>(null)
   const footerRef = useRef<HTMLElement>(null)
+  const footerBrandRef = useRef<HTMLDivElement>(null)
+  const [isDocked, setIsDocked] = useState(false)
+
+  // IntersectionObserver to coordinate mobile logo morphing with navbar
+  useEffect(() => {
+    const el = footerBrandRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsDocked(entry.isIntersecting)
+        window.dispatchEvent(
+          new CustomEvent('iedc:footer-logo-in-view', {
+            detail: { inView: entry.isIntersecting },
+          })
+        )
+      },
+      { threshold: 0.15 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const handlePointerMove = (e: React.PointerEvent<HTMLElement>) => {
     if (e.pointerType === 'touch') return
@@ -157,13 +180,31 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-7 sm:gap-10 lg:gap-12 pb-7 sm:pb-16 border-b border-white/10">
           {/* Column 1: Brand & Organizer Identity */}
           <div className="lg:col-span-4 flex flex-col">
-            <div className="flex items-center gap-3.5 group cursor-pointer w-fit mb-4 sm:mb-5" onClick={handleBackToTop}>
-              <img
-                src={iedcLogo}
-                alt="IEDC BOOTCAMP CEC Logo"
-                className="h-10 sm:h-10 w-auto object-contain transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_4px_16px_rgba(255,201,40,0.2)]"
-              />
-              <div className="flex flex-col -space-y-0.5">
+            <div
+              id="footer-brand"
+              ref={footerBrandRef}
+              className="flex items-center gap-3.5 group cursor-pointer w-fit mb-4 sm:mb-5"
+              onClick={handleBackToTop}
+            >
+              <div className="relative">
+                <img
+                  src={iedcLogo}
+                  alt="IEDC BOOTCAMP CEC Logo"
+                  className={`h-10 sm:h-10 w-auto object-contain transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 ${
+                    isDocked
+                      ? 'drop-shadow-[0_0_24px_rgba(255,201,40,0.45)] scale-100 translate-y-0'
+                      : 'max-md:scale-90 max-md:-translate-y-2 max-md:opacity-80'
+                  }`}
+                />
+              </div>
+
+              <div
+                className={`flex flex-col -space-y-0.5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  isDocked
+                    ? 'opacity-100 translate-x-0'
+                    : 'max-md:opacity-75 max-md:-translate-x-1.5'
+                }`}
+              >
                 <span className="font-display font-black text-xl sm:text-2xl tracking-tight text-white group-hover:text-[#ffc928] transition-colors">
                   {EVENT_CONFIG.name}
                 </span>

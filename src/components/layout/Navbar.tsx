@@ -10,6 +10,7 @@ export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [clickedHref, setClickedHref] = useState<string | null>(null)
+  const [isFooterLogoInView, setIsFooterLogoInView] = useState(false)
   const { scrollTo } = useSmoothScroll()
 
   useEffect(() => {
@@ -34,7 +35,32 @@ export const Navbar: React.FC = () => {
 
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+
+    // Listen for footer logo intersection event for zero-latency morph coordination
+    const handleFooterEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ inView: boolean }>
+      setIsFooterLogoInView(customEvent.detail.inView)
+    }
+    window.addEventListener('iedc:footer-logo-in-view', handleFooterEvent)
+
+    // Fallback IntersectionObserver for mobile footer docking
+    const footerEl = document.getElementById('footer-brand') || document.getElementById('contact')
+    let observer: IntersectionObserver | null = null
+    if (footerEl) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsFooterLogoInView(entry.isIntersecting)
+        },
+        { threshold: 0.1 }
+      )
+      observer.observe(footerEl)
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('iedc:footer-logo-in-view', handleFooterEvent)
+      if (observer) observer.disconnect()
+    }
   }, [])
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -83,8 +109,12 @@ export const Navbar: React.FC = () => {
               <a
                 href="#hero"
                 onClick={(e) => handleNavClick(e, '#hero')}
-                className={`flex items-center group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffc928] p-1 rounded-xs shrink-0 transition-[gap] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                className={`flex items-center group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffc928] p-1 rounded-xs shrink-0 transition-[gap,opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                   isScrolled ? 'gap-0' : 'gap-2.5 sm:gap-3'
+                } ${
+                  isFooterLogoInView
+                    ? 'max-md:opacity-0 max-md:translate-y-6 max-md:scale-75 max-md:pointer-events-none'
+                    : 'opacity-100 translate-y-0 scale-100'
                 }`}
                 aria-label="IDEA SPRINT 2026 by IEDC BOOTCAMP CEC"
               >
