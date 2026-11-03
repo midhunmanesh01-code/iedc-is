@@ -157,7 +157,7 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-7 sm:gap-10 lg:gap-12 pb-7 sm:pb-16 border-b border-white/10">
           {/* Column 1: Brand & Organizer Identity */}
           <div className="lg:col-span-4 flex flex-col">
-            <div className="flex items-center gap-3.5 group cursor-pointer w-fit mb-6 sm:mb-5" onClick={handleBackToTop}>
+            <div className="flex items-center gap-3.5 group cursor-pointer w-fit mb-4 sm:mb-5" onClick={handleBackToTop}>
               <img
                 src={iedcLogo}
                 alt="IEDC BOOTCAMP CEC Logo"
@@ -173,7 +173,8 @@ export const Footer: React.FC = () => {
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-sm leading-relaxed font-mono mb-5 sm:mb-5">
+            {/* Organizer description (Hidden on mobile as requested, visible on desktop) */}
+            <p className="hidden sm:block text-xs sm:text-sm text-zinc-400 max-w-sm leading-relaxed font-mono mb-5 sm:mb-5">
               Organized by <strong className="text-zinc-100 font-semibold">{EVENT_CONFIG.organizer}</strong>, College of Engineering Chengannur. Fostering student innovation and rapid prototyping.
             </p>
 
@@ -319,12 +320,12 @@ export const Footer: React.FC = () => {
               </span>
             </a>
 
-            {/* Embedded Map (Hidden on mobile) */}
-            <div className="hidden sm:block relative rounded-xl overflow-hidden border border-white/10 group bg-zinc-950 shadow-inner">
+            {/* Embedded Map (Visible on all devices, compact on mobile) */}
+            <div className="relative rounded-xl overflow-hidden border border-white/10 group bg-zinc-950 shadow-inner">
               <iframe
                 title="College of Engineering Chengannur Map"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.845899452777!2d76.61519907487224!3d9.317274790737225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0622667d8a6b19%3A0x334fb9e831622bde!2sCollege%20of%20Engineering%20Chengannur!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
-                className="w-full h-32 sm:h-36 border-0 opacity-80 contrast-125 invert-[0.9] hue-rotate-180 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                className="w-full h-28 sm:h-36 border-0 opacity-80 contrast-125 invert-[0.9] hue-rotate-180 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
@@ -332,34 +333,26 @@ export const Footer: React.FC = () => {
                 href="https://maps.google.com/?q=College+of+Engineering+Chengannur"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-black/85 hover:bg-[#ffc928] text-zinc-300 hover:text-black border border-white/20 hover:border-[#ffc928] font-mono text-xs font-semibold backdrop-blur-xs transition-all duration-200 cursor-pointer shadow-sm"
+                className="absolute bottom-2 right-2 sm:bottom-2.5 sm:right-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-md bg-black/85 hover:bg-[#ffc928] text-zinc-300 hover:text-black border border-white/20 hover:border-[#ffc928] font-mono text-[11px] sm:text-xs font-semibold backdrop-blur-xs transition-all duration-200 cursor-pointer shadow-sm"
                 aria-label="Open College of Engineering Chengannur in Google Maps"
               >
                 <span>DIRECTIONS</span>
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </a>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar: Copyright, Creator Credit & Interactive Back to Top */}
-        <div className="pt-6 sm:pt-8 flex flex-col sm:grid sm:grid-cols-3 items-center gap-4 text-xs font-mono text-zinc-500">
-          {/* Back to Top (Top-right on mobile, Far-right on desktop) */}
-          <div className="order-1 sm:order-3 flex justify-end w-full">
-            <button
-              type="button"
-              onClick={handleBackToTop}
-              className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-[#ffc928]/15 border border-white/10 hover:border-[#ffc928]/50 text-xs font-mono text-zinc-300 hover:text-[#ffc928] transition-all duration-300 active:scale-95 cursor-pointer shadow-sm focus-visible:outline-2 focus-visible:outline-[#ffc928]"
-              aria-label="Back to top"
-            >
-              <span>BACK TO TOP</span>
-              <ArrowUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
-            </button>
+        <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
+          {/* Copyright (Bottom on mobile, Left on desktop) */}
+          <div className="order-2 sm:order-1 text-center sm:text-left w-full sm:w-auto text-zinc-500 text-[11px] sm:text-xs">
+            © {EVENT_CONFIG.edition} {EVENT_CONFIG.organizer}. All rights reserved.
           </div>
 
-          {/* Built With Credit (Center on both mobile and desktop) */}
-          <div className="order-2 sm:order-2 flex justify-center w-full">
-            <span className="text-[11px] text-zinc-400 font-mono inline-flex items-center gap-1.5">
+          {/* Combined Credit & Back to Top (Same line on mobile and desktop) */}
+          <div className="order-1 sm:order-2 flex items-center justify-between sm:justify-end gap-3 sm:gap-6 w-full sm:w-auto">
+            <span className="text-[11px] sm:text-xs text-zinc-400 font-mono inline-flex items-center gap-1.5 whitespace-nowrap">
               <span>Built with</span>
               <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline shrink-0" aria-label="love" />
               <span>by</span>
@@ -367,11 +360,16 @@ export const Footer: React.FC = () => {
                 Midhun Manesh
               </span>
             </span>
-          </div>
 
-          {/* Copyright (Bottom centered on mobile, Left-aligned on desktop) */}
-          <div className="order-3 sm:order-1 text-center sm:text-left w-full text-zinc-500">
-            © {EVENT_CONFIG.edition} {EVENT_CONFIG.organizer}. All rights reserved.
+            <button
+              type="button"
+              onClick={handleBackToTop}
+              className="group inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full bg-white/[0.04] hover:bg-[#ffc928]/15 border border-white/10 hover:border-[#ffc928]/50 text-[11px] sm:text-xs font-mono text-zinc-300 hover:text-[#ffc928] transition-all duration-300 active:scale-95 cursor-pointer shadow-sm focus-visible:outline-2 focus-visible:outline-[#ffc928] shrink-0"
+              aria-label="Back to top"
+            >
+              <span>BACK TO TOP</span>
+              <ArrowUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
+            </button>
           </div>
         </div>
       </div>

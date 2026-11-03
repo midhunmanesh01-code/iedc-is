@@ -33,23 +33,6 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
         aria-hidden="true"
       />
 
-      {/* Outer Technical Blueprint Frame Guides */}
-      <div className="fixed inset-2 sm:inset-4 pointer-events-none border border-[#59d6e8]/25 z-40" aria-hidden="true">
-        {/* Corner registration crosses */}
-        <span className="absolute -top-1.5 -left-1.5 w-3 h-3 text-[#59d6e8]/60 font-mono text-[10px] leading-none">+</span>
-        <span className="absolute -top-1.5 -right-1.5 w-3 h-3 text-[#59d6e8]/60 font-mono text-[10px] leading-none">+</span>
-        <span className="absolute -bottom-1.5 -left-1.5 w-3 h-3 text-[#59d6e8]/60 font-mono text-[10px] leading-none">+</span>
-        <span className="absolute -bottom-1.5 -right-1.5 w-3 h-3 text-[#59d6e8]/60 font-mono text-[10px] leading-none">+</span>
-
-        {/* Blueprint coordinate markers */}
-        <span className="absolute top-1 left-2 font-mono text-[9px] uppercase tracking-widest text-[#59d6e8]/40 hidden md:inline">
-          IDEA SPRINT · 2026
-        </span>
-        <span className="absolute top-1 right-2 font-mono text-[9px] uppercase tracking-widest text-[#ffc928]/50 hidden md:inline">
-          IEDC BOOTCAMP · CEC
-        </span>
-      </div>
-
       <Navbar />
 
       <main id="main-content" className="flex-1 relative z-10 pt-16 sm:pt-20">
