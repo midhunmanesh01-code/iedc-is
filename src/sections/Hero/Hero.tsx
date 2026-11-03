@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/common/Button'
 import { Container } from '@/components/common/Container'
 import { SprintReactor } from './SprintReactor'
+import { SplitText } from '@/components/ui/SplitText'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
 
 export interface HeroProps {
@@ -60,30 +61,82 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
               </span>
             </motion.div>
 
-            {/* Kinetic Stacked Headline styled after PRODDEC */}
+            {/* Kinetic Stacked Headline with React Bits SplitText */}
             <div className="space-y-3">
               <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-[5.6rem] xl:text-[7.2rem] 2xl:text-[8.4rem] leading-[0.88] font-black uppercase tracking-tighter">
-                <div className="overflow-hidden py-1.5 sm:py-1">
-                  <motion.div
-                    initial={{ y: '125%', opacity: 0, skewY: 3 }}
-                    animate={hasStarted ? { y: 0, opacity: 1, skewY: 0 } : { y: '125%', opacity: 0, skewY: 3 }}
-                    transition={{ duration: 1.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                    className="block whitespace-nowrap select-none origin-bottom-left"
-                  >
-                    <span className="text-[#ffc928] hover:brightness-110 transition-all">Draft</span>{' '}
-                    <span className="text-white hover:text-white/90 transition-all">Build</span>
-                  </motion.div>
+                <div className="py-1.5 sm:py-1">
+                  {hasStarted ? (
+                    <div className="block whitespace-nowrap select-none">
+                      <SplitText
+                        tag="span"
+                        text="Draft"
+                        className="text-[#ffc928] hover:brightness-110 transition-[filter]"
+                        effect="rise"
+                        splitType="chars"
+                        delay={45}
+                        duration={1.05}
+                        staggerFrom="start"
+                        trigger="load"
+                        startDelay={150}
+                        hoverEffect="lift"
+                      />{' '}
+                      <SplitText
+                        tag="span"
+                        text="Build"
+                        className="text-white hover:text-white/90 transition-colors"
+                        effect="rise"
+                        splitType="chars"
+                        delay={45}
+                        duration={1.05}
+                        staggerFrom="start"
+                        trigger="load"
+                        startDelay={380}
+                        hoverEffect="lift"
+                      />
+                    </div>
+                  ) : (
+                    <div className="block whitespace-nowrap select-none invisible">
+                      <span className="text-[#ffc928]">Draft</span>{' '}
+                      <span className="text-white">Build</span>
+                    </div>
+                  )}
                 </div>
-                <div className="overflow-hidden py-1.5 sm:py-1">
-                  <motion.div
-                    initial={{ y: '125%', opacity: 0, skewY: 3 }}
-                    animate={hasStarted ? { y: 0, opacity: 1, skewY: 0 } : { y: '125%', opacity: 0, skewY: 3 }}
-                    transition={{ duration: 1.5, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
-                    className="block whitespace-nowrap select-none origin-bottom-left"
-                  >
-                    <span className="text-outline-white hover:text-white/20 transition-all duration-300">Pitch</span>{' '}
-                    <span className="text-[#ffc928] hover:brightness-110 transition-all">Startup</span>
-                  </motion.div>
+                <div className="py-1.5 sm:py-1">
+                  {hasStarted ? (
+                    <div className="block whitespace-nowrap select-none">
+                      <SplitText
+                        tag="span"
+                        text="Pitch"
+                        className="text-outline-white hover:text-white/20 transition-all duration-300"
+                        effect="rise"
+                        splitType="chars"
+                        delay={45}
+                        duration={1.05}
+                        staggerFrom="start"
+                        trigger="load"
+                        startDelay={600}
+                        hoverEffect="lift"
+                      />{' '}
+                      <SplitText
+                        tag="span"
+                        text="Startup"
+                        className="text-[#ffc928] hover:brightness-110 transition-[filter]"
+                        effect="rise"
+                        splitType="chars"
+                        delay={45}
+                        duration={1.05}
+                        staggerFrom="start"
+                        trigger="load"
+                        startDelay={820}
+                        hoverEffect="lift"
+                      />
+                    </div>
+                  ) : (
+                    <div className="block whitespace-nowrap select-none invisible">
+                      <span className="text-outline-white">Pitch</span>{' '}
+                      <span className="text-[#ffc928]">Startup</span>
+                    </div>
+                  )}
                 </div>
               </h1>
 
