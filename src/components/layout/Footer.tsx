@@ -215,26 +215,33 @@ export const Footer: React.FC = () => {
                       <a
                         href={link.href}
                         onClick={(e) => handleNavClick(e, link.href)}
-                        className={`group flex items-center justify-between py-2.5 sm:py-3 border-b transition-all duration-200 cursor-pointer active:scale-[0.99] ${
+                        className={`group flex items-center justify-between py-2.5 sm:py-3 border-b transition-all duration-300 cursor-pointer active:scale-[0.99] ${
                           isSelected
                             ? 'border-[#ffc928]/60 text-[#ffc928]'
                             : 'border-white/10 hover:border-[#ffc928]/40 active:border-[#ffc928]/60'
                         }`}
                       >
                         <span
-                          className={`font-sans font-medium text-sm sm:text-base tracking-tight transition-colors ${
+                          className={`inline-flex items-center gap-2 transform-gpu group-hover:translate-x-2 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] font-sans font-medium text-sm sm:text-base tracking-tight ${
                             isSelected
-                              ? 'text-[#ffc928]'
+                              ? 'text-[#ffc928] translate-x-2'
                               : 'text-zinc-200 group-hover:text-[#ffc928] group-active:text-[#ffc928]'
                           }`}
                         >
-                          {link.label}
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full bg-[#ffc928] transition-all duration-300 shadow-[0_0_8px_#ffc928] ${
+                              isSelected
+                                ? 'scale-100 opacity-100'
+                                : 'scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 -mr-1.5 group-hover:mr-0'
+                            }`}
+                          />
+                          <span className="transition-colors duration-200">{link.label}</span>
                         </span>
                         <ArrowRight
-                          className={`w-4 h-4 transition-all duration-200 ${
+                          className={`w-4 h-4 transition-all duration-300 ease-out ${
                             isSelected
-                              ? 'text-[#ffc928] translate-x-1'
-                              : 'text-zinc-500 group-hover:text-[#ffc928] group-active:text-[#ffc928] group-hover:translate-x-1 group-active:translate-x-1'
+                              ? 'text-[#ffc928] translate-x-1.5'
+                              : 'text-zinc-500 group-hover:text-[#ffc928] group-active:text-[#ffc928] group-hover:translate-x-1.5 group-active:translate-x-1.5'
                           }`}
                         />
                       </a>
@@ -251,26 +258,33 @@ export const Footer: React.FC = () => {
                       <a
                         href={link.href}
                         onClick={(e) => handleNavClick(e, link.href)}
-                        className={`group flex items-center justify-between py-2.5 sm:py-3 border-b transition-all duration-200 cursor-pointer active:scale-[0.99] ${
+                        className={`group flex items-center justify-between py-2.5 sm:py-3 border-b transition-all duration-300 cursor-pointer active:scale-[0.99] ${
                           isSelected
                             ? 'border-[#ffc928]/60 text-[#ffc928]'
                             : 'border-white/10 hover:border-[#ffc928]/40 active:border-[#ffc928]/60'
                         }`}
                       >
                         <span
-                          className={`font-sans font-medium text-sm sm:text-base tracking-tight transition-colors ${
+                          className={`inline-flex items-center gap-2 transform-gpu group-hover:translate-x-2 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] font-sans font-medium text-sm sm:text-base tracking-tight ${
                             isSelected
-                              ? 'text-[#ffc928]'
+                              ? 'text-[#ffc928] translate-x-2'
                               : 'text-zinc-200 group-hover:text-[#ffc928] group-active:text-[#ffc928]'
                           }`}
                         >
-                          {link.label}
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full bg-[#ffc928] transition-all duration-300 shadow-[0_0_8px_#ffc928] ${
+                              isSelected
+                                ? 'scale-100 opacity-100'
+                                : 'scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100 -mr-1.5 group-hover:mr-0'
+                            }`}
+                          />
+                          <span className="transition-colors duration-200">{link.label}</span>
                         </span>
                         <ArrowRight
-                          className={`w-4 h-4 transition-all duration-200 ${
+                          className={`w-4 h-4 transition-all duration-300 ease-out ${
                             isSelected
-                              ? 'text-[#ffc928] translate-x-1'
-                              : 'text-zinc-500 group-hover:text-[#ffc928] group-active:text-[#ffc928] group-hover:translate-x-1 group-active:translate-x-1'
+                              ? 'text-[#ffc928] translate-x-1.5'
+                              : 'text-zinc-500 group-hover:text-[#ffc928] group-active:text-[#ffc928] group-hover:translate-x-1.5 group-active:translate-x-1.5'
                           }`}
                         />
                       </a>

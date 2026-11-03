@@ -129,9 +129,11 @@ export const Navbar: React.FC = () => {
                   onClick={(e) => handleNavClick(e, link.href)}
                   className="relative px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-zinc-300 hover:text-white transition-all duration-300 group whitespace-nowrap"
                 >
-                  <span>{link.label}</span>
+                  <span className="inline-block transition-all duration-200 ease-out group-hover:-translate-y-0.5 group-hover:text-[#ffc928] group-hover:drop-shadow-[0_0_8px_rgba(255,201,40,0.4)]">
+                    {link.label}
+                  </span>
                   {link.badge && (
-                    <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-mono tracking-tight bg-[#ffc928]/15 text-[#ffc928] border border-[#ffc928]/30 rounded-xs">
+                    <span className="ml-1.5 px-1.5 py-0.5 text-[9px] font-mono tracking-tight bg-[#ffc928]/15 text-[#ffc928] border border-[#ffc928]/30 rounded-xs transition-transform duration-200 group-hover:scale-105">
                       {link.badge}
                     </span>
                   )}

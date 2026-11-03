@@ -163,10 +163,14 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
                 size="lg"
                 href="#register"
                 onClick={handleRegisterClick}
-                rightIcon={<ArrowRight className="w-4 h-4" />}
-                className="w-full sm:w-auto active:scale-[0.98] !rounded-full px-7 py-3.5 font-mono font-bold text-sm tracking-wider shadow-[0_0_20px_rgba(255,201,40,0.3)] hover:shadow-[0_0_25px_rgba(255,201,40,0.5)] transition-shadow"
+                rightIcon={
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-1.5" />
+                }
+                className="group relative overflow-hidden w-full sm:w-auto !rounded-full px-7 py-3.5 font-mono font-bold text-sm tracking-wider shadow-[0_0_20px_rgba(255,201,40,0.35)] hover:shadow-[0_0_35px_rgba(255,201,40,0.7)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-300 before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/35 before:to-transparent before:transition-transform before:duration-700 before:ease-out"
               >
-                JOIN THE SPRINT
+                <span className="relative z-10 inline-block transition-transform duration-300 group-hover:scale-[1.02]">
+                  JOIN THE SPRINT
+                </span>
               </Button>
 
               <Button
@@ -174,9 +178,14 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
                 size="lg"
                 href="#schedule"
                 onClick={handleScheduleClick}
-                className="w-full sm:w-auto active:scale-[0.98] !rounded-full px-7 py-3.5 font-mono font-bold text-sm border-white/60 hover:border-[#ffc928] text-white"
+                rightIcon={
+                  <ArrowRight className="w-4 h-4 text-[#59d6e8] transition-all duration-300 ease-out group-hover:translate-x-1.5 group-hover:text-[#ffc928]" />
+                }
+                className="group relative overflow-hidden w-full sm:w-auto !rounded-full px-7 py-3.5 font-mono font-bold text-sm border border-[#59d6e8]/40 hover:border-[#ffc928] text-white hover:text-[#ffc928] bg-[#163866]/80 hover:bg-[#163866] shadow-[0_0_15px_rgba(89,214,232,0.15)] hover:shadow-[0_0_25px_rgba(255,201,40,0.4)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-300 before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-[#59d6e8]/20 before:to-transparent before:transition-transform before:duration-700 before:ease-out"
               >
-                VIEW SCHEDULE
+                <span className="relative z-10 inline-block transition-transform duration-300 group-hover:scale-[1.02]">
+                  VIEW SCHEDULE
+                </span>
               </Button>
             </motion.div>
           </div>
