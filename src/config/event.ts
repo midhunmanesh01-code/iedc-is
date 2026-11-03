@@ -15,10 +15,10 @@ export const EVENT_CONFIG: EventConfig = {
   organizer: 'IEDC BOOTCAMP CEC',
   organizerFull: 'Innovation and Entrepreneurship Development Centre, College of Engineering Chengannur',
 
-  // Date and timing configuration (Placeholders - pending official announcement)
-  isDateAnnounced: false,
-  startDate: null, // [PLACEHOLDER: Expected ISO date string e.g. "2026-03-20T09:00:00+05:30"]
-  endDate: null,   // [PLACEHOLDER: Expected ISO date string e.g. "2026-03-21T09:00:00+05:30"]
+  // Date and timing configuration
+  isDateAnnounced: true,
+  startDate: '2026-12-15T09:00:00+05:30',
+  endDate: '2026-12-16T09:00:00+05:30',
   durationHours: 24,
 
   // Venue configuration
