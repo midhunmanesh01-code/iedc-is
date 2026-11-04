@@ -21,8 +21,8 @@ export const App: React.FC = () => {
         <About />
         <Schedule />
         <IdeaForge />
-        <FAQ />
         <Registration />
+        <FAQ />
       </PageLayout>
     </>
   )

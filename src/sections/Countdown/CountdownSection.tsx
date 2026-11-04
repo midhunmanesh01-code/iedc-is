@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { AlertCircle, Calendar, ArrowRight, Zap } from 'lucide-react'
 import { Container } from '@/components/common/Container'
 import { Button } from '@/components/common/Button'
@@ -11,17 +11,96 @@ const CountdownDigit: React.FC<{
   readonly label: string
   readonly isPending: boolean
 }> = ({ value, label, isPending }) => {
-  const top = value[0] ?? '-'
-  const bottom = value[1] ?? '-'
+  const [scramble, setScramble] = useState<string | null>(null)
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
+  const cardRef = useRef<HTMLDivElement>(null)
+  const intervalRef = useRef<number | null>(null)
+
+  // Clean up any interval on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
+  }, [])
+
+  // Smooth number scramble on cursor touch - NO vibration, NO color change, perfectly steady
+  const triggerScramble = () => {
+    if (isPending || intervalRef.current !== null) return
+
+    let count = 0
+    const maxCount = 8
+
+    intervalRef.current = window.setInterval(() => {
+      count++
+      // Rapid clean 2-digit scramble in exact same original white font
+      setScramble(Math.floor(Math.random() * 90 + 10).toString())
+
+      if (count >= maxCount) {
+        if (intervalRef.current) clearInterval(intervalRef.current)
+        intervalRef.current = null
+        setScramble(null)
+      }
+    }, 50)
+  }
+
+  // Smooth 3D tilt following cursor (~11 deg: noticeable and tactile, but tasteful)
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = cardRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const rotX = Math.max(-11, Math.min(11, ((y - rect.height / 2) / (rect.height / 2)) * -11))
+    const rotY = Math.max(-11, Math.min(11, ((x - rect.width / 2) / (rect.width / 2)) * 11))
+    setTilt({ x: rotX, y: rotY })
+  }
+
+  const handleMouseEnter = () => {
+    triggerScramble()
+  }
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 })
+  }
+
+  const display = scramble ?? value
+  const top = display[0] ?? '-'
+  const bottom = display[1] ?? '-'
 
   return (
-    <div className="flex flex-col items-center gap-2 sm:gap-3">
-      {/* Digit card */}
-      <div className="relative w-[72px] sm:w-[100px] lg:w-[130px] h-[88px] sm:h-[120px] lg:h-[150px]">
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={triggerScramble}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          triggerScramble()
+        }
+      }}
+      aria-label={`${label}: ${value}`}
+      className="flex flex-col items-center gap-2 sm:gap-3 group select-none cursor-pointer focus-visible:outline-none"
+    >
+      {/* Digit card with smooth 3D tilt + subtle refined cyan glow on hover */}
+      <div
+        className="relative w-[72px] sm:w-[100px] lg:w-[130px] h-[88px] sm:h-[120px] lg:h-[150px] rounded-lg sm:rounded-xl transition-all duration-200 ease-out group-hover:shadow-[0_0_22px_rgba(89,214,232,0.18)]"
+        style={{
+          transform: `perspective(600px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          transition: 'transform 0.12s ease-out, box-shadow 0.3s ease-out',
+        }}
+      >
         {/* Top half */}
-        <div className="absolute inset-x-0 top-0 h-[calc(50%-1px)] bg-gradient-to-b from-[#122d55] to-[#0f2445] rounded-t-lg sm:rounded-t-xl overflow-hidden border border-b-0 border-[#59d6e8]/15">
+        <div className="absolute inset-x-0 top-0 h-[calc(50%-1px)] bg-gradient-to-b from-[#122d55] to-[#0f2445] rounded-t-lg sm:rounded-t-xl overflow-hidden border border-b-0 border-[#59d6e8]/15 group-hover:border-[#59d6e8]/45 transition-colors duration-200">
           <div className="absolute inset-0 flex items-end justify-center pb-0">
-            <span className={`font-mono font-black text-5xl sm:text-7xl lg:text-8xl leading-none translate-y-[48%] ${isPending ? 'text-[#59d6e8]/30' : 'text-[#f5f7fa]'} transition-colors`}>
+            <span
+              className={`font-mono font-black text-5xl sm:text-7xl lg:text-8xl leading-none translate-y-[48%] ${
+                isPending ? 'text-[#59d6e8]/30' : 'text-[#f5f7fa]'
+              }`}
+            >
               {top}{bottom}
             </span>
           </div>
@@ -29,21 +108,25 @@ const CountdownDigit: React.FC<{
 
         {/* Center line */}
         <div className="absolute inset-x-0 top-1/2 -translate-y-px h-[2px] z-10 bg-[#0a1a30]" />
-        <div className="absolute left-0 top-1/2 -translate-y-px w-1.5 h-1.5 rounded-full bg-[#0a1a30] -translate-x-[3px] z-20" />
-        <div className="absolute right-0 top-1/2 -translate-y-px w-1.5 h-1.5 rounded-full bg-[#0a1a30] translate-x-[3px] z-20" />
+        <div className="absolute left-0 top-1/2 -translate-y-px w-1.5 h-1.5 rounded-full bg-[#0a1a30] -translate-x-[3px] z-20 group-hover:bg-[#59d6e8]/60 transition-colors duration-200" />
+        <div className="absolute right-0 top-1/2 -translate-y-px w-1.5 h-1.5 rounded-full bg-[#0a1a30] translate-x-[3px] z-20 group-hover:bg-[#59d6e8]/60 transition-colors duration-200" />
 
         {/* Bottom half */}
-        <div className="absolute inset-x-0 bottom-0 h-[calc(50%-1px)] bg-gradient-to-b from-[#0d1f3d] to-[#0b1933] rounded-b-lg sm:rounded-b-xl overflow-hidden border border-t-0 border-[#59d6e8]/15">
+        <div className="absolute inset-x-0 bottom-0 h-[calc(50%-1px)] bg-gradient-to-b from-[#0d1f3d] to-[#0b1933] rounded-b-lg sm:rounded-b-xl overflow-hidden border border-t-0 border-[#59d6e8]/15 group-hover:border-[#59d6e8]/45 transition-colors duration-200">
           <div className="absolute inset-0 flex items-start justify-center pt-0">
-            <span className={`font-mono font-black text-5xl sm:text-7xl lg:text-8xl leading-none -translate-y-[52%] ${isPending ? 'text-[#59d6e8]/30' : 'text-[#e8edf4]'} transition-colors`}>
+            <span
+              className={`font-mono font-black text-5xl sm:text-7xl lg:text-8xl leading-none -translate-y-[52%] ${
+                isPending ? 'text-[#59d6e8]/30' : 'text-[#e8edf4]'
+              }`}
+            >
               {top}{bottom}
             </span>
           </div>
         </div>
 
-        {/* Inner glow when active */}
+        {/* Subtle inner ambient glow on hover */}
         {!isPending && (
-          <div className="absolute inset-0 rounded-lg sm:rounded-xl shadow-[inset_0_0_30px_rgba(89,214,232,0.06)] pointer-events-none" />
+          <div className="absolute inset-0 rounded-lg sm:rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[inset_0_0_20px_rgba(89,214,232,0.08)] pointer-events-none" />
         )}
       </div>
 
@@ -57,8 +140,8 @@ const CountdownDigit: React.FC<{
 
 const ColonSeparator: React.FC = () => (
   <div className="flex flex-col items-center gap-2.5 sm:gap-3.5 pt-4 sm:pt-6 lg:pt-8 self-start">
-    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffc928] shadow-[0_0_10px_rgba(255,201,40,0.5)] animate-pulse" />
-    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffc928] shadow-[0_0_10px_rgba(255,201,40,0.5)] animate-pulse" />
+    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffc928]" />
+    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffc928]" />
   </div>
 )
 
@@ -86,19 +169,24 @@ export const CountdownSection: React.FC = () => {
     <section
       id="countdown"
       aria-label="Event Countdown"
-      className="relative py-20 sm:py-28 lg:py-36 border-b border-[#59d6e8]/10 bg-[#0a1628] overflow-hidden"
+      className="relative py-14 sm:py-24 lg:py-32 border-b border-[#59d6e8]/15 bg-gradient-to-b from-[#102b52] via-[#0d213d] to-[#0b1a30] overflow-hidden"
     >
-      {/* Subtle radial gradient background */}
+      {/* Background blueprint grid layer - matches site pattern */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 opacity-[0.035] pointer-events-none"
         aria-hidden="true"
         style={{
-          background: 'radial-gradient(ellipse 70% 50% at 50% 40%, rgba(89,214,232,0.06) 0%, transparent 70%)',
+          backgroundImage:
+            'radial-gradient(circle 1px, rgba(89,214,232,0.8) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
         }}
       />
 
       {/* Gold accent line at top */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-[#ffc928]/60 to-transparent" aria-hidden="true" />
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-[#ffc928]/60 to-transparent"
+        aria-hidden="true"
+      />
 
       <Container size="default">
         <div className="relative z-10 flex flex-col items-center text-center">
@@ -121,7 +209,7 @@ export const CountdownSection: React.FC = () => {
             )}
           </h2>
 
-          <p className="text-sm sm:text-base text-[#8aacc8] max-w-md mb-10 sm:mb-14 leading-relaxed">
+          <p className="text-sm sm:text-base text-[#8aacc8] max-w-md mb-8 sm:mb-12 leading-relaxed">
             {isCompleted
               ? 'The 24-hour innovation marathon has begun. Build, iterate, ship.'
               : isPending
@@ -129,8 +217,8 @@ export const CountdownSection: React.FC = () => {
               : '24 hours of non-stop building. The clock is ticking.'}
           </p>
 
-          {/* Flip-clock style countdown */}
-          <div className="flex items-start gap-2 sm:gap-4 lg:gap-5 mb-10 sm:mb-14">
+          {/* Flip-clock countdown - clean direct row, zero outer box */}
+          <div className="flex items-start gap-2 sm:gap-4 lg:gap-5 mb-8 sm:mb-12">
             <CountdownDigit value={timeUnits[0].value} label={timeUnits[0].label} isPending={isPending} />
             <ColonSeparator />
             <CountdownDigit value={timeUnits[1].value} label={timeUnits[1].label} isPending={isPending} />
@@ -168,9 +256,14 @@ export const CountdownSection: React.FC = () => {
             size="lg"
             href="#register"
             onClick={handleRegisterClick}
-            rightIcon={<ArrowRight className="w-4 h-4" />}
+            rightIcon={
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 ease-out group-hover:translate-x-1.5" />
+            }
+            className="group relative overflow-hidden w-full sm:w-auto max-w-xs sm:max-w-none rounded-xs px-7 py-3.5 font-mono font-bold text-sm tracking-wider shadow-[0_0_20px_rgba(255,201,40,0.35)] hover:shadow-[0_0_35px_rgba(255,201,40,0.7)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-300 before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/35 before:to-transparent before:transition-transform before:duration-700 before:ease-out"
           >
-            Register Your Squad
+            <span className="relative z-10 inline-block transition-transform duration-300 group-hover:scale-[1.02]">
+              REGISTER YOUR SQUAD
+            </span>
           </Button>
         </div>
       </Container>

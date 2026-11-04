@@ -155,22 +155,22 @@ export const Footer: React.FC = () => {
         aria-hidden="true"
       />
 
-      {/* Interactive Cursor-Revealed IEDC Typography (Desktop Only, Spanning Full Footer) */}
+      {/* Interactive Cursor-Revealed IEDC Typography (Desktop Only, Constrained to Columns 1 & 2 Before Venue/Map) */}
       <div
-        className="hidden lg:flex absolute inset-0 items-center justify-center pointer-events-none select-none overflow-hidden z-0"
+        className="hidden lg:flex absolute top-0 bottom-16 left-0 w-[65%] max-w-5xl items-center justify-start pl-8 xl:pl-16 pointer-events-none select-none overflow-hidden z-0"
         aria-hidden="true"
       >
         <div
-          className="w-full text-center font-display font-black text-[18vw] xl:text-[21vw] 2xl:text-[23vw] tracking-[0.12em] uppercase leading-none whitespace-nowrap transition-opacity duration-200"
+          className="font-display font-black text-8xl md:text-9xl lg:text-[11rem] xl:text-[13rem] tracking-[0.16em] uppercase leading-none whitespace-nowrap transition-opacity duration-200"
           style={{
             maskImage:
-              'radial-gradient(circle 340px at var(--cursor-x, -999px) var(--cursor-y, -999px), black 15%, transparent 100%)',
+              'radial-gradient(circle 240px at var(--cursor-x, -999px) var(--cursor-y, -999px), black 10%, transparent 100%)',
             WebkitMaskImage:
-              'radial-gradient(circle 340px at var(--cursor-x, -999px) var(--cursor-y, -999px), black 15%, transparent 100%)',
+              'radial-gradient(circle 240px at var(--cursor-x, -999px) var(--cursor-y, -999px), black 10%, transparent 100%)',
             opacity: 'var(--spotlight-opacity, 0)',
           }}
         >
-          <span className="bg-gradient-to-r from-[#ffc928] via-[#59d6e8] to-[#ffc928] bg-clip-text text-transparent drop-shadow-[0_0_60px_rgba(255,201,40,0.5)]">
+          <span className="bg-gradient-to-r from-[#ffc928] via-[#59d6e8] to-[#ffc928] bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(255,201,40,0.5)]">
             IEDC
           </span>
         </div>
