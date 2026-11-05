@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { motion, AnimatePresence, useInView } from 'motion/react'
 import {
   Terminal as TerminalIcon,
   Copy,
@@ -241,6 +241,36 @@ function getBlueprint(choices: readonly string[]): CompiledBlueprint {
 }
 
 export const IdeaForge: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: true, margin: '-60px' })
+
+  // Detect when full-screen preloader has completed and unmounted
+  const [isPreloaderGone, setIsPreloaderGone] = useState<boolean>(() => {
+    if (typeof document === 'undefined') return true
+    return document.querySelector('[role="status"]') === null
+  })
+
+  useEffect(() => {
+    if (isPreloaderGone) return
+
+    const poll = setInterval(() => {
+      if (document.querySelector('[role="status"]') === null) {
+        setIsPreloaderGone(true)
+      }
+    }, 100)
+
+    const fallback = setTimeout(() => {
+      setIsPreloaderGone(true)
+    }, 2800)
+
+    return () => {
+      clearInterval(poll)
+      clearTimeout(fallback)
+    }
+  }, [isPreloaderGone])
+
+  const canAnimate = isInView && isPreloaderGone
+
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [isDone, setIsDone] = useState<boolean>(false)
@@ -248,12 +278,50 @@ export const IdeaForge: React.FC = () => {
   const [isMuted, setIsMuted] = useState<boolean>(sound.muted)
   const [stressSimulated, setStressSimulated] = useState<boolean>(false)
 
+  // Typing effect state for terminal command execution
+  const [typedCmd, setTypedCmd] = useState<string>('')
+  const [isTyping, setIsTyping] = useState<boolean>(true)
+
   const activeStage = TERMINAL_STAGES[stepIndex]
 
   // Play boot sound on first interaction
   useEffect(() => {
     sound.playBoot()
   }, [])
+
+  // Terminal Natural Human Typing Animation Effect on step transition
+  useEffect(() => {
+    if (!canAnimate || isDone || !activeStage) return
+
+    const target = activeStage.cmd
+    let charIdx = 0
+    let timeoutId: ReturnType<typeof setTimeout>
+
+    const typeNextChar = () => {
+      charIdx++
+      setTypedCmd(target.slice(0, charIdx))
+      sound.playKeyClack()
+
+      if (charIdx < target.length) {
+        // Natural typing rhythm: slightly longer pause on spaces and dashes
+        const nextChar = target[charIdx]
+        const delay =
+          nextChar === ' ' ? 110 : nextChar === '-' ? 85 : 65 + (Math.random() * 18 - 9)
+        timeoutId = setTimeout(typeNextChar, delay)
+      } else {
+        // Natural beat before pressing Enter
+        timeoutId = setTimeout(() => {
+          setIsTyping(false)
+          sound.playEnter()
+        }, 220)
+      }
+    }
+
+    // Brief initial hesitation before starting to type
+    timeoutId = setTimeout(typeNextChar, 140)
+
+    return () => clearTimeout(timeoutId)
+  }, [canAnimate, stepIndex, isDone, activeStage])
 
   // Handle choice selection: updates state immediately without scrolling down
   const handleSelectOption = useCallback(
@@ -263,6 +331,8 @@ export const IdeaForge: React.FC = () => {
       setSelectedKeys(nextKeys)
 
       if (stepIndex + 1 < TERMINAL_STAGES.length) {
+        setTypedCmd('')
+        setIsTyping(true)
         setStepIndex((prev) => prev + 1)
       } else {
         setIsDone(true)
@@ -275,6 +345,8 @@ export const IdeaForge: React.FC = () => {
   // Jump to specific step from pipeline stepper
   const handleJumpToStep = (idx: number) => {
     sound.playKeyClack()
+    setTypedCmd('')
+    setIsTyping(true)
     setStepIndex(idx)
     setIsDone(false)
   }
@@ -282,6 +354,8 @@ export const IdeaForge: React.FC = () => {
   // Handle Reset
   const handleReset = () => {
     sound.playKeyClack()
+    setTypedCmd('')
+    setIsTyping(true)
     setStepIndex(0)
     setSelectedKeys([])
     setIsDone(false)
@@ -327,8 +401,16 @@ export const IdeaForge: React.FC = () => {
       }
 
       if (!isDone && activeStage) {
+        if (isTyping && (e.code === 'Space' || e.key === 'Enter')) {
+          setIsTyping(false)
+          setTypedCmd(activeStage.cmd)
+          return
+        }
+
         const matching = activeStage.options.find((o) => o.key === e.key)
         if (matching) {
+          setIsTyping(false)
+          setTypedCmd(activeStage.cmd)
           handleSelectOption(matching)
         }
       }
@@ -336,7 +418,7 @@ export const IdeaForge: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [stepIndex, isDone, activeStage, handleSelectOption])
+  }, [stepIndex, isDone, activeStage, isTyping, handleSelectOption])
 
   const result = getBlueprint(selectedKeys)
 
@@ -364,6 +446,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
 
   return (
     <section
+      ref={sectionRef}
       id="idea-forge"
       aria-label="Idea Forge Terminal"
       className="relative py-20 sm:py-28 lg:py-36 overflow-hidden border-b border-[#59d6e8]/15 bg-[#050e1a]"
@@ -520,74 +603,102 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                   transition={{ duration: 0.15 }}
                   className="space-y-4"
                 >
-                  {/* Prompt Line */}
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-[#ffc928] font-bold text-xs sm:text-sm">
-                      <span>$</span>
-                      <span className="text-white">{activeStage.cmd}</span>
-                      <span className="inline-block w-2 h-4 bg-[#ffc928] animate-pulse" />
+                  {/* Terminal Prompt Line with Realistic Typing Effect */}
+                  <div className="space-y-1.5 select-none" onClick={() => setIsTyping(false)}>
+                    <div className="flex items-center gap-2 text-xs sm:text-sm">
+                      <span className="text-[#59d6e8] font-bold">guest@iedc-is26:~$</span>
+                      <span className="text-[#ffc928] font-bold tracking-wide">
+                        {typedCmd}
+                      </span>
+                      <span
+                        className={`inline-block w-2 h-4 bg-[#ffc928] ${
+                          isTyping ? 'opacity-100' : 'animate-pulse'
+                        }`}
+                      />
                     </div>
-                    <div className="text-[#8aacc8] text-xs pl-4 font-semibold">
-                      {activeStage.prompt}
-                    </div>
+
+                    {/* Subtitle Prompt - emerges after command finishes typing */}
+                    <AnimatePresence>
+                      {!isTyping && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.16 }}
+                          className="text-[#8aacc8] text-xs pl-4 font-semibold"
+                        >
+                          {activeStage.prompt}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
 
-                  {/* 3 Modular Terminal Boxes (Side-by-Side on Desktop, Non-AI-Slop CAD Style) */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
-                    {activeStage.options.map((opt) => (
-                      <motion.button
-                        key={opt.key}
-                        type="button"
-                        whileHover={{ y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => handleSelectOption(opt)}
-                        className="group relative flex flex-col justify-between text-left p-4 rounded-xs border border-[#59d6e8]/25 hover:border-[#ffc928] bg-[#071829]/70 hover:bg-[#0c243f] transition-all duration-150 cursor-pointer min-h-[142px] focus:outline-none focus:ring-1 focus:ring-[#ffc928]"
+                  {/* 3 Modular Terminal Boxes (Appear strictly after typing completes) */}
+                  <AnimatePresence>
+                    {!isTyping && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.22, ease: 'easeOut' }}
+                        className="space-y-3"
                       >
-                        {/* Top Corner Technical Accent Crosshair */}
-                        <span className="absolute top-1.5 right-1.5 font-mono text-[10px] text-[#59d6e8]/40 group-hover:text-[#ffc928] transition-colors pointer-events-none select-none">
-                          +
-                        </span>
-
-                        {/* Top Header Strip: Key Badge + Flag */}
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between pb-2 border-b border-[#59d6e8]/15 select-none">
-                            <div className="flex items-center gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 group-hover:bg-[#ffc928] transition-colors" />
-                              <span className="font-mono text-[11px] font-bold text-[#ffc928] tracking-wider uppercase">
-                                [KEY {opt.key}]
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
+                          {activeStage.options.map((opt) => (
+                            <motion.button
+                              key={opt.key}
+                              type="button"
+                              whileHover={{ y: -2 }}
+                              whileTap={{ scale: 0.98 }}
+                              onClick={() => handleSelectOption(opt)}
+                              className="group relative flex flex-col justify-between text-left p-4 rounded-xs border border-[#59d6e8]/25 hover:border-[#ffc928] bg-[#071829]/70 hover:bg-[#0c243f] transition-all duration-150 cursor-pointer min-h-[142px] focus:outline-none focus:ring-1 focus:ring-[#ffc928]"
+                            >
+                              {/* Top Corner Technical Accent Crosshair */}
+                              <span className="absolute top-1.5 right-1.5 font-mono text-[10px] text-[#59d6e8]/40 group-hover:text-[#ffc928] transition-colors pointer-events-none select-none">
+                                +
                               </span>
-                            </div>
-                            <span className="font-mono text-[10px] text-[#59d6e8] group-hover:text-white transition-colors">
-                              {opt.flag}
-                            </span>
-                          </div>
 
-                          {/* Option Title & Concise Description */}
-                          <div className="space-y-1">
-                            <h4 className="font-display font-bold text-sm sm:text-[15px] text-white group-hover:text-[#ffc928] transition-colors leading-snug">
-                              {opt.label}
-                            </h4>
-                            <p className="text-xs text-[#8aacc8] group-hover:text-[#d4e4f5] transition-colors leading-relaxed line-clamp-2">
-                              {opt.desc}
-                            </p>
-                          </div>
+                              {/* Top Header Strip: Key Badge + Flag */}
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between pb-2 border-b border-[#59d6e8]/15 select-none">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 group-hover:bg-[#ffc928] transition-colors" />
+                                    <span className="font-mono text-[11px] font-bold text-[#ffc928] tracking-wider uppercase">
+                                      [KEY {opt.key}]
+                                    </span>
+                                  </div>
+                                  <span className="font-mono text-[10px] text-[#59d6e8] group-hover:text-white transition-colors">
+                                    {opt.flag}
+                                  </span>
+                                </div>
+
+                                {/* Option Title & Concise Description */}
+                                <div className="space-y-1">
+                                  <h4 className="font-display font-bold text-sm sm:text-[15px] text-white group-hover:text-[#ffc928] transition-colors leading-snug">
+                                    {opt.label}
+                                  </h4>
+                                  <p className="text-xs text-[#8aacc8] group-hover:text-[#d4e4f5] transition-colors leading-relaxed line-clamp-2">
+                                    {opt.desc}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Bottom Telemetry Strip */}
+                              <div className="pt-2.5 mt-2.5 border-t border-[#59d6e8]/10 flex items-center justify-between font-mono text-[10px]">
+                                <span className="text-[#6e94b8] group-hover:text-[#59d6e8] transition-colors tracking-tight">
+                                  {opt.telemetry}
+                                </span>
+                                <CornerDownLeft className="w-3.5 h-3.5 text-[#59d6e8]/40 group-hover:text-[#ffc928] transition-colors shrink-0" />
+                              </div>
+                            </motion.button>
+                          ))}
                         </div>
 
-                        {/* Bottom Telemetry Strip */}
-                        <div className="pt-2.5 mt-2.5 border-t border-[#59d6e8]/10 flex items-center justify-between font-mono text-[10px]">
-                          <span className="text-[#6e94b8] group-hover:text-[#59d6e8] transition-colors tracking-tight">
-                            {opt.telemetry}
-                          </span>
-                          <CornerDownLeft className="w-3.5 h-3.5 text-[#59d6e8]/40 group-hover:text-[#ffc928] transition-colors shrink-0" />
+                        <div className="text-[11px] text-[#6e94b8] pl-1 pt-1 flex items-center gap-1.5 select-none">
+                          <CornerDownLeft className="w-3.5 h-3.5 text-[#ffc928]" />
+                          <span>Click any box or press [1, 2, 3] on your keyboard.</span>
                         </div>
-                      </motion.button>
-                    ))}
-                  </div>
-
-                  <div className="text-[11px] text-[#6e94b8] pl-1 pt-1 flex items-center gap-1.5 select-none">
-                    <CornerDownLeft className="w-3.5 h-3.5 text-[#ffc928]" />
-                    <span>Click any box or press [1, 2, 3] on your keyboard.</span>
-                  </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ) : (
                 /* ── COMPILED BLUEPRINT VIEW (COMPACT, HIGH-SIGNAL, NO WORDY FLUFF) ── */
