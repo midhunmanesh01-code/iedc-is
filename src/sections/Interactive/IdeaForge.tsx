@@ -1,150 +1,291 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import {
-  RefreshCw,
-  Cpu,
-  Flame,
-  Target,
+  RotateCcw,
+  ArrowRight,
   Copy,
   Check,
-  Zap,
-  Activity,
-  Coins,
-  Sprout,
-  ShieldAlert,
   Shuffle,
-  Bookmark,
-  BookmarkCheck,
-  Terminal,
-  ArrowRight,
-  Sliders,
-  Layers,
+  Trophy,
 } from 'lucide-react'
 import { Container } from '@/components/common/Container'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { Button } from '@/components/common/Button'
-import { Card } from '@/components/ui/Card'
-import {
-  TRACK_DOMAINS,
-  TARGET_AUDIENCES,
-  ENGINEERING_CONSTRAINTS,
-  synthesizeBlueprint,
-  type BlueprintSynthesis,
-} from './ideaForgeData'
-import { ReactorCoreVisual } from './ReactorCoreVisual'
+
+// ── 3-Step Sprint Simulation Decision Tree ─────────────────
+
+interface SimulationChoice {
+  readonly id: string
+  readonly title: string
+  readonly tag: string
+  readonly impact: string
+  readonly trackId: string
+  readonly statBoost: { readonly label: string; readonly value: string }
+}
+
+interface SimulationStep {
+  readonly hour: string
+  readonly phaseName: string
+  readonly situation: string
+  readonly choices: readonly SimulationChoice[]
+}
+
+const SIMULATION_STEPS: readonly SimulationStep[] = [
+  {
+    hour: '09:00 AM · HOUR 00',
+    phaseName: 'PHASE 01: SQUAD ARCHITECTURE',
+    situation: 'The 24-hour sprint clock starts ticking. How does your squad split initial responsibilities?',
+    choices: [
+      {
+        id: 'hardware-iot',
+        title: 'Deep Hardware & Sensor Wiring',
+        tag: 'PHYSICAL EMBEDDED',
+        impact: 'You breadboard microcontrollers and solder analog probes before writing a line of code.',
+        trackId: 'cleantech',
+        statBoost: { label: 'Hardware Rigor', value: '+40' },
+      },
+      {
+        id: 'rapid-software',
+        title: 'High-Velocity Offline PWA',
+        tag: 'PURE SOFTWARE',
+        impact: 'You build an offline-first web client with IndexedDB and mock JSON streams.',
+        trackId: 'fintech',
+        statBoost: { label: 'Build Velocity', value: '+50' },
+      },
+      {
+        id: 'edge-ml',
+        title: 'Quantized TinyML Pipeline',
+        tag: 'INTELLIGENCE',
+        impact: 'You train a 1D-CNN model on audio/optical sensor data for zero-cloud edge inference.',
+        trackId: 'edge-ai',
+        statBoost: { label: 'Tech Novelty', value: '+45' },
+      },
+    ],
+  },
+  {
+    hour: '02:30 AM · HOUR 17',
+    phaseName: 'PHASE 02: THE MIDNIGHT CRISIS',
+    situation: 'The campus Wi-Fi router overheats and crashes. Your cloud API calls are dead. Squad response:',
+    choices: [
+      {
+        id: 'mesh-pivot',
+        title: 'Deploy Peer-to-Peer LoRa / ESP-NOW',
+        tag: 'ZERO CONNECTIVITY',
+        impact: 'You dump cloud dependencies and route packets directly between laptops over RF mesh.',
+        trackId: 'civic',
+        statBoost: { label: 'Fault Resilience', value: '+60' },
+      },
+      {
+        id: 'caching-fallback',
+        title: 'Switch to Cryptographic Offline Vouchers',
+        tag: 'CRYPTOGRAPHIC AUDIT',
+        impact: 'You implement signed local ledger hashes that verify transactions without a server.',
+        trackId: 'fintech',
+        statBoost: { label: 'Security Score', value: '+35' },
+      },
+      {
+        id: 'acoustic-optics',
+        title: 'Pivot to On-Device Sensor Triage',
+        tag: 'AUTONOMOUS SENSORS',
+        impact: 'You wire direct GPIO threshold interrupts and buzzer sirens directly on the breadboard.',
+        trackId: 'healthcare',
+        statBoost: { label: 'Demo Defensibility', value: '+40' },
+      },
+    ],
+  },
+  {
+    hour: '08:15 AM · HOUR 23',
+    phaseName: 'PHASE 03: THE 5-MINUTE DEMO',
+    situation: 'The jury is walking over to your workstation. One jumper wire is loose. How do you pitch?',
+    choices: [
+      {
+        id: 'live-hardware',
+        title: 'Trigger Live Working Prototype',
+        tag: 'MAXIMUM RESPECT',
+        impact: 'You hold the hot soldering iron in hand and run real sensor readings live on stage.',
+        trackId: 'agritech',
+        statBoost: { label: 'Jury Conviction', value: '+55' },
+      },
+      {
+        id: 'resilient-testbench',
+        title: 'Interactive Simulated Stress-Test',
+        tag: 'ROCK SOLID',
+        impact: 'You demonstrate live simulated fault-injection to prove the system cannot crash.',
+        trackId: 'civic',
+        statBoost: { label: 'Architecture Viability', value: '+45' },
+      },
+      {
+        id: 'business-focus',
+        title: 'ROI & Defensible Market Unit Economics',
+        tag: 'STARTUP FOCUS',
+        impact: 'You demonstrate how a sub-₹1000 BOM creates an unassailable margin for rural deployment.',
+        trackId: 'cleantech',
+        statBoost: { label: 'Commercial Viability', value: '+50' },
+      },
+    ],
+  },
+]
+
+// ── Squad Archetypes generated from Choices ────────────────
+
+interface SquadArchetype {
+  readonly badge: string
+  readonly title: string
+  readonly tagline: string
+  readonly matchedTrack: string
+  readonly missionTitle: string
+  readonly missionOneLiner: string
+  readonly stack: readonly string[]
+  readonly stats: { readonly title: string; readonly score: number }[]
+}
+
+const ARCHETYPES: Record<string, SquadArchetype> = {
+  cleantech: {
+    badge: 'ARCHETYPE // HARDWARE RIGOR',
+    title: 'The Off-Grid Microgrid Pioneer',
+    tagline: 'Your squad tackles real thermodynamic & physical challenges where cloud servers cannot reach.',
+    matchedTrack: 'Clean Energy & Infrastructure',
+    missionTitle: 'Solar Cold-Chain Telemetry Puck',
+    missionOneLiner: 'Preventing rural vaccine spoilage through mesh-linked thermal loggers surviving 6+ months on coin cells.',
+    stack: ['ESP32-C3', 'DS18B20 Temp Probe', 'SX1262 LoRa', 'SQLite Edge'],
+    stats: [
+      { title: 'Hardware Rigor', score: 96 },
+      { title: 'Fault Resilience', score: 92 },
+      { title: 'Sprint Readiness', score: 95 },
+    ],
+  },
+  healthcare: {
+    badge: 'ARCHETYPE // CLINICAL ACCURACY',
+    title: 'The Edge MedTech Architect',
+    tagline: 'Your squad transforms commodity hardware into life-saving diagnostic triage tools.',
+    matchedTrack: 'HealthTech & Assistive Devices',
+    missionTitle: 'Sub-50ms Cardiac Murmur Classifier',
+    missionOneLiner: 'On-device acoustic phonocardiogram detecting valve anomalies in remote sub-centers without doctors.',
+    stack: ['ESP32-S3', 'INMP441 MEMS', 'TensorFlow Lite Micro', 'Edge Impulse'],
+    stats: [
+      { title: 'Diagnostic Impact', score: 98 },
+      { title: 'Edge Efficiency', score: 94 },
+      { title: 'Sprint Readiness', score: 91 },
+    ],
+  },
+  'edge-ai': {
+    badge: 'ARCHETYPE // NEURAL ON-CHIP',
+    title: 'The TinyML Systems Specialist',
+    tagline: 'Zero cloud dependencies. Your models execute deterministically on bare silicon.',
+    matchedTrack: 'Edge AI & Autonomous Systems',
+    missionTitle: 'Sub-40ms Optical Safety Interlock',
+    missionOneLiner: 'On-device vision sentinel that hardware-cuts machinery relays before human hands reach blades.',
+    stack: ['Grove Vision AI v2', 'YOLOv8-nano', 'Opto-Isolated Relay', 'WebRTC'],
+    stats: [
+      { title: 'Inference Speed', score: 97 },
+      { title: 'Safety Novelty', score: 94 },
+      { title: 'Sprint Readiness', score: 93 },
+    ],
+  },
+  fintech: {
+    badge: 'ARCHETYPE // TRUSTLESS ARCHITECT',
+    title: 'The Sovereign Ledger Builder',
+    tagline: 'You build payment networks that survive when cell towers and bank servers collapse.',
+    matchedTrack: 'Open Commerce & P2P Finance',
+    missionTitle: 'Zero-Connectivity Voucher Exchange',
+    missionOneLiner: 'Cryptographic airplane-mode token transfers verified locally via ultrasonic acoustic chimes.',
+    stack: ['Web NFC API', 'Ed25519 Crypto', 'Web Audio API', 'Next.js PWA'],
+    stats: [
+      { title: 'Cryptographic Security', score: 95 },
+      { title: 'Network Independence', score: 99 },
+      { title: 'Sprint Readiness', score: 92 },
+    ],
+  },
+  agritech: {
+    badge: 'ARCHETYPE // FRONTLINE IMPACT',
+    title: 'The Precision AgriTech Hacker',
+    tagline: 'Turning ₹50 components into high-yield sensors for smallholder paddy and spice farmers.',
+    matchedTrack: 'AgriTech & Food Preservation',
+    missionTitle: 'Sub-₹500 Acoustic Silo Weevil Sensor',
+    missionOneLiner: 'Contact microphone detecting larval micro-vibrations inside grain storage days before visible damage.',
+    stack: ['Piezo Contact Disc', 'LM358 OpAmp', 'ESP32 ADC', 'FFT Binning'],
+    stats: [
+      { title: 'Cost Democratization', score: 99 },
+      { title: 'Practical Feasibility', score: 95 },
+      { title: 'Sprint Readiness', score: 96 },
+    ],
+  },
+  civic: {
+    badge: 'ARCHETYPE // DISASTER DEFENSE',
+    title: 'The Resilient Mesh Guardian',
+    tagline: 'When monsoon floods arrive, your squad’s decentralized nodes sound the alert before anyone else.',
+    matchedTrack: 'Civic Resilience & Disaster Relief',
+    missionTitle: 'Autonomous River Basin Telemetry Link',
+    missionOneLiner: 'Bridge-mounted ultrasonic rangefinders communicating upstream-to-downstream to trigger sirens.',
+    stack: ['JSN-SR04T Waterproof', 'ATmega328P', 'Ebyte LoRa 1W', 'Siren Relay'],
+    stats: [
+      { title: 'Disaster Resilience', score: 98 },
+      { title: 'Civic Impact', score: 96 },
+      { title: 'Sprint Readiness', score: 94 },
+    ],
+  },
+}
 
 export const IdeaForge: React.FC = () => {
-  const [selectedDomainId, setSelectedDomainId] = useState<string>('cleantech')
-  const [selectedTargetId, setSelectedTargetId] = useState<string>('health-workers')
-  const [selectedConstraintId, setSelectedConstraintId] = useState<string>('offline-mesh')
-  const [sprintMode, setSprintMode] = useState<'hybrid' | 'software' | 'deep'>('hybrid')
+  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0)
+  const [selectedChoices, setSelectedChoices] = useState<SimulationChoice[]>([])
+  const [isCompleted, setIsCompleted] = useState<boolean>(false)
+  const [copied, setCopied] = useState<boolean>(false)
 
-  const [isFusing, setIsFusing] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [savedRacks, setSavedRacks] = useState<BlueprintSynthesis[]>([])
-  const [activeTabMobile, setActiveTabMobile] = useState<'injectors' | 'blueprint'>('blueprint')
+  const activeStep = SIMULATION_STEPS[currentStepIndex] || SIMULATION_STEPS[0]
 
-  // Curated presets for instant inspiration
-  const PRESET_COMBOS = [
-    { label: 'Off-Grid MedTech', domain: 'healthcare', target: 'health-workers', constraint: 'offline-mesh' },
-    { label: 'Disaster Rubble Mesh', domain: 'edge-ai', target: 'first-responders', constraint: 'offline-mesh' },
-    { label: 'Bio-Acoustic AgriTech', domain: 'agritech', target: 'farmers', constraint: 'sub-15-bom' },
-    { label: 'Lab Safety Interlock', domain: 'edge-ai', target: 'makerspaces', constraint: 'sub-50ms-edge' },
-  ]
-
-  const activeDomain = TRACK_DOMAINS.find((d) => d.id === selectedDomainId) || TRACK_DOMAINS[0]
-  const activeTarget = TARGET_AUDIENCES.find((t) => t.id === selectedTargetId) || TARGET_AUDIENCES[0]
-  const activeConstraint = ENGINEERING_CONSTRAINTS.find((c) => c.id === selectedConstraintId) || ENGINEERING_CONSTRAINTS[0]
-
-  // Currently synthesized blueprint
-  const [blueprint, setBlueprint] = useState<BlueprintSynthesis>(() =>
-    synthesizeBlueprint('cleantech', 'health-workers', 'offline-mesh', 'hybrid')
-  )
-
-  const handleTriggerSynthesis = (
-    nextDomain = selectedDomainId,
-    nextTarget = selectedTargetId,
-    nextConstraint = selectedConstraintId,
-    nextMode = sprintMode
-  ) => {
-    setIsFusing(true)
-    setTimeout(() => {
-      const generated = synthesizeBlueprint(nextDomain, nextTarget, nextConstraint, nextMode)
-      setBlueprint(generated)
-      setIsFusing(false)
-      // On mobile, automatically show the synthesized blueprint
-      setActiveTabMobile('blueprint')
-    }, 420)
+  // Determine final archetype based on player choices
+  const resolveArchetype = (): SquadArchetype => {
+    if (selectedChoices.length === 0) return ARCHETYPES.cleantech
+    const lastChoice = selectedChoices[selectedChoices.length - 1]
+    const matched = ARCHETYPES[lastChoice.trackId]
+    return matched || ARCHETYPES.cleantech
   }
 
-  const handleSelectDomain = (domainId: string) => {
-    setSelectedDomainId(domainId)
-    handleTriggerSynthesis(domainId, selectedTargetId, selectedConstraintId, sprintMode)
+  const handleSelectChoice = (choice: SimulationChoice) => {
+    const updated = [...selectedChoices, choice]
+    setSelectedChoices(updated)
+
+    if (currentStepIndex + 1 < SIMULATION_STEPS.length) {
+      setCurrentStepIndex((prev) => prev + 1)
+    } else {
+      setIsCompleted(true)
+    }
   }
 
-  const handleSelectTarget = (targetId: string) => {
-    setSelectedTargetId(targetId)
-    handleTriggerSynthesis(selectedDomainId, targetId, selectedConstraintId, sprintMode)
+  const handleReset = () => {
+    setCurrentStepIndex(0)
+    setSelectedChoices([])
+    setIsCompleted(false)
   }
 
-  const handleSelectConstraint = (constraintId: string) => {
-    setSelectedConstraintId(constraintId)
-    handleTriggerSynthesis(selectedDomainId, selectedTargetId, constraintId, sprintMode)
+  const handleInstantRoll = () => {
+    const randomChoices = SIMULATION_STEPS.map(
+      (step) => step.choices[Math.floor(Math.random() * step.choices.length)]
+    )
+    setSelectedChoices(randomChoices)
+    setCurrentStepIndex(SIMULATION_STEPS.length - 1)
+    setIsCompleted(true)
   }
 
-  const handleModeChange = (mode: 'hybrid' | 'software' | 'deep') => {
-    setSprintMode(mode)
-    handleTriggerSynthesis(selectedDomainId, selectedTargetId, selectedConstraintId, mode)
-  }
+  const resultArchetype = resolveArchetype()
 
-  const handleRandomize = () => {
-    const randomDomain = TRACK_DOMAINS[Math.floor(Math.random() * TRACK_DOMAINS.length)].id
-    const randomTarget = TARGET_AUDIENCES[Math.floor(Math.random() * TARGET_AUDIENCES.length)].id
-    const randomConstraint = ENGINEERING_CONSTRAINTS[Math.floor(Math.random() * ENGINEERING_CONSTRAINTS.length)].id
+  const handleCopyResult = () => {
+    const text = `[IDEA SPRINT 2026 // SQUAD SIMULATION RESULT]
+Archetype: ${resultArchetype.title}
+Track: ${resultArchetype.matchedTrack}
 
-    setSelectedDomainId(randomDomain)
-    setSelectedTargetId(randomTarget)
-    setSelectedConstraintId(randomConstraint)
-    handleTriggerSynthesis(randomDomain, randomTarget, randomConstraint, sprintMode)
-  }
+Assigned Mission:
+${resultArchetype.missionTitle}
+"${resultArchetype.missionOneLiner}"
 
-  const handleLoadPreset = (domain: string, target: string, constraint: string) => {
-    setSelectedDomainId(domain)
-    setSelectedTargetId(target)
-    setSelectedConstraintId(constraint)
-    handleTriggerSynthesis(domain, target, constraint, sprintMode)
-  }
+Recommended 24H Stack:
+${resultArchetype.stack.join(' • ')}
 
-  const handleCopy = () => {
-    const textToCopy = `[IDEA SPRINT 2026 // VENTURE BLUEPRINT]
-Codename: ${blueprint.codename}
-Title: ${blueprint.title}
-Track: ${activeDomain.name}
-Target Persona: ${activeTarget.label}
-Constraint: ${activeConstraint.label} (${activeConstraint.spec})
-
-Elevator Hook:
-${blueprint.hook}
-
-Problem Statement:
-${blueprint.problemStatement}
-
-Proposed Solution Architecture:
-${blueprint.solutionArchitecture}
-
-Recommended Tech Stack:
-${blueprint.recommendedStack.join(' • ')}
-
-24-Hour Sprint MVP Scope:
-${blueprint.sprintMvpScope}
-
-Telemetry:
-Viability: ${blueprint.metrics.feasibility}% | Impact: ${blueprint.metrics.impact}% | Novelty: ${blueprint.metrics.novelty}% | Mode: ${blueprint.metrics.hardwareIntensity}
-
-Generated at IDEA FORGE // IEDC BOOTCAMP CEC`
+Simulated at IDEA FORGE // IEDC BOOTCAMP CEC`
 
     navigator.clipboard
-      .writeText(textToCopy)
+      .writeText(text)
       .then(() => {
         setCopied(true)
         setTimeout(() => setCopied(false), 2200)
@@ -152,625 +293,260 @@ Generated at IDEA FORGE // IEDC BOOTCAMP CEC`
       .catch(() => {})
   }
 
-  const handleTogglePin = () => {
-    setSavedRacks((prev) => {
-      const exists = prev.some((b) => b.id === blueprint.id)
-      if (exists) {
-        return prev.filter((b) => b.id !== blueprint.id)
-      }
-      if (prev.length >= 4) {
-        return [blueprint, ...prev.slice(0, 3)]
-      }
-      return [blueprint, ...prev]
-    })
-  }
-
-  const isCurrentPinned = savedRacks.some((b) => b.id === blueprint.id)
-
-  const renderDomainIcon = (iconName: string, color: string) => {
-    const props = { className: 'w-4 h-4', style: { color } }
-    switch (iconName) {
-      case 'Zap':
-        return <Zap {...props} />
-      case 'Activity':
-        return <Activity {...props} />
-      case 'Cpu':
-        return <Cpu {...props} />
-      case 'Coins':
-        return <Coins {...props} />
-      case 'Sprout':
-        return <Sprout {...props} />
-      case 'ShieldAlert':
-        return <ShieldAlert {...props} />
-      default:
-        return <Flame {...props} />
-    }
-  }
-
   return (
     <section
       id="idea-forge"
-      aria-label="Idea Forge Kinetic Synthesis Deck"
-      className="relative py-16 sm:py-24 lg:py-32 overflow-hidden border-b border-[#59d6e8]/20 bg-[#0b1a30]"
+      aria-label="Idea Forge Sprint Simulator"
+      className="relative py-20 sm:py-28 lg:py-36 overflow-hidden border-b border-[#59d6e8]/10 bg-[#091728]"
     >
-      {/* Background blueprint grid accents */}
+      {/* Blueprint Grid Atmosphere */}
       <div
-        className="absolute inset-0 opacity-[0.035] pointer-events-none"
-        aria-hidden="true"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle 1px, rgba(89,214,232,0.8) 1px, transparent 1px)',
-          backgroundSize: '30px 30px',
-        }}
-      />
-      <div
-        className="absolute top-0 right-1/4 w-96 h-96 bg-[#ffc928]/[0.03] rounded-full blur-3xl pointer-events-none"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#59d6e8]/[0.03] rounded-full blur-3xl pointer-events-none"
+        className="absolute inset-0 bg-blueprint-grid opacity-35 pointer-events-none"
         aria-hidden="true"
       />
 
       <Container size="default">
-        {/* Section Heading */}
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 sm:mb-12">
+        {/* Section Heading matching other sections */}
+        <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
           <SectionHeading
-            tag="TACTICAL IDEATION BENCH"
-            title="IDEA FORGE: Kinetic Idea Reactor"
-            subtitle="Fuse real-world engineering domains, user cohorts, and extreme operational constraints into defensible 24-hour sprint concepts."
+            tag="INTERACTIVE BENCH"
+            title="The 24-Hour Sprint Simulator."
+            subtitle="Simulate three critical squad decisions under sprint conditions to uncover your team's tactical archetype and matched build mission."
             className="mb-0 max-w-2xl"
           />
 
-          {/* Quick serendipity & randomize button */}
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRandomize}
-              isLoading={isFusing}
-              leftIcon={<Shuffle className="w-3.5 h-3.5 text-[#ffc928]" />}
-              className="text-xs font-mono font-bold tracking-wider border-[#ffc928]/50 text-[#ffc928] hover:bg-[#ffc928]/10 min-h-[42px] cursor-pointer"
+          {/* Quick Instant Random Roll */}
+          <div className="flex items-center gap-3 shrink-0 self-start md:self-auto">
+            <button
+              type="button"
+              onClick={handleInstantRoll}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xs font-mono text-xs uppercase tracking-wider font-bold text-[#ffc928] border border-[#ffc928]/40 hover:border-[#ffc928] hover:bg-[#ffc928]/10 transition-colors cursor-pointer min-h-[44px]"
             >
-              Overclock // Randomize
-            </Button>
+              <Shuffle className="w-3.5 h-3.5" />
+              <span>Instant Roll</span>
+            </button>
           </div>
         </div>
 
-        {/* Preset Vectors Quick Chips */}
-        <div className="relative z-10 flex items-center gap-2 overflow-x-auto scrollbar-none pb-4 mb-6 -mx-4 px-4 sm:mx-0 sm:px-0">
-          <span className="font-mono text-[11px] uppercase tracking-wider text-[#59d6e8] font-bold shrink-0 flex items-center gap-1.5">
-            <Target className="w-3.5 h-3.5 text-[#ffc928]" /> Curated Vectors:
+        {/* ======================================================== */}
+        {/* SIMULATOR APPARATUS (CLEAN DRAFTING PLANE - ZERO SLOP)   */}
+        {/* ======================================================== */}
+        <div className="relative z-10 border border-[#59d6e8]/25 bg-[#0b1d33]/95 backdrop-blur-xs shadow-2xl">
+          {/* Corner Crosshairs */}
+          <span className="absolute top-1 left-2 font-mono text-xs text-[#59d6e8]/40 select-none">
+            +
           </span>
-          {PRESET_COMBOS.map((p) => (
-            <button
-              key={p.label}
-              type="button"
-              onClick={() => handleLoadPreset(p.domain, p.target, p.constraint)}
-              className="px-3 py-1.5 rounded-full text-xs font-mono bg-[#163866]/90 border border-[#59d6e8]/25 text-[#c4daf2] hover:text-[#ffc928] hover:border-[#ffc928]/60 transition-all shrink-0 cursor-pointer active:scale-95 whitespace-nowrap"
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
+          <span className="absolute top-1 right-2 font-mono text-xs text-[#59d6e8]/40 select-none">
+            +
+          </span>
+          <span className="absolute bottom-1 left-2 font-mono text-xs text-[#59d6e8]/40 select-none">
+            +
+          </span>
+          <span className="absolute bottom-1 right-2 font-mono text-xs text-[#59d6e8]/40 select-none">
+            +
+          </span>
 
-        {/* Mobile View Toggle: Switch between Injectors Config and Blueprint Output */}
-        <div className="lg:hidden relative z-10 grid grid-cols-2 gap-2 p-1 bg-[#102b52] border border-[#59d6e8]/20 rounded-lg mb-6">
-          <button
-            type="button"
-            onClick={() => setActiveTabMobile('injectors')}
-            className={`py-2.5 px-3 rounded text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-              activeTabMobile === 'injectors'
-                ? 'bg-[#ffc928] text-[#102b52] shadow-sm'
-                : 'text-[#8aacc8] hover:text-white'
-            }`}
-          >
-            <Sliders className="w-3.5 h-3.5" />
-            <span>1. Injectors</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTabMobile('blueprint')}
-            className={`py-2.5 px-3 rounded text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-              activeTabMobile === 'blueprint'
-                ? 'bg-[#ffc928] text-[#102b52] shadow-sm'
-                : 'text-[#8aacc8] hover:text-white'
-            }`}
-          >
-            <Terminal className="w-3.5 h-3.5" />
-            <span>2. Blueprint</span>
-          </button>
-        </div>
-
-        {/* Main Workbench Grid */}
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-          {/* ========================================================= */}
-          {/* LEFT COLUMN: THE 3 INJECTORS (CONFIG CHAMBERS)           */}
-          {/* ========================================================= */}
-          <div
-            className={`lg:col-span-5 space-y-6 ${
-              activeTabMobile === 'injectors' ? 'block' : 'hidden lg:block'
-            }`}
-          >
-            {/* INJECTOR 1: DOMAIN TRACK */}
-            <div className="bg-[#122f59]/90 border border-[#59d6e8]/25 p-4 sm:p-5 rounded-lg shadow-lg relative">
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#59d6e8]/15">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#ffc928]/15 text-[#ffc928] border border-[#ffc928]/30">
-                    INJECTOR α
-                  </span>
-                  <span className="font-display font-bold text-sm text-white">Sprint Track</span>
-                </div>
-                <span className="font-mono text-[10px] text-[#59d6e8] uppercase tracking-wider">
-                  {activeDomain.tag}
-                </span>
-              </div>
-
-              {/* Domains Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {TRACK_DOMAINS.map((domain) => {
-                  const isSelected = domain.id === selectedDomainId
-                  return (
-                    <button
-                      key={domain.id}
-                      type="button"
-                      onClick={() => handleSelectDomain(domain.id)}
-                      className={`p-2.5 rounded text-left transition-all relative border cursor-pointer min-h-[64px] flex flex-col justify-between ${
-                        isSelected
-                          ? 'bg-[#1e467e] border-[#ffc928] shadow-[0_0_12px_rgba(255,201,40,0.2)]'
-                          : 'bg-[#102b52]/80 border-[#59d6e8]/20 hover:border-[#59d6e8]/50 hover:bg-[#163866]'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        {renderDomainIcon(domain.iconName, domain.color)}
-                        {isSelected && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928] animate-pulse" />
-                        )}
-                      </div>
-                      <span className="font-display text-xs font-bold text-[#f5f7fa] line-clamp-2 mt-1 leading-snug">
-                        {domain.name}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-              <p className="font-mono text-[11px] text-[#8aacc8] mt-3 leading-relaxed">
-                {activeDomain.description}
-              </p>
-            </div>
-
-            {/* INJECTOR 2: TARGET PERSONA / COHORT */}
-            <div className="bg-[#122f59]/90 border border-[#59d6e8]/25 p-4 sm:p-5 rounded-lg shadow-lg relative">
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#59d6e8]/15">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-[#59d6e8]/15 text-[#59d6e8] border border-[#59d6e8]/30">
-                    INJECTOR β
-                  </span>
-                  <span className="font-display font-bold text-sm text-white">Target Beneficiary</span>
-                </div>
-                <span className="font-mono text-[10px] text-[#8aacc8] uppercase tracking-wider">
-                  {TARGET_AUDIENCES.length} Cohorts
-                </span>
-              </div>
-
-              {/* Targets List */}
-              <div className="space-y-1.5">
-                {TARGET_AUDIENCES.map((target) => {
-                  const isSelected = target.id === selectedTargetId
-                  return (
-                    <button
-                      key={target.id}
-                      type="button"
-                      onClick={() => handleSelectTarget(target.id)}
-                      className={`w-full p-2.5 rounded text-left transition-all border flex items-center justify-between cursor-pointer min-h-[44px] ${
-                        isSelected
-                          ? 'bg-[#1e467e] border-[#59d6e8] text-white shadow-sm'
-                          : 'bg-[#102b52]/70 border-[#59d6e8]/15 text-[#c4daf2] hover:bg-[#163866] hover:text-white'
-                      }`}
-                    >
-                      <span className="font-display text-xs font-semibold leading-tight pr-2">
-                        {target.label}
-                      </span>
-                      {isSelected ? (
-                        <span className="font-mono text-[10px] text-[#59d6e8] font-bold shrink-0">
-                          [LOCKED]
-                        </span>
-                      ) : (
-                        <span className="font-mono text-[10px] text-[#6e94b8] shrink-0">
-                          SELECT
-                        </span>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* INJECTOR 3: ENGINEERING CONSTRAINT */}
-            <div className="bg-[#122f59]/90 border border-[#59d6e8]/25 p-4 sm:p-5 rounded-lg shadow-lg relative">
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#59d6e8]/15">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-rose-400/15 text-rose-300 border border-rose-400/30">
-                    INJECTOR γ
-                  </span>
-                  <span className="font-display font-bold text-sm text-white">Extreme Constraint</span>
-                </div>
-                <span className="font-mono text-[10px] text-rose-300 uppercase tracking-wider">
-                  REAL-WORLD LIMIT
-                </span>
-              </div>
-
-              {/* Constraints Chips */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {ENGINEERING_CONSTRAINTS.map((constraint) => {
-                  const isSelected = constraint.id === selectedConstraintId
-                  return (
-                    <button
-                      key={constraint.id}
-                      type="button"
-                      onClick={() => handleSelectConstraint(constraint.id)}
-                      className={`p-2.5 rounded text-left transition-all border cursor-pointer min-h-[52px] flex flex-col justify-between ${
-                        isSelected
-                          ? 'bg-[#1e467e] border-rose-400 text-white shadow-sm'
-                          : 'bg-[#102b52]/70 border-[#59d6e8]/15 text-[#b0c8e8] hover:bg-[#163866] hover:text-white'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[9px] uppercase tracking-wider text-[#ffc928] font-bold">
-                          {constraint.tag}
-                        </span>
-                        {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />}
-                      </div>
-                      <span className="font-display text-xs font-bold mt-1 line-clamp-1">
-                        {constraint.label}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-              <p className="font-mono text-[10px] text-[#6e94b8] mt-2.5 leading-tight">
-                {activeConstraint.spec}
-              </p>
-            </div>
-
-            {/* Prototype Mode Toggle */}
-            <div className="bg-[#102b52] border border-[#59d6e8]/20 p-3 rounded-lg flex items-center justify-between">
-              <span className="font-mono text-xs text-[#8aacc8] flex items-center gap-1.5 font-bold">
-                <Layers className="w-3.5 h-3.5 text-[#59d6e8]" /> Sprint Intensity:
+          {/* Progress Header Ribbon */}
+          <div className="border-b border-[#59d6e8]/20 bg-[#081524] px-5 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-[#ffc928] animate-pulse" />
+              <span className="text-[#ffc928] font-bold uppercase tracking-wider">
+                {isCompleted ? 'SIMULATION COMPLETE' : activeStep.hour}
               </span>
-              <div className="flex items-center gap-1">
-                {(['software', 'hybrid', 'deep'] as const).map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    onClick={() => handleModeChange(m)}
-                    className={`px-2.5 py-1 rounded text-[11px] font-mono uppercase font-bold transition-all cursor-pointer ${
-                      sprintMode === m
-                        ? 'bg-[#ffc928] text-[#102b52]'
-                        : 'text-[#6e94b8] hover:text-white hover:bg-[#163866]'
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-[#6e94b8] uppercase">PROGRESS:</span>
+              <div className="flex gap-1.5">
+                {SIMULATION_STEPS.map((_, idx) => (
+                  <span
+                    key={idx}
+                    className={`h-2 w-8 sm:w-12 rounded-xs transition-colors duration-200 ${
+                      isCompleted || idx <= currentStepIndex
+                        ? 'bg-[#ffc928]'
+                        : 'bg-[#163866]'
                     }`}
-                  >
-                    {m === 'software' ? 'Software' : m === 'hybrid' ? 'IoT Hybrid' : 'Hardware'}
-                  </button>
+                  />
                 ))}
               </div>
             </div>
           </div>
 
-          {/* ========================================================= */}
-          {/* RIGHT COLUMN: KINETIC REACTOR + SYNTHESIZED BLUEPRINT CARD */}
-          {/* ========================================================= */}
-          <div
-            className={`lg:col-span-7 space-y-5 ${
-              activeTabMobile === 'blueprint' ? 'block' : 'hidden lg:block'
-            }`}
-          >
-            {/* Interactive Reactor Visual Centerpiece */}
-            <div className="bg-[#163866]/90 border border-[#59d6e8]/30 rounded-xl p-5 sm:p-6 relative overflow-hidden shadow-2xl backdrop-blur-xs">
-              {/* Technical Blueprint Corner Crosshairs */}
-              <span className="absolute top-2 left-2 font-mono text-[9px] text-[#59d6e8]/40 select-none">
-                [SYS_REACTOR_26]
-              </span>
-              <span className="absolute top-2 right-2 font-mono text-[9px] text-[#ffc928]/50 select-none">
-                SEC_CHAMBER_ONLINE
-              </span>
-
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-                {/* SVG Gyroscope Core */}
-                <div className="md:col-span-6 flex justify-center py-2">
-                  <ReactorCoreVisual
-                    isFusing={isFusing}
-                    domainColor={activeDomain.color}
-                    onTriggerFuse={() => handleTriggerSynthesis()}
-                    statusText={isFusing ? 'SYNTHESIZING VECTORS...' : 'CORE EQUILIBRATED'}
-                    activeDomainTag={activeDomain.tag.split(' ')[0]}
-                    activeConstraintTag={activeConstraint.tag}
-                  />
-                </div>
-
-                {/* Telemetry Summary & Primary Fusion Action */}
-                <div className="md:col-span-6 space-y-3.5 text-center md:text-left">
-                  <div className="space-y-1">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#ffc928] font-bold">
-                      INJECTOR SYNC STATUS
-                    </span>
-                    <h3 className="text-xl sm:text-2xl font-display font-extrabold text-white leading-tight">
-                      Synthesize Sprint Concept
-                    </h3>
-                    <p className="font-mono text-xs text-[#9bbad6] leading-relaxed">
-                      Tap the reactor or hit fuse to bind these three engineering vectors into a viable 24H build plan.
-                    </p>
-                  </div>
-
-                  {/* Injector Lock Badges */}
-                  <div className="space-y-1.5 font-mono text-xs">
-                    <div className="flex items-center gap-2 p-1.5 bg-[#102b52]/80 border border-[#59d6e8]/20 rounded">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928]" />
-                      <span className="text-[#a0c0e0] text-[11px] truncate">
-                        <strong>Track:</strong> {activeDomain.name}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 p-1.5 bg-[#102b52]/80 border border-[#59d6e8]/20 rounded">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#59d6e8]" />
-                      <span className="text-[#a0c0e0] text-[11px] truncate">
-                        <strong>Target:</strong> {activeTarget.label}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 p-1.5 bg-[#102b52]/80 border border-rose-400/20 rounded">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                      <span className="text-[#a0c0e0] text-[11px] truncate">
-                        <strong>Rule:</strong> {activeConstraint.label}
-                      </span>
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="primary"
-                    size="md"
-                    onClick={() => handleTriggerSynthesis()}
-                    isLoading={isFusing}
-                    leftIcon={<RefreshCw className={`w-4 h-4 ${isFusing ? 'animate-spin' : ''}`} />}
-                    className="w-full justify-center min-h-[46px] font-bold shadow-[0_0_20px_rgba(255,201,40,0.35)] cursor-pointer"
-                  >
-                    {isFusing ? 'Fusing Blueprint...' : 'Initiate Fusion'}
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Synthesized Venture Blueprint Card */}
+          {/* Simulator Body */}
+          <div className="p-6 sm:p-10">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={blueprint.id}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <Card className="bg-[#122f59] border-[#59d6e8]/35 p-5 sm:p-7 relative overflow-hidden shadow-2xl" withCrosshairs>
-                  {/* Blueprint Stamp Header */}
-                  <div className="flex flex-wrap items-start justify-between gap-3 pb-4 border-b border-[#59d6e8]/20">
-                    <div>
-                      <div className="flex items-center gap-2 font-mono text-[11px]">
-                        <span className="px-2 py-0.5 rounded bg-[#59d6e8]/15 text-[#59d6e8] font-bold border border-[#59d6e8]/30">
-                          {blueprint.id}
-                        </span>
-                        <span className="text-[#ffc928] font-bold tracking-wider uppercase">
-                          {blueprint.codename}
-                        </span>
-                      </div>
-
-                      <h4 className="text-xl sm:text-2xl lg:text-3xl font-display font-extrabold text-white mt-1.5 leading-tight">
-                        {blueprint.title}
-                      </h4>
-                    </div>
-
-                    {/* Action buttons: Bookmark + Copy */}
-                    <div className="flex items-center gap-2 shrink-0">
-                      <button
-                        type="button"
-                        onClick={handleTogglePin}
-                        title={isCurrentPinned ? 'Remove from Saved Racks' : 'Pin to Saved Racks'}
-                        aria-label="Pin Blueprint"
-                        className={`p-2.5 rounded border transition-all cursor-pointer min-h-[40px] flex items-center justify-center ${
-                          isCurrentPinned
-                            ? 'bg-[#ffc928]/20 border-[#ffc928] text-[#ffc928]'
-                            : 'bg-[#102b52] border-[#59d6e8]/30 text-[#8aacc8] hover:text-white hover:border-[#ffc928]/60'
-                        }`}
-                      >
-                        {isCurrentPinned ? (
-                          <BookmarkCheck className="w-4 h-4 text-[#ffc928]" />
-                        ) : (
-                          <Bookmark className="w-4 h-4" />
-                        )}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={handleCopy}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#102b52] hover:bg-[#163866] active:scale-95 border border-[#59d6e8]/40 rounded text-xs font-mono text-zinc-100 hover:text-white transition-all min-h-[40px] cursor-pointer"
-                        title="Copy blueprint brief"
-                      >
-                        {copied ? (
-                          <>
-                            <Check className="w-4 h-4 text-emerald-400" />
-                            <span className="text-emerald-400 font-bold">Copied!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-4 h-4 text-[#59d6e8]" />
-                            <span className="font-bold">Copy Brief</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Elevator Pitch Callout */}
-                  <div className="my-4 p-3.5 bg-[#102b52]/90 border-l-3 border-[#ffc928] rounded-r text-sm text-[#f5f7fa] font-display italic leading-relaxed">
-                    "{blueprint.hook}"
-                  </div>
-
-                  {/* 3 Technical Dossier Sections */}
-                  <div className="space-y-4 font-mono">
-                    {/* [01] The Pain Vector */}
-                    <div className="p-3.5 bg-[#102b52]/70 border border-[#59d6e8]/20 rounded">
-                      <div className="text-[10px] font-bold text-[#ffc928] uppercase tracking-wider mb-1">
-                        [01] The Core Problem Vector:
-                      </div>
-                      <p className="text-xs sm:text-sm text-[#c4daf2] leading-relaxed">
-                        {blueprint.problemStatement}
-                      </p>
-                    </div>
-
-                    {/* [02] Solution Architecture */}
-                    <div className="p-3.5 bg-[#102b52]/70 border border-[#59d6e8]/20 rounded">
-                      <div className="text-[10px] font-bold text-[#59d6e8] uppercase tracking-wider mb-1">
-                        [02] Engineering Architecture & Feasibility:
-                      </div>
-                      <p className="text-xs sm:text-sm text-[#c4daf2] leading-relaxed mb-3">
-                        {blueprint.solutionArchitecture}
-                      </p>
-
-                      {/* Tech Stack Chips */}
-                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        <span className="text-[10px] text-[#6e94b8] uppercase mr-1">Stack:</span>
-                        {blueprint.recommendedStack.map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-2 py-0.5 text-[11px] bg-[#163866] border border-[#59d6e8]/25 rounded text-[#59d6e8] font-bold"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* [03] 24-Hour MVP Deliverable */}
-                    <div className="p-3.5 bg-[#102b52]/70 border border-[#59d6e8]/20 rounded">
-                      <div className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
-                        [03] 24H Sprint MVP Deliverable:
-                      </div>
-                      <p className="text-xs sm:text-sm text-[#c4daf2] leading-relaxed">
-                        {blueprint.sprintMvpScope}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Telemetry Metrics Bar */}
-                  <div className="mt-5 pt-4 border-t border-[#59d6e8]/20 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div className="p-2.5 bg-[#102b52] rounded border border-[#59d6e8]/15">
-                      <div className="font-mono text-[9px] uppercase text-[#8aacc8]">Feasibility</div>
-                      <div className="font-mono text-base font-extrabold text-white">
-                        {blueprint.metrics.feasibility}%
-                      </div>
-                      <div className="w-full bg-[#163866] h-1 rounded-full mt-1 overflow-hidden">
-                        <div
-                          className="bg-[#59d6e8] h-full"
-                          style={{ width: `${blueprint.metrics.feasibility}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="p-2.5 bg-[#102b52] rounded border border-[#59d6e8]/15">
-                      <div className="font-mono text-[9px] uppercase text-[#8aacc8]">Impact</div>
-                      <div className="font-mono text-base font-extrabold text-[#ffc928]">
-                        {blueprint.metrics.impact}%
-                      </div>
-                      <div className="w-full bg-[#163866] h-1 rounded-full mt-1 overflow-hidden">
-                        <div
-                          className="bg-[#ffc928] h-full"
-                          style={{ width: `${blueprint.metrics.impact}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="p-2.5 bg-[#102b52] rounded border border-[#59d6e8]/15">
-                      <div className="font-mono text-[9px] uppercase text-[#8aacc8]">Novelty</div>
-                      <div className="font-mono text-base font-extrabold text-emerald-400">
-                        {blueprint.metrics.novelty}%
-                      </div>
-                      <div className="w-full bg-[#163866] h-1 rounded-full mt-1 overflow-hidden">
-                        <div
-                          className="bg-emerald-400 h-full"
-                          style={{ width: `${blueprint.metrics.novelty}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="p-2.5 bg-[#102b52] rounded border border-[#59d6e8]/15 flex flex-col justify-between">
-                      <div className="font-mono text-[9px] uppercase text-[#8aacc8]">Intensity</div>
-                      <div className="font-mono text-xs font-bold text-white truncate">
-                        {blueprint.metrics.hardwareIntensity}
-                      </div>
-                      <span className="font-mono text-[8px] text-[#59d6e8]">24H VALIDATED</span>
-                    </div>
-                  </div>
-
-                  {/* Register to Build CTA */}
-                  <div className="mt-5 pt-4 border-t border-[#59d6e8]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <span className="font-mono text-xs text-[#8aacc8]">
-                      Ready to build this or your own custom vector?
+              {!isCompleted ? (
+                /* ── ACTIVE GAME QUESTION SCREEN ── */
+                <motion.div
+                  key={currentStepIndex}
+                  initial={{ opacity: 0, x: 18 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -18 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-6 sm:space-y-8"
+                >
+                  {/* Phase & Prompt */}
+                  <div className="space-y-2 border-l-2 border-[#59d6e8] pl-4 sm:pl-5">
+                    <span className="font-mono text-xs text-[#59d6e8] font-bold tracking-widest uppercase">
+                      {activeStep.phaseName}
                     </span>
+                    <h3 className="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-white leading-tight">
+                      {activeStep.situation}
+                    </h3>
+                  </div>
+
+                  {/* 3 Clickable Choice Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    {activeStep.choices.map((choice) => (
+                      <motion.button
+                        key={choice.id}
+                        whileHover={{ y: -3 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="button"
+                        onClick={() => handleSelectChoice(choice)}
+                        className="p-5 sm:p-6 text-left border border-[#59d6e8]/20 bg-[#081524] hover:bg-[#102b52] hover:border-[#ffc928] transition-all duration-150 cursor-pointer flex flex-col justify-between group min-h-[160px] select-none"
+                      >
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="font-mono text-[10px] text-[#ffc928] font-bold tracking-wider uppercase">
+                              {choice.tag}
+                            </span>
+                            <span className="font-mono text-[10px] text-emerald-400 font-bold bg-emerald-400/10 px-2 py-0.5 rounded-xs border border-emerald-400/20">
+                              {choice.statBoost.value} {choice.statBoost.label}
+                            </span>
+                          </div>
+
+                          <h4 className="font-display text-base sm:text-lg font-bold text-white group-hover:text-[#ffc928] transition-colors leading-snug">
+                            {choice.title}
+                          </h4>
+
+                          <p className="text-xs text-[#8aacc8] leading-relaxed">
+                            {choice.impact}
+                          </p>
+                        </div>
+
+                        <div className="pt-4 flex items-center justify-between font-mono text-[11px] text-[#59d6e8] font-bold uppercase tracking-wider">
+                          <span>SELECT TACTIC</span>
+                          <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
+              ) : (
+                /* ── COMPLETED RESULT SCREEN ── */
+                <motion.div
+                  key="result"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="space-y-8"
+                >
+                  {/* Result Header */}
+                  <div className="border-b border-[#59d6e8]/20 pb-6 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2 font-mono text-xs text-[#ffc928] font-bold tracking-wider uppercase mb-1.5">
+                        <Trophy className="w-4 h-4 text-[#ffc928]" />
+                        {resultArchetype.badge}
+                      </div>
+                      <h3 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight">
+                        {resultArchetype.title}
+                      </h3>
+                      <p className="text-sm sm:text-base text-[#b8d4f0] font-display italic mt-1">
+                        "{resultArchetype.tagline}"
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="inline-flex items-center gap-2 px-3.5 py-2 font-mono text-xs text-[#59d6e8] hover:text-white border border-[#59d6e8]/30 hover:border-[#ffc928] transition-colors cursor-pointer rounded-xs"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Re-simulate</span>
+                    </button>
+                  </div>
+
+                  {/* 3 Calibrated Telemetry Scores */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#59d6e8]/15 border border-[#59d6e8]/20 bg-[#081524]">
+                    {resultArchetype.stats.map((stat, i) => (
+                      <div key={i} className="p-4 sm:p-5 flex items-center justify-between">
+                        <span className="font-mono text-xs text-[#8aacc8] uppercase tracking-wider font-semibold">
+                          {stat.title}
+                        </span>
+                        <span className="font-mono text-xl sm:text-2xl font-black text-[#ffc928]">
+                          {stat.score}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Matched Build Mission */}
+                  <div className="p-5 sm:p-7 border-l-3 border-[#ffc928] bg-[#081524] space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
+                      <span className="text-[#59d6e8] font-bold uppercase tracking-wider">
+                        RECOMMENDED SPRINT TRACK: {resultArchetype.matchedTrack}
+                      </span>
+                      <span className="text-emerald-400 font-bold uppercase">
+                        READY FOR VERIFICATION
+                      </span>
+                    </div>
+
+                    <h4 className="font-heading text-2xl sm:text-3xl font-black text-white uppercase">
+                      {resultArchetype.missionTitle}
+                    </h4>
+
+                    <p className="text-sm sm:text-base text-[#c4daf2] leading-relaxed">
+                      {resultArchetype.missionOneLiner}
+                    </p>
+
+                    {/* Tech Chips */}
+                    <div className="pt-2 flex flex-wrap items-center gap-2 font-mono text-xs">
+                      <span className="text-[#6e94b8] uppercase mr-1">Stack:</span>
+                      {resultArchetype.stack.map((item) => (
+                        <span
+                          key={item}
+                          className="px-2.5 py-1 bg-[#102b52] border border-[#59d6e8]/25 text-[#59d6e8] font-semibold rounded-xs"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="border-t border-[#59d6e8]/20 pt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+                    <button
+                      type="button"
+                      onClick={handleCopyResult}
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#102b52] hover:bg-[#163866] border border-[#59d6e8]/30 rounded-xs font-mono text-xs uppercase tracking-wider text-[#f5f7fa] hover:text-white transition-colors cursor-pointer min-h-[46px]"
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400 font-bold">Mission Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5 text-[#59d6e8]" />
+                          <span>Copy Squad Mission</span>
+                        </>
+                      )}
+                    </button>
+
                     <Button
                       variant="primary"
-                      size="sm"
+                      size="md"
                       href="#register"
-                      rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
-                      className="font-bold cursor-pointer"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
+                      className="font-bold cursor-pointer justify-center min-h-[46px]"
                     >
-                      Register Your Team
+                      Register Squad For This Mission
                     </Button>
                   </div>
-                </Card>
-              </motion.div>
+                </motion.div>
+              )}
             </AnimatePresence>
-
-            {/* Saved Blueprints Rack (If any pinned) */}
-            {savedRacks.length > 0 && (
-              <div className="p-4 bg-[#122f59]/90 border border-[#ffc928]/30 rounded-lg">
-                <div className="flex items-center justify-between mb-2.5">
-                  <span className="font-mono text-xs uppercase tracking-wider text-[#ffc928] font-bold flex items-center gap-1.5">
-                    <BookmarkCheck className="w-3.5 h-3.5" /> Saved Concept Rack ({savedRacks.length}/4):
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setSavedRacks([])}
-                    className="font-mono text-[10px] text-[#8aacc8] hover:text-white cursor-pointer"
-                  >
-                    Clear All
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {savedRacks.map((saved) => (
-                    <button
-                      key={saved.id}
-                      type="button"
-                      onClick={() => setBlueprint(saved)}
-                      className={`p-2.5 rounded text-left border transition-all cursor-pointer flex items-center justify-between ${
-                        saved.id === blueprint.id
-                          ? 'bg-[#1e467e] border-[#ffc928] text-white'
-                          : 'bg-[#102b52] border-[#59d6e8]/20 text-[#c4daf2] hover:bg-[#163866]'
-                      }`}
-                    >
-                      <div className="truncate pr-2">
-                        <div className="font-mono text-[9px] text-[#ffc928] font-bold">
-                          {saved.codename}
-                        </div>
-                        <div className="font-display text-xs font-bold truncate text-white">
-                          {saved.title}
-                        </div>
-                      </div>
-                      <span className="font-mono text-[10px] text-[#59d6e8] shrink-0 font-bold">
-                        VIEW
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </Container>
