@@ -242,7 +242,8 @@ function getBlueprint(choices: readonly string[]): CompiledBlueprint {
 
 export const IdeaForge: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-60px' })
+  // Triggers strictly when user scrolls into the Idea Forge section (15% in view)
+  const isInView = useInView(sectionRef, { once: true, amount: 0.15 })
 
   // Detect when full-screen preloader has completed and unmounted
   const [isPreloaderGone, setIsPreloaderGone] = useState<boolean>(() => {
@@ -269,7 +270,9 @@ export const IdeaForge: React.FC = () => {
     }
   }, [isPreloaderGone])
 
+  // Gated: ONLY starts when user arrives at Idea Forge AND preloader is clear
   const canAnimate = isInView && isPreloaderGone
+  const hasBootedRef = useRef(false)
 
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
@@ -284,10 +287,13 @@ export const IdeaForge: React.FC = () => {
 
   const activeStage = TERMINAL_STAGES[stepIndex]
 
-  // Play boot sound on first interaction
+  // Play terminal boot sound ONLY when user arrives at Idea Forge
   useEffect(() => {
-    sound.playBoot()
-  }, [])
+    if (canAnimate && !hasBootedRef.current) {
+      hasBootedRef.current = true
+      sound.playBoot()
+    }
+  }, [canAnimate])
 
   // Terminal Natural Human Typing Animation Effect on step transition
   useEffect(() => {
