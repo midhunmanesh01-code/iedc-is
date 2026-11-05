@@ -273,6 +273,7 @@ export const IdeaForge: React.FC = () => {
   // Gated: ONLY starts when user arrives at Idea Forge AND preloader is clear
   const canAnimate = isInView && isPreloaderGone
   const hasBootedRef = useRef(false)
+  const terminalPanelRef = useRef<HTMLDivElement>(null)
 
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
@@ -280,6 +281,25 @@ export const IdeaForge: React.FC = () => {
   const [copied, setCopied] = useState<boolean>(false)
   const [isMuted, setIsMuted] = useState<boolean>(sound.muted)
   const [stressSimulated, setStressSimulated] = useState<boolean>(false)
+
+  // Smooth mobile viewport adaptation: keeps active prompt / result perfectly in view
+  const adaptMobileViewport = useCallback((offset = 68) => {
+    if (typeof window === 'undefined' || window.innerWidth >= 768) return
+
+    requestAnimationFrame(() => {
+      if (!terminalPanelRef.current) return
+      const rect = terminalPanelRef.current.getBoundingClientRect()
+      const targetScrollY = window.scrollY + rect.top - offset
+
+      // If top of terminal is noticeably displaced from viewport top under navbar
+      if (Math.abs(rect.top - offset) > 16) {
+        window.scrollTo({
+          top: Math.max(0, targetScrollY),
+          behavior: 'smooth',
+        })
+      }
+    })
+  }, [])
 
   // Typing effect state for terminal command execution
   const [typedCmd, setTypedCmd] = useState<string>('')
@@ -329,7 +349,7 @@ export const IdeaForge: React.FC = () => {
     return () => clearTimeout(timeoutId)
   }, [canAnimate, stepIndex, isDone, activeStage])
 
-  // Handle choice selection: updates state immediately without scrolling down
+  // Handle choice selection: updates state immediately and adapts mobile view
   const handleSelectOption = useCallback(
     (opt: TerminalOption) => {
       sound.playEnter()
@@ -344,8 +364,10 @@ export const IdeaForge: React.FC = () => {
         setIsDone(true)
         sound.playSuccess()
       }
+
+      adaptMobileViewport()
     },
-    [selectedKeys, stepIndex]
+    [selectedKeys, stepIndex, adaptMobileViewport]
   )
 
   // Jump to specific step from pipeline stepper
@@ -355,6 +377,7 @@ export const IdeaForge: React.FC = () => {
     setIsTyping(true)
     setStepIndex(idx)
     setIsDone(false)
+    adaptMobileViewport()
   }
 
   // Handle Reset
@@ -367,6 +390,7 @@ export const IdeaForge: React.FC = () => {
     setIsDone(false)
     setCopied(false)
     setStressSimulated(false)
+    adaptMobileViewport()
   }
 
   // Handle Instant Auto-Roll
@@ -379,6 +403,7 @@ export const IdeaForge: React.FC = () => {
     setStepIndex(2)
     setIsDone(true)
     sound.playSuccess()
+    adaptMobileViewport()
   }
 
   // Trigger 03:00 AM Stress Test
@@ -526,7 +551,10 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
         {/* ======================================================== */}
         {/* ADAPTIVE TACTICAL TERMINAL PANEL                         */}
         {/* ======================================================== */}
-        <div className="relative z-10 border border-[#59d6e8]/30 rounded-xs bg-[#040b14]/98 shadow-2xl overflow-hidden font-mono text-xs sm:text-sm text-[#d4e4f5]">
+        <div
+          ref={terminalPanelRef}
+          className="relative z-10 border border-[#59d6e8]/30 rounded-xs bg-[#040b14]/98 shadow-2xl overflow-hidden font-mono text-xs sm:text-sm text-[#d4e4f5]"
+        >
           {/* Subtle CRT Phosphor Scanline Overlay */}
           <div
             className="absolute inset-0 bg-[linear-gradient(rgba(18,30,49,0)_50%,rgba(0,0,0,0.32)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40 z-20"
@@ -534,17 +562,17 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
           />
 
           {/* Terminal Titlebar */}
-          <div className="relative z-30 bg-[#081524] border-b border-[#59d6e8]/20 px-4 py-2.5 flex items-center justify-between select-none">
-            <div className="flex items-center gap-2.5">
-              <TerminalIcon className="w-3.5 h-3.5 text-[#ffc928]" />
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[11px] font-bold text-[#8aacc8] tracking-wider uppercase">
+          <div className="relative z-30 bg-[#081524] border-b border-[#59d6e8]/20 px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between select-none">
+            <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+              <TerminalIcon className="w-3.5 h-3.5 text-[#ffc928] shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span className="text-[10px] sm:text-[11px] font-bold text-[#8aacc8] tracking-wider uppercase truncate">
                 guest@iedc-is26:~ / idea-forge-shell
               </span>
             </div>
 
             {/* Stage indicator */}
-            <div className="flex items-center gap-3 text-[11px]">
+            <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] shrink-0">
               <span className="text-[#6e94b8] hidden sm:inline">
                 STATUS: {isDone ? 'COMPILED' : `STEP 0${stepIndex + 1}/03`}
               </span>
@@ -553,9 +581,9 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
           </div>
 
           {/* Terminal Interactive Stepper Breadcrumb Header */}
-          <div className="relative z-20 px-4 sm:px-7 py-2.5 bg-[#061220] border-b border-[#59d6e8]/15 flex items-center justify-between gap-2 overflow-x-auto select-none">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="text-[#6e94b8] text-[10px] uppercase font-bold tracking-wider shrink-0">
+          <div className="relative z-20 px-3 sm:px-7 py-2 sm:py-2.5 bg-[#061220] border-b border-[#59d6e8]/15 flex items-center justify-between gap-2 overflow-x-auto scrollbar-none touch-pan-x select-none">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-xs">
+              <span className="text-[#6e94b8] text-[9px] sm:text-[10px] uppercase font-bold tracking-wider shrink-0">
                 PIPELINE:
               </span>
               {TERMINAL_STAGES.map((stg, idx) => {
@@ -569,7 +597,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                     key={idx}
                     type="button"
                     onClick={() => handleJumpToStep(idx)}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs border text-[11px] transition-all cursor-pointer shrink-0 ${
+                    className={`inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-xs border text-[10px] sm:text-[11px] transition-all cursor-pointer shrink-0 touch-manipulation min-h-[30px] sm:min-h-0 ${
                       isCurrent
                         ? 'border-[#ffc928] bg-[#ffc928]/15 text-[#ffc928] font-bold'
                         : isCompleted
@@ -577,7 +605,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                         : 'border-[#59d6e8]/15 text-[#6e94b8] opacity-60'
                     }`}
                   >
-                    <span className="text-[10px]">0{idx + 1}</span>
+                    <span className="text-[9px] sm:text-[10px]">0{idx + 1}</span>
                     <span>{selOpt ? selOpt.label.split(' ')[0] : stg.shortName}</span>
                     {isCompleted && <Check className="w-3 h-3 text-emerald-400" />}
                   </button>
@@ -589,7 +617,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
               <button
                 type="button"
                 onClick={() => handleJumpToStep(0)}
-                className="text-[10px] text-[#ffc928] hover:underline uppercase shrink-0 font-bold"
+                className="text-[10px] text-[#ffc928] hover:underline uppercase shrink-0 font-bold touch-manipulation"
               >
                 [Edit Options]
               </button>
@@ -597,7 +625,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
           </div>
 
           {/* Terminal Body: Adaptive Height (Zero Scroll Jumping!) */}
-          <div className="relative z-10 p-4 sm:p-7 space-y-4">
+          <div className="relative z-10 p-3.5 sm:p-7 space-y-3.5 sm:space-y-4">
             <AnimatePresence mode="wait">
               {!isDone && activeStage ? (
                 /* ── STEP SELECTION VIEW ── */
@@ -655,7 +683,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                               whileHover={{ y: -2 }}
                               whileTap={{ scale: 0.98 }}
                               onClick={() => handleSelectOption(opt)}
-                              className="group relative flex flex-col justify-between text-left p-4 rounded-xs border border-[#59d6e8]/25 hover:border-[#ffc928] bg-[#071829]/70 hover:bg-[#0c243f] transition-all duration-150 cursor-pointer min-h-[142px] focus:outline-none focus:ring-1 focus:ring-[#ffc928]"
+                              className="group relative flex flex-col justify-between text-left p-3.5 sm:p-4 rounded-xs border border-[#59d6e8]/25 hover:border-[#ffc928] bg-[#071829]/70 hover:bg-[#0c243f] active:bg-[#0c243f] transition-all duration-150 cursor-pointer min-h-[124px] sm:min-h-[142px] focus:outline-none focus:ring-1 focus:ring-[#ffc928] touch-manipulation"
                             >
                               {/* Top Corner Technical Accent Crosshair */}
                               <span className="absolute top-1.5 right-1.5 font-mono text-[10px] text-[#59d6e8]/40 group-hover:text-[#ffc928] transition-colors pointer-events-none select-none">
@@ -716,20 +744,20 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                   className="space-y-4"
                 >
                   {/* Master Blueprint Dossier Box */}
-                  <div className="p-4 sm:p-6 bg-[#030912] border border-[#59d6e8]/30 rounded-xs space-y-4">
+                  <div className="p-3.5 sm:p-6 bg-[#030912] border border-[#59d6e8]/30 rounded-xs space-y-3.5 sm:space-y-4">
                     {/* Header Strip: Codename, Track, Badges */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#59d6e8]/20">
-                      <div className="flex flex-wrap items-center gap-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 pb-3 border-b border-[#59d6e8]/20">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 min-w-0">
                         <span className="w-2.5 h-2.5 rounded-full bg-[#ffc928] animate-pulse shrink-0" />
-                        <span className="font-display text-lg sm:text-2xl font-black text-white uppercase tracking-tight">
+                        <span className="font-display text-lg sm:text-2xl font-black text-white uppercase tracking-tight break-words">
                           {result.codename}
                         </span>
-                        <span className="text-[#59d6e8] text-xs font-mono px-2 py-0.5 rounded-xs bg-[#59d6e8]/10 border border-[#59d6e8]/25">
+                        <span className="text-[#59d6e8] text-[10px] sm:text-xs font-mono px-2 py-0.5 rounded-xs bg-[#59d6e8]/10 border border-[#59d6e8]/25 shrink-0">
                           {result.track}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs font-mono">
+                      <div className="flex items-center gap-2 text-xs font-mono shrink-0">
                         <span className="text-[#ffc928] font-bold bg-[#ffc928]/10 border border-[#ffc928]/30 px-2 py-0.5 rounded-xs">
                           {result.stats.find((s) => s.label.includes('BOM'))?.val || '<₹1200'}
                         </span>
@@ -793,8 +821,8 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
 
                     {/* Compact 03:00 AM Crisis Failover Bar */}
                     <div className="p-2.5 bg-[#0b1828] border border-rose-500/30 rounded-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
-                      <div className="flex items-center gap-2">
-                        <ShieldAlert className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                      <div className="flex items-start sm:items-center gap-2">
+                        <ShieldAlert className="w-3.5 h-3.5 text-rose-400 shrink-0 mt-0.5 sm:mt-0" />
                         <span className="text-[#c4daf2] text-[11px] leading-tight">
                           {result.crisisResolution}
                         </span>
@@ -802,10 +830,10 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                       <button
                         type="button"
                         onClick={handleSimulateStress}
-                        className={`shrink-0 px-2.5 py-1 rounded-xs text-[10px] font-bold uppercase cursor-pointer transition-colors ${
+                        className={`shrink-0 px-2.5 py-1.5 sm:py-1 rounded-xs text-[10px] font-bold uppercase cursor-pointer transition-colors touch-manipulation min-h-[36px] sm:min-h-0 flex items-center justify-center ${
                           stressSimulated
                             ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/40'
-                            : 'bg-rose-500/20 text-rose-300 hover:text-white border border-rose-500/40'
+                            : 'bg-rose-500/20 text-rose-300 hover:text-white border border-rose-500/40 active:bg-rose-500/30'
                         }`}
                       >
                         {stressSimulated ? (
@@ -821,12 +849,12 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                   </div>
 
                   {/* Actions Bar */}
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
-                    <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 pt-1">
+                    <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
                       <button
                         type="button"
                         onClick={handleCopy}
-                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0f243c] hover:bg-[#163860] border border-[#59d6e8]/30 rounded-xs text-xs font-mono uppercase tracking-wider text-white transition-colors cursor-pointer min-h-[44px]"
+                        className="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-[#0f243c] hover:bg-[#163860] active:bg-[#163860] border border-[#59d6e8]/30 rounded-xs text-xs font-mono uppercase tracking-wider text-white transition-colors cursor-pointer min-h-[44px] touch-manipulation"
                       >
                         {copied ? (
                           <>
@@ -844,7 +872,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                       <button
                         type="button"
                         onClick={() => handleJumpToStep(0)}
-                        className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-[#091829] hover:bg-[#102b52] border border-[#59d6e8]/20 rounded-xs text-xs font-mono uppercase text-[#8aacc8] hover:text-white transition-colors cursor-pointer min-h-[44px]"
+                        className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-2.5 bg-[#09091f] hover:bg-[#102b52] active:bg-[#102b52] border border-[#59d6e8]/20 rounded-xs text-xs font-mono uppercase text-[#8aacc8] hover:text-white transition-colors cursor-pointer min-h-[44px] touch-manipulation"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
                         <span>Re-calibrate</span>
@@ -856,7 +884,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                       size="md"
                       href="#register"
                       rightIcon={<ArrowRight className="w-4 h-4" />}
-                      className="font-bold cursor-pointer justify-center min-h-[44px]"
+                      className="font-bold cursor-pointer justify-center min-h-[44px] touch-manipulation w-full sm:w-auto"
                     >
                       $ sudo register --squad
                     </Button>
@@ -867,14 +895,14 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
           </div>
 
           {/* Terminal Bottom Status Bar */}
-          <div className="bg-[#081524] border-t border-[#59d6e8]/20 px-4 py-2 text-[11px] text-[#6e94b8] flex flex-wrap items-center justify-between gap-2 select-none">
+          <div className="bg-[#081524] border-t border-[#59d6e8]/20 px-3.5 sm:px-4 py-2 text-[10px] sm:text-[11px] text-[#6e94b8] flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 select-none">
             <div className="flex items-center gap-2">
               <span className="text-[#ffc928] font-bold">TTY_SESSION: #2026-CEC</span>
               <span>•</span>
               <span>VT-100 UTF-8</span>
             </div>
-            <div className="flex items-center gap-3">
-              <span>CONTROLS: [1,2,3] SELECT · [R] RESET · [M] MUTE</span>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="hidden sm:inline">CONTROLS: [1,2,3] SELECT · [R] RESET · [M] MUTE</span>
               <span className="text-emerald-400 font-bold">24H PROTOTYPE COMPILER</span>
             </div>
           </div>
