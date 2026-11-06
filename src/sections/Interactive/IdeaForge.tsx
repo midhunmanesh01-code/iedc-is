@@ -599,66 +599,17 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
         {/* ADAPTIVE TACTICAL TERMINAL PANEL                         */}
         {/* ======================================================== */}
         <div className="relative">
-          {/* Ambient Lighting & Atmosphere */}
+          {/* Subtle Ambient Backing Glow */}
           <div
-            className="absolute -inset-3 sm:-inset-6 bg-[radial-gradient(ellipse_at_top,rgba(89,214,232,0.18),transparent_65%)] pointer-events-none rounded-3xl blur-2xl"
-            aria-hidden="true"
-          />
-          <div
-            className="absolute -inset-2 sm:-inset-4 bg-[radial-gradient(ellipse_at_bottom_right,rgba(255,201,40,0.1),transparent_60%)] pointer-events-none rounded-3xl blur-xl"
+            className="absolute -inset-2 sm:-inset-4 bg-[radial-gradient(ellipse_at_top,rgba(89,214,232,0.12),transparent_70%)] pointer-events-none rounded-2xl blur-xl"
             aria-hidden="true"
           />
 
-          {/* Exterior Tactical Housing / Industrial Bezel */}
+          {/* Clean Terminal Window */}
           <div
             ref={terminalPanelRef}
-            className="relative p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl border border-[#59d6e8]/35 bg-gradient-to-b from-[#0c1f36] via-[#061424] to-[#020710] shadow-[0_24px_70px_rgba(0,0,0,0.95),0_0_40px_rgba(89,214,232,0.12)] ring-1 ring-white/10"
+            className="relative rounded-lg sm:rounded-xl border border-[#59d6e8]/30 bg-[#030913]/98 shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_30px_rgba(89,214,232,0.1)] overflow-hidden font-mono text-xs sm:text-sm text-[#d4e4f5]"
           >
-            {/* Tactical HUD Corner Brackets */}
-            <span
-              className="absolute -top-[1px] -left-[1px] w-3.5 sm:w-5 h-3.5 sm:h-5 border-t-2 border-l-2 border-[#59d6e8] rounded-tl-sm pointer-events-none z-40"
-              aria-hidden="true"
-            />
-            <span
-              className="absolute -top-[1px] -right-[1px] w-3.5 sm:w-5 h-3.5 sm:h-5 border-t-2 border-r-2 border-[#ffc928] rounded-tr-sm pointer-events-none z-40"
-              aria-hidden="true"
-            />
-            <span
-              className="absolute -bottom-[1px] -left-[1px] w-3.5 sm:w-5 h-3.5 sm:h-5 border-b-2 border-l-2 border-[#ffc928] rounded-bl-sm pointer-events-none z-40"
-              aria-hidden="true"
-            />
-            <span
-              className="absolute -bottom-[1px] -right-[1px] w-3.5 sm:w-5 h-3.5 sm:h-5 border-b-2 border-r-2 border-[#59d6e8] rounded-br-sm pointer-events-none z-40"
-              aria-hidden="true"
-            />
-
-            {/* Chassis Corner Industrial Screws/Rivets */}
-            <div className="absolute top-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-[#1b3a5c] border border-[#59d6e8]/40 pointer-events-none hidden sm:block" />
-            <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#1b3a5c] border border-[#ffc928]/40 pointer-events-none hidden sm:block" />
-            <div className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-[#1b3a5c] border border-[#ffc928]/40 pointer-events-none hidden sm:block" />
-            <div className="absolute bottom-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#1b3a5c] border border-[#59d6e8]/40 pointer-events-none hidden sm:block" />
-
-            {/* Chassis Top Edge Hardware Silkscreen Strip */}
-            <div className="flex items-center justify-between px-2 sm:px-3 py-1 mb-1 font-mono text-[9px] text-[#59d6e8]/50 tracking-widest uppercase select-none">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928] shadow-[0_0_6px_rgba(255,201,40,0.8)] animate-pulse" />
-                <span className="font-bold text-[#8aacc8]">
-                  <span className="sm:hidden">FORGE // UNIT-01</span>
-                  <span className="hidden sm:inline">CHASSIS MK-IV // TERMINAL UNIT 01</span>
-                </span>
-              </div>
-              <div className="flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px]">
-                <span className="hidden xs:inline text-[#6e94b8]">BUS: 64-BIT</span>
-                <span className="hidden xs:inline text-[#59d6e8]/30">•</span>
-                <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                  <span className="w-1 h-1 rounded-full bg-emerald-400" />
-                  <span>I/O LINKED</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Inner Terminal Screen Housing */}
-            <div className="relative rounded-sm sm:rounded-md border border-[#59d6e8]/25 bg-[#030913]/98 overflow-hidden font-mono text-xs sm:text-sm text-[#d4e4f5] shadow-inner">
               {/* Subtle CRT Phosphor Scanline Overlay */}
               <div
                 className="absolute inset-0 bg-[linear-gradient(rgba(18,30,49,0)_50%,rgba(0,0,0,0.32)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40 z-20"
@@ -1142,24 +1093,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
             </div>
           </div>
         </div>
-
-        {/* Chassis Bottom Vent & Hardware Stamping */}
-        <div className="hidden sm:flex items-center justify-between px-2 sm:px-3 py-1 mt-1 font-mono text-[9px] text-[#59d6e8]/35 tracking-widest uppercase select-none">
-          <div className="flex items-center gap-1 text-[8px]">
-            <span>[BUS-A]</span>
-            <span>[BUS-B]</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-8 h-[1px] bg-[#59d6e8]/25" />
-            <span>VENTILATION EXHAUST // ACTIVE</span>
-            <span className="inline-block w-8 h-[1px] bg-[#59d6e8]/25" />
-          </div>
-          <div className="text-[8px] text-[#ffc928]/50">
-            <span>VERIFIED // 24H SPRINT</span>
-          </div>
-        </div>
       </div>
-    </div>
       </Container>
     </section>
   )
