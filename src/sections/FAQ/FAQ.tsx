@@ -112,8 +112,8 @@ export const FAQ: React.FC = () => {
       <Container size="default">
         {/* 2-Column Split: Header on Left (Desktop), FAQ Cards on Right */}
         <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16 relative z-10">
-          {/* ── Left Column: Section Heading (Static, constant position on desktop — no sticky scroll conflict) ── */}
-          <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0 space-y-4 text-left">
+          {/* ── Left Column: Section Heading (Pinned constant in viewport while questions scroll) ── */}
+          <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0 lg:sticky lg:top-28 xl:top-32 self-start space-y-4 text-left transform-gpu will-change-transform">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-semibold tracking-wide uppercase">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>FREQUENTLY ASKED QUESTIONS</span>
