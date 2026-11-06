@@ -445,7 +445,7 @@ export const Footer: React.FC = () => {
               <iframe
                 title="College of Engineering Chengannur Map"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.845899452777!2d76.61519907487224!3d9.317274790737225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0622667d8a6b19%3A0x334fb9e831622bde!2sCollege%20of%20Engineering%20Chengannur!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
-                className="w-full h-28 sm:h-36 border-0 opacity-80 contrast-125 invert-[0.9] hue-rotate-180 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                className="w-full h-28 sm:h-36 border-0 opacity-80 contrast-125 invert-[0.9] hue-rotate-180 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none transform-gpu"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />

@@ -97,23 +97,23 @@ export const FAQ: React.FC = () => {
     <section
       id="faq"
       aria-label="Frequently Asked Questions"
-      className="py-16 sm:py-24 lg:py-32 relative border-b border-[#59d6e8]/15 bg-[#07101f] overflow-hidden"
+      className="py-16 sm:py-24 lg:py-32 relative border-b border-[#59d6e8]/15 bg-[#07101f]"
     >
       {/* Background Subtle Ambient Glows */}
       <div
-        className="absolute top-1/4 left-1/4 w-[500px] h-[400px] bg-[#59d6e8]/5 rounded-full blur-3xl pointer-events-none"
+        className="absolute top-1/4 left-1/4 w-[500px] h-[400px] bg-[#59d6e8]/5 rounded-full blur-3xl pointer-events-none transform-gpu"
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-1/4 right-1/4 w-[450px] h-[350px] bg-[#ffc928]/5 rounded-full blur-3xl pointer-events-none"
+        className="absolute bottom-1/4 right-1/4 w-[450px] h-[350px] bg-[#ffc928]/5 rounded-full blur-3xl pointer-events-none transform-gpu"
         aria-hidden="true"
       />
 
       <Container size="default">
         {/* 2-Column Split: Header on Left (Desktop), FAQ Cards on Right */}
         <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16 relative z-10">
-          {/* ── Left Column: Section Heading (Pinned/constant on desktop) ── */}
-          <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0 lg:sticky lg:top-32 space-y-4 text-left">
+          {/* ── Left Column: Section Heading (Static, constant position on desktop — no sticky scroll conflict) ── */}
+          <div className="w-full lg:w-[380px] xl:w-[420px] shrink-0 space-y-4 text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-semibold tracking-wide uppercase">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>FREQUENTLY ASKED QUESTIONS</span>
