@@ -14,7 +14,6 @@ import {
   Zap,
 } from 'lucide-react'
 import { Container } from '@/components/common/Container'
-import { SectionHeading } from '@/components/common/SectionHeading'
 import { Button } from '@/components/common/Button'
 import { sound } from './soundEngine'
 
@@ -242,8 +241,14 @@ function getBlueprint(choices: readonly string[]): CompiledBlueprint {
 
 export const IdeaForge: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null)
-  // Triggers strictly when user scrolls into the Idea Forge section (15% in view)
-  const isInView = useInView(sectionRef, { once: true, amount: 0.15 })
+  const headingRef = useRef<HTMLDivElement>(null)
+  const terminalPanelRef = useRef<HTMLDivElement>(null)
+
+  // Gated intersection observers:
+  // 1. Heading animates strictly when the heading block itself enters view
+  const isHeadingInView = useInView(headingRef, { once: true, amount: 0.25 })
+  // 2. Terminal boots & types strictly when the terminal shell itself enters view
+  const isTerminalInView = useInView(terminalPanelRef, { once: true, amount: 0.12 })
 
   // Detect when full-screen preloader has completed and unmounted
   const [isPreloaderGone, setIsPreloaderGone] = useState<boolean>(() => {
@@ -270,10 +275,10 @@ export const IdeaForge: React.FC = () => {
     }
   }, [isPreloaderGone])
 
-  // Gated: ONLY starts when user arrives at Idea Forge AND preloader is clear
-  const canAnimate = isInView && isPreloaderGone
+  // Gated: ONLY starts when the target element arrives in view AND preloader is clear
+  const canAnimateHeading = isHeadingInView && isPreloaderGone
+  const canAnimateTerminal = isTerminalInView && isPreloaderGone
   const hasBootedRef = useRef(false)
-  const terminalPanelRef = useRef<HTMLDivElement>(null)
 
   const [stepIndex, setStepIndex] = useState<number>(0)
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
@@ -306,17 +311,17 @@ export const IdeaForge: React.FC = () => {
 
   const activeStage = TERMINAL_STAGES[stepIndex]
 
-  // Play terminal boot sound ONLY when user arrives at Idea Forge
+  // Play terminal boot sound ONLY when terminal shell is in view
   useEffect(() => {
-    if (canAnimate && !hasBootedRef.current) {
+    if (canAnimateTerminal && !hasBootedRef.current) {
       hasBootedRef.current = true
       sound.playBoot()
     }
-  }, [canAnimate])
+  }, [canAnimateTerminal])
 
   // Terminal Natural Human Typing Animation Effect on step transition
   useEffect(() => {
-    if (!canAnimate || isDone || !activeStage) return
+    if (!canAnimateTerminal || isDone || !activeStage) return
 
     const target = activeStage.cmd
     let charIdx = 0
@@ -346,7 +351,7 @@ export const IdeaForge: React.FC = () => {
     timeoutId = setTimeout(typeNextChar, 140)
 
     return () => clearTimeout(timeoutId)
-  }, [canAnimate, stepIndex, isDone, activeStage])
+  }, [canAnimateTerminal, stepIndex, isDone, activeStage])
 
   // Handle choice selection: updates state immediately and adapts viewport
   const handleSelectOption = useCallback(
@@ -491,16 +496,59 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
         {/* ======================================================== */}
         {/* SECTION HEADING & QUICK CONTROLS                         */}
         {/* ======================================================== */}
-        <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12">
-          <SectionHeading
-            tag="TACTICAL TERMINAL"
-            title="The Idea Forge"
-            subtitle="The 24-hour sprint compiler. Pass tactical parameters via interactive CLI or tap command lines to synthesize your squad's verified engineering blueprint."
-            className="mb-0 max-w-2xl"
-          />
+        <div
+          ref={headingRef}
+          className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12"
+        >
+          <div className="max-w-2xl">
+            {/* Tag Badge */}
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={canAnimateHeading ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+              className="flex items-center gap-2 mb-2.5 sm:mb-3.5"
+            >
+              <span
+                className="inline-block w-2 h-2 bg-[#ffc928] rounded-xs shadow-[0_0_8px_rgba(255,201,40,0.6)] animate-pulse"
+                aria-hidden="true"
+              />
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#ffc928] font-bold">
+                TACTICAL TERMINAL
+              </span>
+              <span className="hidden sm:inline-block font-mono text-[11px] text-[#59d6e8]/45">
+                // COMPILER_v2.6
+              </span>
+            </motion.div>
+
+            {/* Title */}
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              animate={canAnimateHeading ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#f5f7fa] font-display leading-[1.12]"
+            >
+              The Idea Forge
+            </motion.h2>
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={canAnimateHeading ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-3 sm:mt-4 text-sm sm:text-base lg:text-lg text-[#b0c8e8] font-normal leading-relaxed"
+            >
+              <span className="text-[#e2edf8] font-medium">The 24-hour sprint compiler.</span>{' '}
+              Pass tactical parameters via interactive CLI or tap command lines to synthesize your squad's verified engineering blueprint.
+            </motion.p>
+          </div>
 
           {/* Quick Toolbar */}
-          <div className="flex items-center gap-2.5 shrink-0 self-start md:self-auto font-mono text-xs">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={canAnimateHeading ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.45, delay: 0.22, ease: 'easeOut' }}
+            className="flex items-center gap-2.5 shrink-0 self-start md:self-auto font-mono text-xs"
+          >
             {/* Audio Mute/Unmute */}
             <button
               type="button"
@@ -544,7 +592,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
               <RotateCcw className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Reset [R]</span>
             </button>
-          </div>
+          </motion.div>
         </div>
 
         {/* ======================================================== */}
