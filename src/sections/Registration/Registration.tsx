@@ -8,7 +8,7 @@ export const Registration: React.FC = () => {
     <section
       id="register"
       aria-label="Event Registration"
-      className="py-16 sm:py-24 lg:py-28 relative border-b border-[#59d6e8]/15 bg-[#030914] overflow-hidden"
+      className="py-12 sm:py-16 lg:py-20 relative border-b border-[#59d6e8]/15 bg-[#030914] overflow-hidden"
     >
       {/* Background blueprint subtle scanlines */}
       <div
@@ -29,7 +29,7 @@ export const Registration: React.FC = () => {
           title="Claim Your Squad Ticket"
           subtitle="Join IDEA SPRINT 2026. 24 hours of rapid prototyping, dedicated hardware benches, and zero registration fee at College of Engineering Chengannur."
           align="center"
-          className="mb-8 sm:mb-12"
+          className="mb-6 sm:mb-8"
         />
 
         {/* Interactive Form with Live Ticket Pass */}
