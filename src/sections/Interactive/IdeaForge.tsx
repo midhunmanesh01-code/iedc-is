@@ -282,23 +282,22 @@ export const IdeaForge: React.FC = () => {
   const [isMuted, setIsMuted] = useState<boolean>(sound.muted)
   const [stressSimulated, setStressSimulated] = useState<boolean>(false)
 
-  // Smooth mobile viewport adaptation: keeps active prompt / result perfectly in view
-  const adaptMobileViewport = useCallback((offset = 68) => {
-    if (typeof window === 'undefined' || window.innerWidth >= 768) return
+  // Smooth viewport adaptation: keeps terminal prompt & header centered and in view
+  const adaptViewport = useCallback((force = false) => {
+    if (typeof window === 'undefined' || !terminalPanelRef.current) return
 
-    requestAnimationFrame(() => {
-      if (!terminalPanelRef.current) return
-      const rect = terminalPanelRef.current.getBoundingClientRect()
-      const targetScrollY = window.scrollY + rect.top - offset
+    const isMobile = window.innerWidth < 768
+    const navOffset = isMobile ? 68 : 80
+    const rect = terminalPanelRef.current.getBoundingClientRect()
+    const targetScrollY = window.scrollY + rect.top - navOffset
 
-      // If top of terminal is noticeably displaced from viewport top under navbar
-      if (Math.abs(rect.top - offset) > 16) {
-        window.scrollTo({
-          top: Math.max(0, targetScrollY),
-          behavior: 'smooth',
-        })
-      }
-    })
+    // If force is requested (recalibrate, reset, final step) OR if terminal top is out of view
+    if (force || rect.top < navOffset - 20 || (isMobile && Math.abs(rect.top - navOffset) > 20)) {
+      window.scrollTo({
+        top: Math.max(0, targetScrollY),
+        behavior: 'smooth',
+      })
+    }
   }, [])
 
   // Typing effect state for terminal command execution
@@ -349,7 +348,7 @@ export const IdeaForge: React.FC = () => {
     return () => clearTimeout(timeoutId)
   }, [canAnimate, stepIndex, isDone, activeStage])
 
-  // Handle choice selection: updates state immediately and adapts mobile view
+  // Handle choice selection: updates state immediately and adapts viewport
   const handleSelectOption = useCallback(
     (opt: TerminalOption) => {
       sound.playEnter()
@@ -360,28 +359,28 @@ export const IdeaForge: React.FC = () => {
         setTypedCmd('')
         setIsTyping(true)
         setStepIndex((prev) => prev + 1)
+        adaptViewport(false)
       } else {
         setIsDone(true)
         sound.playSuccess()
+        adaptViewport(true)
       }
-
-      adaptMobileViewport()
     },
-    [selectedKeys, stepIndex, adaptMobileViewport]
+    [selectedKeys, stepIndex, adaptViewport]
   )
 
-  // Jump to specific step from pipeline stepper
+  // Jump to specific step from pipeline stepper or re-calibrate
   const handleJumpToStep = (idx: number) => {
     sound.playKeyClack()
     setTypedCmd('')
     setIsTyping(true)
     setStepIndex(idx)
     setIsDone(false)
-    adaptMobileViewport()
+    adaptViewport(true)
   }
 
   // Handle Reset
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     sound.playKeyClack()
     setTypedCmd('')
     setIsTyping(true)
@@ -390,8 +389,8 @@ export const IdeaForge: React.FC = () => {
     setIsDone(false)
     setCopied(false)
     setStressSimulated(false)
-    adaptMobileViewport()
-  }
+    adaptViewport(true)
+  }, [adaptViewport])
 
   // Handle Instant Auto-Roll
   const handleInstantRoll = () => {
@@ -403,7 +402,7 @@ export const IdeaForge: React.FC = () => {
     setStepIndex(2)
     setIsDone(true)
     sound.playSuccess()
-    adaptMobileViewport()
+    adaptViewport(true)
   }
 
   // Trigger 03:00 AM Stress Test
@@ -449,7 +448,7 @@ export const IdeaForge: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [stepIndex, isDone, activeStage, isTyping, handleSelectOption])
+  }, [stepIndex, isDone, activeStage, isTyping, handleSelectOption, handleReset])
 
   const result = getBlueprint(selectedKeys)
 
@@ -625,7 +624,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
           </div>
 
           {/* Terminal Body: Adaptive Height (Zero Scroll Jumping!) */}
-          <div className="relative z-10 p-3.5 sm:p-7 space-y-3.5 sm:space-y-4">
+          <div className="relative z-10 p-3.5 sm:p-7 space-y-3.5 sm:space-y-4 min-h-[460px] sm:min-h-[360px]">
             <AnimatePresence mode="wait">
               {!isDone && activeStage ? (
                 /* ── STEP SELECTION VIEW ── */
@@ -871,7 +870,11 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
 
                       <button
                         type="button"
-                        onClick={() => handleJumpToStep(0)}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          handleJumpToStep(0)
+                        }}
                         className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-2.5 bg-[#09091f] hover:bg-[#102b52] active:bg-[#102b52] border border-[#59d6e8]/20 rounded-xs text-xs font-mono uppercase text-[#8aacc8] hover:text-white transition-colors cursor-pointer min-h-[44px] touch-manipulation"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
