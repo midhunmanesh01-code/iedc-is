@@ -1,152 +1,105 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { ChevronDown, MapPin, Sparkles } from 'lucide-react'
-import type { ScheduleDay as ScheduleDayType, ScheduleItem } from '@/types/schedule'
+import React from 'react'
+import { motion } from 'motion/react'
+import { MapPin, Sparkles } from 'lucide-react'
+import type { ScheduleDay as ScheduleDayType } from '@/types/schedule'
 
 export interface ScheduleDayProps {
   readonly day: ScheduleDayType
 }
 
-const CATEGORY_COLOR: Record<ScheduleItem['category'], string> = {
-  ceremony: 'text-[#ffc928] bg-[#ffc928]/10 border-[#ffc928]/20',
-  hacking: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-  mentoring: 'text-[#59d6e8] bg-[#59d6e8]/10 border-[#59d6e8]/20',
-  workshop: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
-  pitch: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
-  break: 'text-zinc-400 bg-white/5 border-white/10',
-}
-
 export const ScheduleDay: React.FC<ScheduleDayProps> = ({ day }) => {
-  const [expandedItemId, setExpandedItemId] = useState<string | null>(null)
-
-  const toggleItem = (id: string) => {
-    setExpandedItemId((prev) => (prev === id ? null : id))
-  }
-
   return (
-    <div className="space-y-6">
-      {/* Day header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 bg-[#102b52] border border-[#59d6e8]/15 rounded-lg">
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-xs uppercase tracking-wider text-[#ffc928] font-bold">
-            {day.dayLabel} —
-          </span>
-          <span className="text-sm sm:text-base font-display font-semibold text-white">
-            {day.theme}
-          </span>
-        </div>
-        <span className="font-mono text-xs text-[#6e94b8]">{day.dateLabel}</span>
-      </div>
+    <div className="relative">
+      {/* Subtle vertical connector rail on desktop */}
+      <div
+        className="hidden sm:block absolute left-[118px] top-6 bottom-6 w-px bg-gradient-to-b from-[#ffc928]/40 via-[#59d6e8]/20 to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
 
-      {/* Timeline */}
-      <div className="relative pl-7 sm:pl-9">
-        {/* Vertical line */}
-        <div
-          className="absolute left-[9px] sm:left-[13px] top-2 bottom-2 w-px bg-[#59d6e8]/15"
-          aria-hidden="true"
-        />
+      <div className="divide-y divide-[#59d6e8]/10">
+        {day.items.map((item, index) => {
+          return (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.22, delay: index * 0.03 }}
+              className={`py-5 sm:py-6 first:pt-1 last:pb-1 group transition-colors rounded-xl px-3 sm:px-4 -mx-3 sm:-mx-4 ${
+                item.isHighlight ? 'hover:bg-[#ffc928]/[0.03]' : 'hover:bg-white/[0.02]'
+              }`}
+            >
+              <div className="flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-7">
+                {/* Time Column (Left on sm+, top on mobile) */}
+                <div className="flex items-center justify-between sm:justify-end sm:w-[96px] shrink-0 pt-0.5">
+                  <span
+                    className={`font-mono text-xs sm:text-sm font-semibold tracking-tight ${
+                      item.isHighlight ? 'text-[#ffc928]' : 'text-slate-300'
+                    }`}
+                  >
+                    {item.time}
+                  </span>
 
-        <div className="space-y-4">
-          {day.items.map((item, i) => {
-            const isExpanded = expandedItemId === item.id
-
-            return (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.35, delay: i * 0.06 }}
-                className="relative group"
-              >
-                {/* Dot */}
-                <div className="absolute -left-[22px] sm:-left-[28px] top-5" aria-hidden="true">
-                  {item.isHighlight ? (
-                    <div className="w-3.5 h-3.5 rounded-full bg-[#ffc928] shadow-[0_0_8px_rgba(255,201,40,0.5)]" />
-                  ) : (
-                    <div className="w-2.5 h-2.5 rounded-full border-2 border-[#59d6e8]/30 bg-[#0b1a30] group-hover:border-[#ffc928] transition-colors" />
+                  {/* Mobile Venue tag */}
+                  {item.venue && (
+                    <span className="sm:hidden flex items-center gap-1 text-[11px] font-mono text-slate-400">
+                      <MapPin className="w-3 h-3 text-[#59d6e8]" />
+                      <span>{item.venue}</span>
+                    </span>
                   )}
                 </div>
 
-                {/* Card */}
+                {/* Timeline Dot (sm+ only) */}
                 <div
-                  className={`p-4 sm:p-5 rounded-lg border transition-colors duration-200 ${
-                    item.isHighlight
-                      ? 'bg-[#122848] border-[#ffc928]/15 hover:border-[#ffc928]/30'
-                      : 'bg-[#0f2240] border-[#59d6e8]/8 hover:border-[#59d6e8]/20'
-                  }`}
+                  className="hidden sm:flex items-center justify-center w-5 h-5 shrink-0 relative mt-0.5"
+                  aria-hidden="true"
                 >
-                  {/* Meta row */}
-                  <div className="flex flex-wrap items-center gap-2 mb-3">
-                    <span className="font-mono text-xs font-bold text-[#ffc928]">
-                      {item.time}
-                    </span>
-                    <span
-                      className={`px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider font-bold rounded border ${CATEGORY_COLOR[item.category]}`}
-                    >
-                      {item.category}
-                    </span>
-                    {item.isHighlight && (
-                      <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono uppercase text-[#ffc928] font-bold">
-                        <Sparkles className="w-3 h-3" /> Milestone
-                      </span>
-                    )}
-                    {item.venue && (
-                      <span className="ml-auto hidden sm:flex items-center gap-1 text-[11px] font-mono text-[#6e94b8]">
-                        <MapPin className="w-3 h-3" />
-                        {item.venue}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Title + expand */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h4 className="text-[15px] sm:text-base font-display font-bold text-[#f5f7fa] leading-snug">
-                        {item.title}
-                      </h4>
-                      <p className="mt-1 text-xs sm:text-sm text-[#7fa3c4] leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => toggleItem(item.id)}
-                      aria-expanded={isExpanded}
-                      className="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg border border-[#59d6e8]/10 text-[#6e94b8] hover:text-white hover:border-[#ffc928]/30 transition-colors cursor-pointer shrink-0"
-                      aria-label={isExpanded ? 'Collapse' : 'Expand'}
-                    >
-                      <motion.div
-                        animate={{ rotate: isExpanded ? 180 : 0 }}
-                        transition={{ duration: 0.25 }}
-                      >
-                        <ChevronDown className="w-4 h-4" />
-                      </motion.div>
-                    </button>
-                  </div>
-
-                  {/* Expandable details */}
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <div className="mt-3 pt-3 border-t border-[#59d6e8]/8 text-xs text-[#7fa3c4] font-mono space-y-1">
-                          <p>• Be at {item.venue || 'designated hall'} 10 min before.</p>
-                          <p>• Laptops & kits must be logged at verification.</p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div
+                    className={`w-2 h-2 rounded-full transition-transform duration-200 group-hover:scale-125 ${
+                      item.isHighlight
+                        ? 'bg-[#ffc928] ring-4 ring-[#ffc928]/25 shadow-[0_0_8px_rgba(255,201,40,0.6)]'
+                        : 'bg-[#59d6e8]/60 group-hover:bg-[#59d6e8]'
+                    }`}
+                  />
                 </div>
-              </motion.div>
-            )
-          })}
-        </div>
+
+                {/* Content Column */}
+                <div className="flex-1 min-w-0 space-y-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <h4
+                      className={`text-sm sm:text-base font-display font-semibold transition-colors ${
+                        item.isHighlight
+                          ? 'text-white group-hover:text-[#ffc928]'
+                          : 'text-slate-200 group-hover:text-white'
+                      }`}
+                    >
+                      {item.title}
+                    </h4>
+
+                    {/* Desktop Venue tag + Highlight badge */}
+                    <div className="hidden sm:flex items-center gap-2 shrink-0">
+                      {item.isHighlight && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded bg-[#ffc928]/10 text-[#ffc928] border border-[#ffc928]/25">
+                          <Sparkles className="w-2.5 h-2.5" />
+                          <span>Milestone</span>
+                        </span>
+                      )}
+                      {item.venue && (
+                        <span className="flex items-center gap-1 text-xs font-mono text-slate-400">
+                          <MapPin className="w-3 h-3 text-[#59d6e8]" />
+                          <span>{item.venue}</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-sans">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )
+        })}
       </div>
     </div>
   )
