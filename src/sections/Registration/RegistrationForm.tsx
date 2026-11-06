@@ -13,7 +13,6 @@ import {
 import type { RegistrationFormData, RegistrationFormErrors } from '@/types/event'
 import { Button } from '@/components/common/Button'
 import { TearTicket } from '@/components/ui/TearTicket'
-import { sound } from '@/sections/Interactive/soundEngine'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
 
 const INITIAL_FORM_DATA: RegistrationFormData = {
@@ -126,11 +125,9 @@ export const RegistrationForm: React.FC = () => {
     e.preventDefault()
 
     if (!validate()) {
-      sound.playAlarm()
       return
     }
 
-    sound.playEnter()
     setIsSubmitting(true)
 
     const randomNum = Math.floor(100000 + Math.random() * 900000).toString()
@@ -141,18 +138,15 @@ export const RegistrationForm: React.FC = () => {
       setIsTorn(false)
       setTicketNumber(randomNum)
       setSubmittedTeam({ ...formData })
-      sound.playSuccess()
       setFormData(INITIAL_FORM_DATA)
     }, 650)
   }
 
   const handleTear = () => {
-    sound.playSuccess()
     setIsTorn(true)
   }
 
   const handleReset = () => {
-    sound.playKeyClack()
     setIsSuccess(false)
     setSubmittedTeam(null)
     setErrors({})
@@ -165,7 +159,6 @@ export const RegistrationForm: React.FC = () => {
 
   const handleCopyReceipt = () => {
     if (!submittedTeam) return
-    sound.playEnter()
 
     const receipt = `[IDEA SPRINT 2026 // SQUAD ADMISSION PASS]
 TICKET NO:   #${ticketNumber}
@@ -440,7 +433,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             value={formData.teamName}
             onChange={handleChange}
             placeholder="e.g. Apex Pioneers"
-            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30 ${
+            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-white/30 ${
               errors.teamName
                 ? 'border-rose-400 bg-rose-500/[0.03]'
                 : 'border-white/10 hover:border-white/20'
@@ -467,7 +460,6 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
                   key={size}
                   type="button"
                   onClick={() => {
-                    sound.playKeyClack()
                     setFormData((prev) => ({ ...prev, teamSize: size }))
                   }}
                   className={`py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
@@ -484,20 +476,20 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
         </div>
 
         {/* Row 2: Innovation Track */}
-        <div>
+        <div className="min-w-0">
           <label
             htmlFor="reg-primaryDomain"
             className="block text-xs font-medium text-slate-300 mb-1"
           >
             Innovation Track <span className="text-[#ffc928]">*</span>
           </label>
-          <div className="relative">
+          <div className="relative min-w-0 max-w-full">
             <select
               id="reg-primaryDomain"
               name="primaryDomain"
               value={formData.primaryDomain}
               onChange={handleChange}
-              className="w-full bg-[#030914] border border-white/10 text-white text-sm px-3 py-2 rounded-lg appearance-none transition-all hover:border-white/20 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30 cursor-pointer pr-9"
+              className="w-full min-w-0 max-w-full bg-[#030914] border border-white/10 text-white text-sm px-3 py-2 rounded-lg appearance-none transition-all hover:border-white/20 focus:outline-none focus:border-white/30 cursor-pointer pr-9 truncate"
             >
               {TRACKS.map((t) => (
                 <option key={t} value={t} className="bg-[#030914] text-white">
@@ -510,20 +502,20 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
         </div>
 
         {/* Row 2: Year of Study */}
-        <div>
+        <div className="min-w-0">
           <label
             htmlFor="reg-yearOfStudy"
             className="block text-xs font-medium text-slate-300 mb-1"
           >
             Year of Study <span className="text-[#ffc928]">*</span>
           </label>
-          <div className="relative">
+          <div className="relative min-w-0 max-w-full">
             <select
               id="reg-yearOfStudy"
               name="yearOfStudy"
               value={formData.yearOfStudy}
               onChange={handleChange}
-              className="w-full bg-[#030914] border border-white/10 text-white text-sm px-3 py-2 rounded-lg appearance-none transition-all hover:border-white/20 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30 cursor-pointer pr-9"
+              className="w-full min-w-0 max-w-full bg-[#030914] border border-white/10 text-white text-sm px-3 py-2 rounded-lg appearance-none transition-all hover:border-white/20 focus:outline-none focus:border-white/30 cursor-pointer pr-9 truncate"
             >
               {YEARS.map((y) => (
                 <option key={y} value={y} className="bg-[#030914] text-white">
@@ -552,7 +544,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             value={formData.fullName}
             onChange={handleChange}
             placeholder="e.g. Maya Chen"
-            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30 ${
+            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-white/30 ${
               errors.fullName
                 ? 'border-rose-400 bg-rose-500/[0.03]'
                 : 'border-white/10 hover:border-white/20'
@@ -583,7 +575,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             value={formData.email}
             onChange={handleChange}
             placeholder="e.g. maya@ceconline.edu"
-            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30 ${
+            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-white/30 ${
               errors.email
                 ? 'border-rose-400 bg-rose-500/[0.03]'
                 : 'border-white/10 hover:border-white/20'
@@ -614,7 +606,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             value={formData.phone}
             onChange={handleChange}
             placeholder="+91 98765 43210"
-            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30 ${
+            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-white/30 ${
               errors.phone
                 ? 'border-rose-400 bg-rose-500/[0.03]'
                 : 'border-white/10 hover:border-white/20'
@@ -645,7 +637,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             value={formData.institution}
             onChange={handleChange}
             placeholder="e.g. CE Chengannur"
-            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30 ${
+            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-white/30 ${
               errors.institution
                 ? 'border-rose-400 bg-rose-500/[0.03]'
                 : 'border-white/10 hover:border-white/20'
@@ -675,7 +667,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             value={formData.department}
             onChange={handleChange}
             placeholder="e.g. Computer Science"
-            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30 ${
+            className={`w-full bg-[#030914] border text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 focus:outline-none focus:border-white/30 ${
               errors.department
                 ? 'border-rose-400 bg-rose-500/[0.03]'
                 : 'border-white/10 hover:border-white/20'
@@ -704,7 +696,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             value={formData.ideaSummary}
             onChange={handleChange}
             placeholder="e.g. AI drone or assistive device"
-            className="w-full bg-[#030914] border border-white/10 text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 hover:border-white/20 focus:outline-none focus:border-[#59d6e8] focus:ring-1 focus:ring-[#59d6e8]/30"
+            className="w-full bg-[#030914] border border-white/10 text-white text-sm px-3 py-2 rounded-lg transition-all placeholder:text-slate-500 hover:border-white/20 focus:outline-none focus:border-white/30"
           />
         </div>
       </div>
