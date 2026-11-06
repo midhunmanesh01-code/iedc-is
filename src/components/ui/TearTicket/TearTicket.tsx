@@ -232,7 +232,10 @@ export const TearTicket: React.FC<TearTicketProps> = ({
   const used = controlled ? torn : inner
   const [grabbing, setGrabbing] = useState(false)
   const [instant, setInstant] = useState(used)
-  const [fit, setFit] = useState(1)
+  const [fit, setFit] = useState(() => {
+    if (typeof window === 'undefined') return 1
+    return Math.min(1, Math.max(0.3, (window.innerWidth - 32) / width)) || 1
+  })
   const rootRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)

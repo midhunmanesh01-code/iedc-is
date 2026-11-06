@@ -547,7 +547,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
             initial={{ opacity: 0, y: 12 }}
             animate={canAnimateHeading ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.45, delay: 0.22, ease: 'easeOut' }}
-            className="flex items-center gap-2.5 shrink-0 self-start md:self-auto font-mono text-xs"
+            className="grid grid-cols-3 gap-2 w-full sm:w-auto sm:flex sm:items-center sm:gap-2.5 shrink-0 font-mono text-xs"
           >
             {/* Audio Mute/Unmute */}
             <button
@@ -556,18 +556,18 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                 const nextM = sound.toggleMute()
                 setIsMuted(nextM)
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xs border border-[#59d6e8]/25 hover:border-[#ffc928] bg-[#091829] text-[#8aacc8] hover:text-white transition-colors cursor-pointer min-h-[42px]"
+              className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xs border border-[#59d6e8]/25 hover:border-[#ffc928] bg-[#091829]/90 hover:bg-[#0c243f] text-[#8aacc8] hover:text-white transition-all cursor-pointer min-h-[42px] touch-manipulation shadow-xs"
               title={isMuted ? 'Unmute terminal clacks (Key: M)' : 'Mute terminal clacks (Key: M)'}
             >
               {isMuted ? (
                 <>
-                  <VolumeX className="w-3.5 h-3.5 text-rose-400" />
-                  <span className="hidden sm:inline text-rose-300">SFX OFF</span>
+                  <VolumeX className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                  <span className="text-[11px] sm:text-xs text-rose-300 font-medium">SFX OFF</span>
                 </>
               ) : (
                 <>
-                  <Volume2 className="w-3.5 h-3.5 text-[#ffc928]" />
-                  <span className="hidden sm:inline text-[#ffc928]">SFX ON</span>
+                  <Volume2 className="w-3.5 h-3.5 text-[#ffc928] shrink-0" />
+                  <span className="text-[11px] sm:text-xs text-[#ffc928] font-medium">SFX ON</span>
                 </>
               )}
             </button>
@@ -576,21 +576,21 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
             <button
               type="button"
               onClick={handleInstantRoll}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xs border border-[#ffc928]/40 hover:border-[#ffc928] bg-[#ffc928]/10 hover:bg-[#ffc928]/20 text-[#ffc928] font-bold tracking-wider uppercase transition-colors cursor-pointer min-h-[42px]"
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 rounded-xs border border-[#ffc928]/50 hover:border-[#ffc928] bg-[#ffc928]/15 hover:bg-[#ffc928]/25 text-[#ffc928] font-bold tracking-wider uppercase transition-all cursor-pointer min-h-[42px] shadow-[0_0_15px_rgba(255,201,40,0.15)] touch-manipulation"
             >
-              <Shuffle className="w-3.5 h-3.5" />
-              <span>Auto Roll [🎲]</span>
+              <Shuffle className="w-3.5 h-3.5 shrink-0 animate-pulse" />
+              <span className="text-[11px] sm:text-xs truncate">Auto Roll 🎲</span>
             </button>
 
             {/* Reset */}
             <button
               type="button"
               onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xs border border-[#59d6e8]/25 hover:border-[#59d6e8]/60 text-[#8aacc8] hover:text-white transition-colors cursor-pointer min-h-[42px]"
+              className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xs border border-[#59d6e8]/25 hover:border-[#59d6e8]/60 bg-[#091829]/90 hover:bg-[#0c243f] text-[#8aacc8] hover:text-white transition-all cursor-pointer min-h-[42px] touch-manipulation shadow-xs"
               title="Reset terminal (Press 'r')"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Reset [R]</span>
+              <RotateCcw className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-[11px] sm:text-xs">Reset [R]</span>
             </button>
           </motion.div>
         </div>
@@ -598,81 +598,180 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
         {/* ======================================================== */}
         {/* ADAPTIVE TACTICAL TERMINAL PANEL                         */}
         {/* ======================================================== */}
-        <div
-          ref={terminalPanelRef}
-          className="relative z-10 border border-[#59d6e8]/30 rounded-xs bg-[#040b14]/98 shadow-2xl overflow-hidden font-mono text-xs sm:text-sm text-[#d4e4f5]"
-        >
-          {/* Subtle CRT Phosphor Scanline Overlay */}
+        <div className="relative">
+          {/* Ambient Lighting & Atmosphere */}
           <div
-            className="absolute inset-0 bg-[linear-gradient(rgba(18,30,49,0)_50%,rgba(0,0,0,0.32)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40 z-20"
+            className="absolute -inset-3 sm:-inset-6 bg-[radial-gradient(ellipse_at_top,rgba(89,214,232,0.18),transparent_65%)] pointer-events-none rounded-3xl blur-2xl"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute -inset-2 sm:-inset-4 bg-[radial-gradient(ellipse_at_bottom_right,rgba(255,201,40,0.1),transparent_60%)] pointer-events-none rounded-3xl blur-xl"
             aria-hidden="true"
           />
 
-          {/* Terminal Titlebar */}
-          <div className="relative z-30 bg-[#081524] border-b border-[#59d6e8]/20 px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between select-none">
-            <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-              <TerminalIcon className="w-3.5 h-3.5 text-[#ffc928] shrink-0" />
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-              <span className="text-[10px] sm:text-[11px] font-bold text-[#8aacc8] tracking-wider uppercase truncate">
-                guest@iedc-is26:~ / idea-forge-shell
-              </span>
+          {/* Exterior Tactical Housing / Industrial Bezel */}
+          <div
+            ref={terminalPanelRef}
+            className="relative p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl border border-[#59d6e8]/35 bg-gradient-to-b from-[#0c1f36] via-[#061424] to-[#020710] shadow-[0_24px_70px_rgba(0,0,0,0.95),0_0_40px_rgba(89,214,232,0.12)] ring-1 ring-white/10"
+          >
+            {/* Tactical HUD Corner Brackets */}
+            <span
+              className="absolute -top-[1px] -left-[1px] w-3.5 sm:w-5 h-3.5 sm:h-5 border-t-2 border-l-2 border-[#59d6e8] rounded-tl-sm pointer-events-none z-40"
+              aria-hidden="true"
+            />
+            <span
+              className="absolute -top-[1px] -right-[1px] w-3.5 sm:w-5 h-3.5 sm:h-5 border-t-2 border-r-2 border-[#ffc928] rounded-tr-sm pointer-events-none z-40"
+              aria-hidden="true"
+            />
+            <span
+              className="absolute -bottom-[1px] -left-[1px] w-3.5 sm:w-5 h-3.5 sm:h-5 border-b-2 border-l-2 border-[#ffc928] rounded-bl-sm pointer-events-none z-40"
+              aria-hidden="true"
+            />
+            <span
+              className="absolute -bottom-[1px] -right-[1px] w-3.5 sm:w-5 h-3.5 sm:h-5 border-b-2 border-r-2 border-[#59d6e8] rounded-br-sm pointer-events-none z-40"
+              aria-hidden="true"
+            />
+
+            {/* Chassis Corner Industrial Screws/Rivets */}
+            <div className="absolute top-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-[#1b3a5c] border border-[#59d6e8]/40 pointer-events-none hidden sm:block" />
+            <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#1b3a5c] border border-[#ffc928]/40 pointer-events-none hidden sm:block" />
+            <div className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-[#1b3a5c] border border-[#ffc928]/40 pointer-events-none hidden sm:block" />
+            <div className="absolute bottom-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#1b3a5c] border border-[#59d6e8]/40 pointer-events-none hidden sm:block" />
+
+            {/* Chassis Top Edge Hardware Silkscreen Strip */}
+            <div className="flex items-center justify-between px-2 sm:px-3 py-1 mb-1 font-mono text-[9px] text-[#59d6e8]/50 tracking-widest uppercase select-none">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928] shadow-[0_0_6px_rgba(255,201,40,0.8)] animate-pulse" />
+                <span className="font-bold text-[#8aacc8]">
+                  <span className="sm:hidden">FORGE // UNIT-01</span>
+                  <span className="hidden sm:inline">CHASSIS MK-IV // TERMINAL UNIT 01</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-2 sm:gap-3 text-[8px] sm:text-[9px]">
+                <span className="hidden xs:inline text-[#6e94b8]">BUS: 64-BIT</span>
+                <span className="hidden xs:inline text-[#59d6e8]/30">•</span>
+                <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                  <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                  <span>I/O LINKED</span>
+                </span>
+              </div>
             </div>
 
-            {/* Stage indicator */}
-            <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] shrink-0">
-              <span className="text-[#6e94b8] hidden sm:inline">
-                STATUS: {isDone ? 'COMPILED' : `STEP 0${stepIndex + 1}/03`}
-              </span>
-              <span className="text-emerald-400 font-bold">READY</span>
-            </div>
-          </div>
+            {/* Inner Terminal Screen Housing */}
+            <div className="relative rounded-sm sm:rounded-md border border-[#59d6e8]/25 bg-[#030913]/98 overflow-hidden font-mono text-xs sm:text-sm text-[#d4e4f5] shadow-inner">
+              {/* Subtle CRT Phosphor Scanline Overlay */}
+              <div
+                className="absolute inset-0 bg-[linear-gradient(rgba(18,30,49,0)_50%,rgba(0,0,0,0.32)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40 z-20"
+                aria-hidden="true"
+              />
 
-          {/* Terminal Interactive Stepper Breadcrumb Header */}
-          <div className="relative z-20 px-3 sm:px-7 py-2 sm:py-2.5 bg-[#061220] border-b border-[#59d6e8]/15 flex items-center justify-between gap-2 overflow-x-auto scrollbar-none touch-pan-x select-none">
-            <div className="flex items-center gap-1.5 sm:gap-2 text-xs">
-              <span className="text-[#6e94b8] text-[9px] sm:text-[10px] uppercase font-bold tracking-wider shrink-0">
-                PIPELINE:
-              </span>
-              {TERMINAL_STAGES.map((stg, idx) => {
-                const isCompleted = idx < selectedKeys.length
-                const isCurrent = idx === stepIndex && !isDone
-                const selKey = selectedKeys[idx]
-                const selOpt = selKey ? stg.options.find((o) => o.key === selKey) : null
+              {/* Curved Glass Screen Glare Highlight */}
+              <div
+                className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-white/[0.04] via-white/[0.01] to-transparent pointer-events-none z-20"
+                aria-hidden="true"
+              />
 
-                return (
+              {/* CRT Screen Edge Vignette */}
+              <div
+                className="absolute inset-0 shadow-[inset_0_0_35px_rgba(0,0,0,0.7)] pointer-events-none z-20"
+                aria-hidden="true"
+              />
+
+              {/* Technical Registration Corner Crosshairs inside screen */}
+              <span className="absolute top-1.5 left-2 text-[#59d6e8]/25 font-mono text-[9px] pointer-events-none select-none z-20">+</span>
+              <span className="absolute top-1.5 right-2 text-[#59d6e8]/25 font-mono text-[9px] pointer-events-none select-none z-20">+</span>
+              <span className="absolute bottom-1.5 left-2 text-[#59d6e8]/25 font-mono text-[9px] pointer-events-none select-none z-20">+</span>
+              <span className="absolute bottom-1.5 right-2 text-[#59d6e8]/25 font-mono text-[9px] pointer-events-none select-none z-20">+</span>
+
+              {/* Terminal Titlebar */}
+              <div className="relative z-30 bg-gradient-to-r from-[#071628] via-[#0b203a] to-[#071628] border-b border-[#59d6e8]/25 px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between select-none">
+                {/* Window controls & Host prompt */}
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                  {/* Simulated Terminal Window Action LEDs */}
+                  <div className="flex items-center gap-1.5 shrink-0" aria-hidden="true">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] shadow-[0_0_6px_rgba(255,95,86,0.6)] inline-block" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] shadow-[0_0_6px_rgba(255,189,46,0.6)] inline-block" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f] shadow-[0_0_6px_rgba(39,201,63,0.6)] inline-block" />
+                  </div>
+
+                  <div className="h-3.5 w-px bg-[#59d6e8]/20 shrink-0" />
+
+                  <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                    <TerminalIcon className="w-3.5 h-3.5 text-[#ffc928] shrink-0 drop-shadow-[0_0_6px_rgba(255,201,40,0.6)]" />
+                    <span className="text-[10px] sm:text-[11px] font-bold text-[#b8d2eb] tracking-wider uppercase truncate">
+                      <span className="hidden md:inline text-[#59d6e8]">guest@iedc-is26:~ / </span>
+                      <span>idea-forge-shell</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Stage indicator & Online Pill */}
+                <div className="flex items-center gap-2 sm:gap-2.5 text-[10px] sm:text-[11px] shrink-0">
+                  <span className="text-[#6e94b8] hidden sm:inline font-mono">
+                    STATUS: {isDone ? 'COMPILED' : `STEP 0${stepIndex + 1}/03`}
+                  </span>
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-500/40 text-emerald-400 font-bold tracking-wider text-[9px] sm:text-[10px]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>{isDone ? 'COMPILED' : 'ONLINE'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Terminal Interactive Stepper Breadcrumb Header */}
+              <div className="relative z-20 px-2.5 sm:px-6 py-2 sm:py-2.5 bg-[#05101d] border-b border-[#59d6e8]/20 flex items-center justify-between gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none touch-pan-x select-none">
+                <div className="flex items-center gap-1 sm:gap-2 text-xs min-w-0">
+                  <span className="text-[#6e94b8] text-[9px] sm:text-[10px] uppercase font-bold tracking-wider shrink-0 hidden sm:inline">
+                    PIPELINE:
+                  </span>
+                  <div className="flex items-center gap-1 sm:gap-1.5">
+                    {TERMINAL_STAGES.map((stg, idx) => {
+                      const isCompleted = idx < selectedKeys.length
+                      const isCurrent = idx === stepIndex && !isDone
+                      const selKey = selectedKeys[idx]
+                      const selOpt = selKey ? stg.options.find((o) => o.key === selKey) : null
+
+                      return (
+                        <React.Fragment key={idx}>
+                          {idx > 0 && (
+                            <span className="text-[#59d6e8]/30 text-[10px] font-mono select-none">
+                              ›
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => handleJumpToStep(idx)}
+                            className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-xs border text-[10px] sm:text-[11px] transition-all cursor-pointer shrink-0 touch-manipulation min-h-[30px] sm:min-h-0 ${
+                              isCurrent
+                                ? 'border-[#ffc928] bg-[#ffc928]/15 text-[#ffc928] font-bold shadow-[0_0_10px_rgba(255,201,40,0.25)] ring-1 ring-[#ffc928]/40'
+                                : isCompleted
+                                ? 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300 hover:border-emerald-400'
+                                : 'border-[#59d6e8]/15 text-[#6e94b8] opacity-60 hover:opacity-90'
+                            }`}
+                          >
+                            <span className="text-[9px] sm:text-[10px] opacity-75 font-mono">0{idx + 1}</span>
+                            <span className="font-semibold">{selOpt ? selOpt.label.split(' ')[0] : stg.shortName}</span>
+                            {isCompleted && <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400 shrink-0" />}
+                          </button>
+                        </React.Fragment>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {isDone && (
                   <button
-                    key={idx}
                     type="button"
-                    onClick={() => handleJumpToStep(idx)}
-                    className={`inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-xs border text-[10px] sm:text-[11px] transition-all cursor-pointer shrink-0 touch-manipulation min-h-[30px] sm:min-h-0 ${
-                      isCurrent
-                        ? 'border-[#ffc928] bg-[#ffc928]/15 text-[#ffc928] font-bold'
-                        : isCompleted
-                        ? 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300 hover:border-emerald-400'
-                        : 'border-[#59d6e8]/15 text-[#6e94b8] opacity-60'
-                    }`}
+                    onClick={() => handleJumpToStep(0)}
+                    className="inline-flex items-center gap-1 text-[10px] text-[#ffc928] hover:text-white uppercase shrink-0 font-bold touch-manipulation px-2 py-1 rounded-xs bg-[#ffc928]/10 border border-[#ffc928]/30 hover:bg-[#ffc928]/20 transition-colors"
                   >
-                    <span className="text-[9px] sm:text-[10px]">0{idx + 1}</span>
-                    <span>{selOpt ? selOpt.label.split(' ')[0] : stg.shortName}</span>
-                    {isCompleted && <Check className="w-3 h-3 text-emerald-400" />}
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Edit</span>
                   </button>
-                )
-              })}
-            </div>
+                )}
+              </div>
 
-            {isDone && (
-              <button
-                type="button"
-                onClick={() => handleJumpToStep(0)}
-                className="text-[10px] text-[#ffc928] hover:underline uppercase shrink-0 font-bold touch-manipulation"
-              >
-                [Edit Options]
-              </button>
-            )}
-          </div>
-
-          {/* Terminal Body: Adaptive Height (Zero Scroll Jumping!) */}
-          <div className="relative z-10 p-3.5 sm:p-7 space-y-3.5 sm:space-y-4 min-h-[460px] sm:min-h-[360px]">
+              {/* Terminal Body: Adaptive Height (Zero Scroll Jumping!) */}
+              <div className="relative z-10 p-3.5 sm:p-6 md:p-7 space-y-3.5 sm:space-y-4 min-h-[460px] sm:min-h-[360px]">
             <AnimatePresence mode="wait">
               {!isDone && activeStage ? (
                 /* ── STEP SELECTION VIEW ── */
@@ -686,26 +785,29 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                 >
                   {/* Terminal Prompt Line with Realistic Typing Effect */}
                   <div className="space-y-1.5 select-none" onClick={() => setIsTyping(false)}>
-                    <div className="flex items-center gap-2 text-xs sm:text-sm">
-                      <span className="text-[#59d6e8] font-bold">guest@iedc-is26:~$</span>
-                      <span className="text-[#ffc928] font-bold tracking-wide">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm flex-wrap sm:flex-nowrap">
+                      <span className="text-[#59d6e8] font-bold shrink-0">
+                        <span className="sm:hidden">guest@iedc:~$</span>
+                        <span className="hidden sm:inline">guest@iedc-is26:~$</span>
+                      </span>
+                      <span className="text-[#ffc928] font-bold tracking-wide break-all">
                         {typedCmd}
                       </span>
                       <span
-                        className={`inline-block w-2 h-4 bg-[#ffc928] ${
+                        className={`inline-block w-2 h-3.5 sm:h-4 bg-[#ffc928] shrink-0 ${
                           isTyping ? 'opacity-100' : 'animate-pulse'
                         }`}
                       />
                     </div>
 
                     {/* Subtitle Prompt / Live Kernel Stream */}
-                    <div className="text-xs pl-4 font-semibold min-h-[18px]">
+                    <div className="text-xs pl-2 sm:pl-4 font-semibold min-h-[18px]">
                       {isTyping ? (
-                        <span className="text-[#6e94b8]/75 font-mono text-[11px] tracking-wide">
+                        <span className="text-[#6e94b8]/75 font-mono text-[10px] sm:text-[11px] tracking-wide">
                           &gt; KERNEL: Compiling choice registers for {activeStage.phase}...
                         </span>
                       ) : (
-                        <span className="text-[#8aacc8]">{activeStage.prompt}</span>
+                        <span className="text-[#8aacc8] text-[11px] sm:text-xs">{activeStage.prompt}</span>
                       )}
                     </div>
                   </div>
@@ -766,9 +868,10 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                           ))}
                         </div>
 
-                        <div className="text-[11px] text-[#6e94b8]/70 pl-1 pt-1 flex items-center gap-1.5 select-none">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928]/50 animate-pulse" />
-                          <span>Executing query... Tap command line or press [Space] to skip.</span>
+                        <div className="text-[10px] sm:text-[11px] text-[#6e94b8]/70 pl-1 pt-1 flex items-center gap-1.5 select-none">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928]/50 animate-pulse shrink-0" />
+                          <span className="sm:hidden">Compiling... Tap to skip typing.</span>
+                          <span className="hidden sm:inline">Executing query... Tap command line or press [Space] to skip.</span>
                         </div>
                       </motion.div>
                     ) : (
@@ -832,9 +935,10 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                           ))}
                         </div>
 
-                        <div className="text-[11px] text-[#6e94b8] pl-1 pt-1 flex items-center gap-1.5 select-none">
-                          <CornerDownLeft className="w-3.5 h-3.5 text-[#ffc928]" />
-                          <span>Click any box or press [1, 2, 3] on your keyboard.</span>
+                        <div className="text-[10px] sm:text-[11px] text-[#6e94b8] pl-1 pt-1 flex items-center gap-1.5 select-none">
+                          <CornerDownLeft className="w-3.5 h-3.5 text-[#ffc928] shrink-0" />
+                          <span className="sm:hidden">Tap any option card to select & proceed.</span>
+                          <span className="hidden sm:inline">Click any box or press [1, 2, 3] on your keyboard.</span>
                         </div>
                       </motion.div>
                     )}
@@ -1005,18 +1109,57 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
           </div>
 
           {/* Terminal Bottom Status Bar */}
-          <div className="bg-[#081524] border-t border-[#59d6e8]/20 px-3.5 sm:px-4 py-2 text-[10px] sm:text-[11px] text-[#6e94b8] flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 select-none">
-            <div className="flex items-center gap-2">
-              <span className="text-[#ffc928] font-bold">TTY_SESSION: #2026-CEC</span>
-              <span>•</span>
-              <span>VT-100 UTF-8</span>
+          <div className="relative z-30 bg-gradient-to-r from-[#071628] via-[#091a2e] to-[#071628] border-t border-[#59d6e8]/20 px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-[11px] text-[#6e94b8] flex items-center justify-between gap-2 select-none">
+            {/* Subtle top edge luminous line */}
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#59d6e8]/30 to-transparent pointer-events-none" />
+
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <span className="text-[#ffc928] font-bold tracking-tight">TTY: #2026-CEC</span>
+              <span className="text-[#59d6e8]/30">•</span>
+              <span className="px-1.5 py-0.5 rounded-xs bg-[#0b2138] border border-[#59d6e8]/20 text-[#8aacc8] text-[9px] sm:text-[10px] font-mono">
+                VT-100
+              </span>
+              <span className="hidden sm:inline text-[#59d6e8]/30">•</span>
+              <span className="hidden sm:inline text-[#7e9bb5]">UTF-8</span>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <span className="hidden sm:inline">CONTROLS: [1,2,3] SELECT · [R] RESET · [M] MUTE</span>
-              <span className="text-emerald-400 font-bold">24H PROTOTYPE COMPILER</span>
+
+            {/* Keyboard controls guide: shown on desktop */}
+            <div className="hidden lg:flex items-center gap-2 text-[10px] text-[#6e94b8]">
+              <span>KEYBOARD:</span>
+              <span className="text-[#d4e4f5] bg-[#0c233c] px-1.5 py-0.5 rounded-xs border border-[#59d6e8]/20">[1, 2, 3]</span>
+              <span>SELECT</span>
+              <span>•</span>
+              <span className="text-[#d4e4f5] bg-[#0c233c] px-1.5 py-0.5 rounded-xs border border-[#59d6e8]/20">[R]</span>
+              <span>RESET</span>
+            </div>
+
+            {/* Right Compiler indicator */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-emerald-400 font-bold tracking-wide text-[9px] sm:text-[10px]">
+                <span className="hidden sm:inline">24H PROTOTYPE </span>COMPILER
+              </span>
             </div>
           </div>
         </div>
+
+        {/* Chassis Bottom Vent & Hardware Stamping */}
+        <div className="hidden sm:flex items-center justify-between px-2 sm:px-3 py-1 mt-1 font-mono text-[9px] text-[#59d6e8]/35 tracking-widest uppercase select-none">
+          <div className="flex items-center gap-1 text-[8px]">
+            <span>[BUS-A]</span>
+            <span>[BUS-B]</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-8 h-[1px] bg-[#59d6e8]/25" />
+            <span>VENTILATION EXHAUST // ACTIVE</span>
+            <span className="inline-block w-8 h-[1px] bg-[#59d6e8]/25" />
+          </div>
+          <div className="text-[8px] text-[#ffc928]/50">
+            <span>VERIFIED // 24H SPRINT</span>
+          </div>
+        </div>
+      </div>
+    </div>
       </Container>
     </section>
   )
