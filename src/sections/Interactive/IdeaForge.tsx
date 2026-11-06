@@ -650,28 +650,87 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                       />
                     </div>
 
-                    {/* Subtitle Prompt - emerges after command finishes typing */}
-                    <AnimatePresence>
-                      {!isTyping && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -4 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.16 }}
-                          className="text-[#8aacc8] text-xs pl-4 font-semibold"
-                        >
-                          {activeStage.prompt}
-                        </motion.div>
+                    {/* Subtitle Prompt / Live Kernel Stream */}
+                    <div className="text-xs pl-4 font-semibold min-h-[18px]">
+                      {isTyping ? (
+                        <span className="text-[#6e94b8]/75 font-mono text-[11px] tracking-wide">
+                          &gt; KERNEL: Compiling choice registers for {activeStage.phase}...
+                        </span>
+                      ) : (
+                        <span className="text-[#8aacc8]">{activeStage.prompt}</span>
                       )}
-                    </AnimatePresence>
+                    </div>
                   </div>
 
-                  {/* 3 Modular Terminal Boxes (Appear strictly after typing completes) */}
-                  <AnimatePresence>
-                    {!isTyping && (
+                  {/* 3 Modular Terminal Boxes / Ghost Buffer Slots while Typing */}
+                  <AnimatePresence mode="wait">
+                    {isTyping ? (
+                      /* ── SKELETON WIREFRAME SLOTS (DURING REALISTIC COMMAND TYPING) ── */
                       <motion.div
-                        initial={{ opacity: 0, y: 10 }}
+                        key="skeleton"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.12 }}
+                        className="space-y-3"
+                      >
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
+                          {[1, 2, 3].map((slotNum) => (
+                            <div
+                              key={slotNum}
+                              className="relative flex flex-col justify-between p-3.5 sm:p-4 rounded-xs border border-dashed border-[#59d6e8]/20 bg-[#061424]/40 min-h-[124px] sm:min-h-[142px] overflow-hidden select-none"
+                            >
+                              {/* Scanline subtle pulse */}
+                              <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(89,214,232,0.03)_50%,transparent_100%)] animate-pulse pointer-events-none" />
+
+                              {/* Technical corner mark */}
+                              <span className="absolute top-1.5 right-1.5 font-mono text-[10px] text-[#59d6e8]/30">
+                                +
+                              </span>
+
+                              {/* Wireframe header */}
+                              <div className="space-y-2.5">
+                                <div className="flex items-center justify-between pb-2 border-b border-[#59d6e8]/10">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928]/40 animate-ping" />
+                                    <span className="font-mono text-[11px] font-bold text-[#ffc928]/60 tracking-wider uppercase">
+                                      [BUFFER 0{slotNum}]
+                                    </span>
+                                  </div>
+                                  <span className="font-mono text-[10px] text-[#59d6e8]/40">
+                                    PARSING...
+                                  </span>
+                                </div>
+
+                                {/* Placeholder wireframe lines */}
+                                <div className="space-y-2 pt-1">
+                                  <div className="h-3.5 w-3/4 bg-[#59d6e8]/10 rounded-xs animate-pulse" />
+                                  <div className="h-2.5 w-11/12 bg-[#59d6e8]/5 rounded-xs" />
+                                </div>
+                              </div>
+
+                              {/* Wireframe footer telemetry */}
+                              <div className="pt-2.5 mt-2.5 border-t border-[#59d6e8]/10 flex items-center justify-between font-mono text-[10px] text-[#6e94b8]/50">
+                                <span>I/O REG: 0x{((slotNum * 239) % 899 + 100).toString(16).toUpperCase()}</span>
+                                <span className="text-[#ffc928]/50">● STANDBY</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="text-[11px] text-[#6e94b8]/70 pl-1 pt-1 flex items-center gap-1.5 select-none">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928]/50 animate-pulse" />
+                          <span>Executing query... Tap command line or press [Space] to skip.</span>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      /* ── 3 INTERACTIVE TACTICAL BOXES (AFTER COMMAND TYPES) ── */
+                      <motion.div
+                        key="options"
+                        initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.22, ease: 'easeOut' }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
                         className="space-y-3"
                       >
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
