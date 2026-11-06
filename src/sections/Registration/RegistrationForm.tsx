@@ -12,6 +12,7 @@ import {
   CheckCheck,
 } from 'lucide-react'
 import type { RegistrationFormData, RegistrationFormErrors } from '@/types/event'
+import { Button } from '@/components/common/Button'
 import { TearTicket } from '@/components/ui/TearTicket'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
 import { sound } from '@/sections/Interactive/soundEngine'
@@ -430,12 +431,12 @@ Venue:       College of Engineering Chengannur`
               <button
                 type="button"
                 onClick={handleCopyReceipt}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-white transition-colors cursor-pointer min-h-[40px] flex-1 sm:flex-initial"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 active:bg-white/15 text-xs font-mono font-medium tracking-wider text-white transition-colors cursor-pointer min-h-[42px] touch-manipulation flex-1 sm:flex-initial"
               >
                 {copied ? (
                   <>
                     <Check className="w-4 h-4 text-emerald-400" />
-                    <span className="text-emerald-400">Copied Pass Details</span>
+                    <span className="text-emerald-400 font-bold">Copied Pass Details</span>
                   </>
                 ) : (
                   <>
@@ -445,14 +446,19 @@ Venue:       College of Engineering Chengannur`
                 )}
               </button>
 
-              <button
-                type="button"
+              <Button
+                variant="secondary"
+                size="md"
                 onClick={handleReset}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 bg-transparent hover:bg-white/5 text-xs font-medium text-slate-300 hover:text-white transition-colors cursor-pointer min-h-[40px] flex-1 sm:flex-initial"
+                leftIcon={
+                  <RotateCcw className="w-4 h-4 text-[#59d6e8] transition-all duration-300 ease-out group-hover:-rotate-90 group-hover:text-[#ffc928]" />
+                }
+                className="group relative overflow-hidden !rounded-full px-6 py-2.5 font-mono font-bold text-xs sm:text-sm border border-[#59d6e8]/40 hover:border-[#ffc928] text-white hover:text-[#ffc928] bg-[#163866]/80 hover:bg-[#163866] shadow-[0_0_15px_rgba(89,214,232,0.15)] hover:shadow-[0_0_25px_rgba(255,201,40,0.4)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-300 before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-[#59d6e8]/20 before:to-transparent before:transition-transform before:duration-700 before:ease-out min-h-[42px] touch-manipulation flex-1 sm:flex-initial justify-center"
               >
-                <RotateCcw className="w-4 h-4 text-slate-400" />
-                <span>Register Another Team</span>
-              </button>
+                <span className="relative z-10 inline-block transition-transform duration-300 group-hover:scale-[1.02]">
+                  REGISTER ANOTHER TEAM
+                </span>
+              </Button>
             </div>
 
             <p className="text-xs text-slate-400 max-w-sm mx-auto">
