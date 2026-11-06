@@ -61,6 +61,75 @@ const TwitterXIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' 
   </svg>
 )
 
+const CEC_WORDS = [
+  { word: 'College', startIndex: 0 },
+  { word: 'of', startIndex: 7 },
+  { word: 'Engineering', startIndex: 9 },
+  { word: 'Chengannur', startIndex: 20 },
+] as const
+
+const CollegeHoverText: React.FC<{ className?: string }> = ({ className = '' }) => {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <a
+      href="https://ceconline.edu"
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`group/cec relative inline-flex flex-wrap items-baseline text-zinc-100 font-semibold cursor-pointer transition-colors duration-200 ${className}`}
+      title="Visit College of Engineering Chengannur Official Website"
+      aria-label="College of Engineering Chengannur (opens official website in new tab)"
+    >
+      <span className="inline-flex flex-wrap items-baseline gap-x-[0.25em]">
+        {CEC_WORDS.map(({ word, startIndex }) => (
+          <span key={word} className="inline-flex whitespace-nowrap">
+            {word.split('').map((char, charIdx) => {
+              const index = startIndex + charIdx
+              return (
+                <span
+                  key={index}
+                  className="inline-block transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] text-zinc-200"
+                  style={{
+                    transform: isHovered ? 'translateY(-2.5px)' : 'translateY(0px)',
+                    color: isHovered ? '#ffc928' : undefined,
+                    filter: isHovered ? 'drop-shadow(0 0 8px rgba(255, 201, 40, 0.45))' : 'none',
+                    transitionDelay: isHovered ? `${index * 14}ms` : '0ms',
+                  }}
+                >
+                  {char}
+                </span>
+              )
+            })}
+          </span>
+        ))}
+      </span>
+
+      {/* Micro external link indicator */}
+      <span
+        aria-hidden="true"
+        className="inline-flex items-center ml-1 text-[#ffc928] transition-all duration-200 ease-out"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          transform: isHovered ? 'translate(0px, -1px)' : 'translate(-4px, 2px)',
+        }}
+      >
+        <ExternalLink className="w-3 h-3" />
+      </span>
+
+      {/* Hairline animated underline */}
+      <span
+        aria-hidden="true"
+        className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#ffc928] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-left"
+        style={{
+          transform: isHovered ? 'scaleX(1)' : 'scaleX(0)',
+        }}
+      />
+    </a>
+  )
+}
+
 export const Footer: React.FC = () => {
   const { scrollTo } = useSmoothScroll()
   const [clickedHref, setClickedHref] = useState<string | null>(null)
@@ -216,7 +285,8 @@ export const Footer: React.FC = () => {
 
             {/* Organizer description (Hidden on mobile as requested, visible on desktop) */}
             <p className="hidden sm:block text-xs sm:text-sm text-zinc-400 max-w-sm leading-relaxed font-mono mb-5 sm:mb-5">
-              Organized by <strong className="text-zinc-100 font-semibold">{EVENT_CONFIG.organizer}</strong>, College of Engineering Chengannur. Fostering student innovation and rapid prototyping.
+              Organized by <strong className="text-zinc-100 font-semibold">{EVENT_CONFIG.organizer}</strong>,{' '}
+              <CollegeHoverText />. Fostering student innovation and rapid prototyping.
             </p>
 
             {/* Social Channels with Animated Micro-Interactions */}
@@ -356,8 +426,17 @@ export const Footer: React.FC = () => {
               <div className="p-1.5 rounded-md bg-white/[0.04] border border-white/10 group-hover/address:border-[#ffc928]/50 text-[#59d6e8] group-hover/address:text-[#ffc928] shrink-0 mt-0.5 transition-colors">
                 <MapPin className="w-4 h-4" />
               </div>
-              <span className="leading-relaxed group-hover/address:text-[#ffc928] transition-colors">
-                {EVENT_CONFIG.contact.address}
+              <span className="leading-relaxed transition-colors">
+                <span className="relative inline-block font-semibold text-zinc-100 group-hover/address:text-[#ffc928] transition-colors">
+                  College of Engineering Chengannur
+                  <span
+                    aria-hidden="true"
+                    className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#ffc928] scale-x-0 group-hover/address:scale-x-100 transition-transform origin-left duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  />
+                </span>
+                <span className="text-zinc-400 group-hover/address:text-zinc-300 transition-colors">
+                  , Alappuzha, Kerala - 689121
+                </span>
               </span>
             </a>
 

@@ -14,6 +14,7 @@ import type { RegistrationFormData, RegistrationFormErrors } from '@/types/event
 import { Button } from '@/components/common/Button'
 import { TearTicket } from '@/components/ui/TearTicket'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
+import { sound } from '@/sections/Interactive/soundEngine'
 
 const INITIAL_FORM_DATA: RegistrationFormData = {
   fullName: '',
@@ -139,6 +140,7 @@ export const RegistrationForm: React.FC = () => {
       setTicketNumber(randomNum)
       setSubmittedTeam({ ...formData })
       setFormData(INITIAL_FORM_DATA)
+      sound.playSuccess()
     }, 650)
   }
 
@@ -203,7 +205,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             Here Is Your Squad Pass!
           </h3>
 
-          <p className="text-xs sm:text-sm text-[#8aacc8] max-w-lg mx-auto">
+          <p className="text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto">
             {isTorn ? (
               <span className="text-emerald-300 font-medium">
                 Stub successfully claimed! Keep your ticket receipt ready for on-site check-in.
@@ -222,15 +224,15 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             width={560}
             height={250}
             stubSize={160}
-            radius={16}
+            radius={14}
             holes={13}
             holeSize={6}
             notch={4}
-            background="#061325"
-            stubBackground="#030c18"
+            background="#0d1017"
+            stubBackground="#090b0e"
             color="#ffffff"
             border={true}
-            borderColor="rgba(89, 214, 232, 0.45)"
+            borderColor="rgba(255, 255, 255, 0.14)"
             borderWidth={1.5}
             rotate={0}
             tilt={true}
@@ -240,7 +242,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             ariaLabel="Tear off the squad admit stub"
             stub={
               /* Tear-off Stub Content */
-              <div className="h-full flex flex-col justify-between p-4 text-left border-l border-white/10 select-none font-mono relative overflow-hidden bg-gradient-to-b from-[#06162b] to-[#020914]">
+              <div className="h-full flex flex-col justify-between p-4 text-left border-l border-white/10 select-none font-mono relative overflow-hidden bg-[#090b0e]">
                 {/* Top: Admit & Ticket Serial */}
                 <div className="space-y-0.5">
                   <span className="text-[10px] text-[#ffc928] tracking-widest font-bold block uppercase">
@@ -249,29 +251,29 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
                   <div className="text-sm font-black text-white tracking-wider">
                     № {ticketNumber}
                   </div>
-                  <div className="text-[10px] text-[#8aacc8] font-medium tracking-tight">
+                  <div className="text-[10px] text-zinc-500 font-medium tracking-tight">
                     24H PROTOTYPING
                   </div>
                 </div>
 
-                {/* Middle: Crisp Machine Barcode Strip */}
+                {/* Middle: Clean Monochrome Barcode Strip */}
                 <div className="py-1 flex flex-col items-center w-full">
                   <div className="flex items-center justify-center gap-[2.5px] h-9 w-full px-1">
                     <div className="w-[3px] h-full bg-white rounded-[1px]" />
-                    <div className="w-[1px] h-full bg-white" />
-                    <div className="w-[4px] h-full bg-[#59d6e8] rounded-[1px]" />
-                    <div className="w-[1.5px] h-full bg-white" />
+                    <div className="w-[1px] h-full bg-white/70" />
+                    <div className="w-[4px] h-full bg-white rounded-[1px]" />
+                    <div className="w-[1.5px] h-full bg-white/60" />
                     <div className="w-[2px] h-full bg-white" />
                     <div className="w-[5px] h-full bg-white rounded-[1px]" />
-                    <div className="w-[1px] h-full bg-[#59d6e8]" />
+                    <div className="w-[1px] h-full bg-white/70" />
                     <div className="w-[3px] h-full bg-white" />
-                    <div className="w-[2px] h-full bg-white" />
+                    <div className="w-[2px] h-full bg-white/60" />
                     <div className="w-[4px] h-full bg-white rounded-[1px]" />
                     <div className="w-[1.5px] h-full bg-white" />
-                    <div className="w-[3px] h-full bg-[#59d6e8]" />
+                    <div className="w-[3px] h-full bg-white/80" />
                     <div className="w-[2px] h-full bg-white" />
                   </div>
-                  <div className="text-[9px] font-mono text-[#7e9ebc] tracking-widest mt-1 text-center font-bold">
+                  <div className="text-[9px] font-mono text-zinc-500 tracking-widest mt-1 text-center font-bold">
                     CEC · {ticketNumber}
                   </div>
                 </div>
@@ -279,12 +281,12 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
                 {/* Bottom: Tear Indicator Action */}
                 <div className="pt-2 border-t border-white/10">
                   {isTorn ? (
-                    <div className="w-full py-1.5 px-2 rounded bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 text-[10px] font-mono font-bold flex items-center justify-center gap-1 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+                    <div className="w-full py-1.5 px-2 rounded bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-[10px] font-mono font-bold flex items-center justify-center gap-1">
                       <CheckCheck className="w-3.5 h-3.5 shrink-0" />
                       <span>CLAIMED</span>
                     </div>
                   ) : (
-                    <div className="w-full py-1.5 px-2 rounded bg-[#ffc928]/15 border border-[#ffc928]/50 text-[#ffc928] text-[10px] font-mono font-bold flex items-center justify-center gap-1 shadow-[0_0_12px_rgba(255,201,40,0.25)] animate-pulse">
+                    <div className="w-full py-1.5 px-2 rounded bg-[#ffc928]/10 border border-[#ffc928]/40 text-[#ffc928] text-[10px] font-mono font-bold flex items-center justify-center gap-1 animate-pulse">
                       <Scissors className="w-3.5 h-3.5 shrink-0" />
                       <span>DRAG TO TEAR</span>
                     </div>
@@ -294,16 +296,16 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
             }
           >
             {/* Main Ticket Body Content */}
-            <div className="h-full flex flex-col justify-between p-5 text-left select-none relative z-10 overflow-hidden font-sans bg-gradient-to-br from-[#081a33] via-[#051326] to-[#020a16]">
+            <div className="h-full flex flex-col justify-between p-5 text-left select-none relative z-10 overflow-hidden font-sans bg-[#0d1017]">
               {/* Subtle blueprint grid overlay */}
               <div
-                className="absolute inset-0 bg-blueprint-grid opacity-15 pointer-events-none"
+                className="absolute inset-0 bg-blueprint-grid opacity-10 pointer-events-none"
                 aria-hidden="true"
               />
 
               {/* Watermark stamp */}
               <div
-                className="absolute right-3 bottom-6 text-[44px] font-black font-display text-white/[0.035] select-none pointer-events-none tracking-tighter"
+                className="absolute right-3 bottom-6 text-[44px] font-black font-display text-white/[0.03] select-none pointer-events-none tracking-tighter"
                 aria-hidden="true"
               >
                 IS26
@@ -315,23 +317,23 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
                   <span className="text-[10px] font-mono text-[#ffc928] uppercase font-bold tracking-widest block">
                     IEDC BOOTCAMP CEC
                   </span>
-                  <h4 className="font-display font-black text-lg text-white tracking-tight drop-shadow-sm">
+                  <h4 className="font-display font-black text-lg text-white tracking-tight">
                     IDEA SPRINT 2026
                   </h4>
                 </div>
 
-                <div className="px-2.5 py-1 rounded bg-[#59d6e8]/10 border border-[#59d6e8]/35 text-[#59d6e8] text-[10px] font-mono font-bold tracking-wider flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#59d6e8] shadow-[0_0_6px_#59d6e8]" />
+                <div className="px-2.5 py-1 rounded bg-white/5 border border-white/15 text-zinc-300 text-[10px] font-mono font-semibold tracking-wider flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ffc928]" />
                   <span>{submittedTeam.teamSize}-CREW SQUAD</span>
                 </div>
               </div>
 
               {/* Middle Section: Team Callsign & Innovation Track */}
               <div className="space-y-1.5 py-1 relative z-10">
-                <span className="text-[9px] font-mono uppercase tracking-widest text-[#8aacc8] font-bold block">
+                <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 font-bold block">
                   OFFICIAL SQUAD CALLSIGN
                 </span>
-                <div className="font-display font-black text-2xl text-white tracking-tight leading-tight uppercase truncate drop-shadow-md">
+                <div className="font-display font-black text-2xl text-white tracking-tight leading-tight uppercase truncate">
                   {submittedTeam.teamName}
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#ffc928]/10 border border-[#ffc928]/30 text-[#ffc928] text-xs font-mono font-semibold max-w-full">
@@ -343,18 +345,18 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
               {/* Footer Section: Lead Operative & Campus Venue */}
               <div className="pt-2.5 border-t border-white/10 flex items-center justify-between gap-3 relative z-10 text-xs">
                 <div>
-                  <span className="text-[9px] font-mono uppercase text-[#7e9ebc] font-semibold block">
+                  <span className="text-[9px] font-mono uppercase text-zinc-500 font-semibold block">
                     LEAD OPERATIVE
                   </span>
-                  <span className="text-white font-bold block truncate max-w-[170px]">
+                  <span className="text-zinc-200 font-bold block truncate max-w-[170px]">
                     {submittedTeam.fullName}
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[9px] font-mono uppercase text-[#7e9ebc] font-semibold block">
+                  <span className="text-[9px] font-mono uppercase text-zinc-500 font-semibold block">
                     CAMPUS VENUE
                   </span>
-                  <span className="text-[#c5ddf5] font-bold block truncate max-w-[170px]">
+                  <span className="text-zinc-200 font-bold block truncate max-w-[170px]">
                     CEC CHENGANNUR
                   </span>
                 </div>
@@ -368,7 +370,7 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
           <button
             type="button"
             onClick={handleCopyReceipt}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#59d6e8]/30 bg-[#0c243f] hover:bg-[#13365c] text-xs font-mono uppercase tracking-wider text-white transition-colors cursor-pointer min-h-[42px]"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-xs font-mono uppercase tracking-wider text-white transition-colors cursor-pointer min-h-[42px]"
           >
             {copied ? (
               <>
@@ -377,25 +379,30 @@ VENUE:       College of Engineering Chengannur // IEDC BOOTCAMP CEC`
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 text-[#59d6e8]" />
+                <Copy className="w-4 h-4 text-zinc-400" />
                 <span>Copy Ticket Receipt</span>
               </>
             )}
           </button>
 
-          <button
+          <Button
             type="button"
+            variant="secondary"
             onClick={handleReset}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-white/15 bg-[#061220] hover:bg-[#0a1e35] text-xs font-mono uppercase text-[#8aacc8] hover:text-white transition-colors cursor-pointer min-h-[42px]"
+            leftIcon={
+              <RotateCcw className="w-4 h-4 text-[#59d6e8] transition-all duration-300 ease-out group-hover:-rotate-90 group-hover:text-[#ffc928]" />
+            }
+            className="group relative overflow-hidden !rounded-full px-5 sm:px-6 py-2.5 sm:py-3 font-mono font-bold text-xs sm:text-sm border border-[#59d6e8]/40 hover:border-[#ffc928] text-white hover:text-[#ffc928] bg-[#163866]/80 hover:bg-[#163866] shadow-[0_0_15px_rgba(89,214,232,0.15)] hover:shadow-[0_0_25px_rgba(255,201,40,0.4)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-300 before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-[#59d6e8]/20 before:to-transparent before:transition-transform before:duration-700 before:ease-out min-h-[42px]"
           >
-            <RotateCcw className="w-4 h-4" />
-            <span>Register Another Squad</span>
-          </button>
+            <span className="relative z-10 inline-block transition-transform duration-300 group-hover:scale-[1.02]">
+              REGISTER ANOTHER SQUAD
+            </span>
+          </Button>
         </div>
 
-        <p className="text-[11px] text-[#6e94b8] font-mono max-w-sm mx-auto">
+        <p className="text-[11px] text-zinc-500 font-mono max-w-sm mx-auto">
           A confirmation dispatch has also been sent to{' '}
-          <strong className="text-white">{submittedTeam.email}</strong>.
+          <strong className="text-zinc-300">{submittedTeam.email}</strong>.
         </p>
       </div>
     )
