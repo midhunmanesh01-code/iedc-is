@@ -274,134 +274,156 @@ Venue:       College of Engineering Chengannur`
             </div>
 
             {/* The TearTicket Component */}
-            <div className="w-full flex justify-center py-2 sm:py-3 overflow-visible touch-pan-y relative z-10">
-              <TearTicket
-                width={isMobile ? 480 : 560}
-                height={isMobile ? 240 : 250}
-                stubSize={isMobile ? 145 : 160}
-                radius={14}
-                holes={13}
-                holeSize={6}
-                notch={4}
-                background="#0d1424"
-                stubBackground="#080e1a"
-                color="#ffffff"
-                border={true}
-                borderColor="rgba(255, 255, 255, 0.12)"
-                borderWidth={1}
-                rotate={0}
-                tilt={true}
-                tiltMax={5}
-                tiltReach={260}
-                onTear={handleTear}
-                ariaLabel="Tear off the admission ticket stub"
-                stub={
-                  /* Ticket Stub */
-                  <div className="h-full flex flex-col justify-between p-3.5 sm:p-4 text-left border-l border-white/10 select-none bg-[#080e1a]">
-                    <div className="space-y-0.5">
-                      <span className="text-[10px] text-amber-400 font-semibold tracking-wider block uppercase">
-                        ADMIT TEAM
-                      </span>
-                      <div className="text-sm font-bold text-white tracking-wider font-mono">
-                        № {ticketNumber}
-                      </div>
-                      <div className="text-[10px] text-slate-400">
-                        24h Prototyping
-                      </div>
-                    </div>
+            <div className="w-full flex justify-center py-4 sm:py-6 overflow-visible touch-pan-y relative z-10">
+              {/* Ambient backlight so the ticket pops off the dark background */}
+              <div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[260px] bg-gradient-to-r from-amber-500/15 via-[#59d6e8]/10 to-amber-500/10 rounded-full blur-3xl pointer-events-none"
+                aria-hidden="true"
+              />
 
-                    {/* Barcode Strip */}
-                    <div className="py-1 flex flex-col items-center w-full">
-                      <div className="flex items-center justify-center gap-[2.5px] h-8 w-full px-1">
-                        <div className="w-[3px] h-full bg-white rounded-[1px]" />
-                        <div className="w-[1px] h-full bg-white/70" />
-                        <div className="w-[4px] h-full bg-white rounded-[1px]" />
-                        <div className="w-[1.5px] h-full bg-white/60" />
-                        <div className="w-[2px] h-full bg-white" />
-                        <div className="w-[5px] h-full bg-white rounded-[1px]" />
-                        <div className="w-[1px] h-full bg-white/70" />
-                        <div className="w-[3px] h-full bg-white" />
-                        <div className="w-[2px] h-full bg-white/60" />
-                        <div className="w-[4px] h-full bg-white rounded-[1px]" />
-                        <div className="w-[1.5px] h-full bg-white" />
-                        <div className="w-[3px] h-full bg-white/80" />
-                        <div className="w-[2px] h-full bg-white" />
-                      </div>
-                      <div className="text-[9px] font-mono text-slate-400 tracking-wider mt-1 text-center">
-                        CEC · {ticketNumber}
-                      </div>
-                    </div>
-
-                    {/* Tear Action Button */}
-                    <div className="pt-2 border-t border-white/10">
-                      {isTorn ? (
-                        <div className="w-full py-1.5 px-2 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-medium flex items-center justify-center gap-1">
-                          <CheckCheck className="w-3.5 h-3.5 shrink-0" />
-                          <span>CLAIMED</span>
+              <div className="relative filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)] drop-shadow-[0_0_25px_rgba(255,201,40,0.12)]">
+                <TearTicket
+                  width={isMobile ? 480 : 560}
+                  height={isMobile ? 240 : 250}
+                  stubSize={isMobile ? 145 : 160}
+                  radius={16}
+                  holes={13}
+                  holeSize={6}
+                  notch={5}
+                  background="#101d35"
+                  stubBackground="#0b1426"
+                  color="#ffffff"
+                  border={true}
+                  borderColor="rgba(255, 201, 40, 0.3)"
+                  borderWidth={1.5}
+                  rotate={0}
+                  tilt={true}
+                  tiltMax={6}
+                  tiltReach={260}
+                  onTear={handleTear}
+                  ariaLabel="Tear off the admission ticket stub"
+                  stub={
+                    /* Ticket Stub */
+                    <div className="h-full flex flex-col justify-between p-3.5 sm:p-4 text-left border-l border-white/10 select-none bg-gradient-to-b from-[#0e182e] to-[#080f1d] relative overflow-hidden">
+                      {/* Top serial */}
+                      <div className="space-y-0.5 relative z-10">
+                        <span className="text-[10px] text-amber-400 font-bold tracking-wider block uppercase">
+                          ADMIT PASS
+                        </span>
+                        <div className="text-base font-black text-white tracking-wider font-mono">
+                          № {ticketNumber}
                         </div>
-                      ) : (
-                        <div className="w-full py-1.5 px-2 rounded bg-amber-400/10 border border-amber-400/30 text-amber-400 text-[10px] font-medium flex items-center justify-center gap-1">
-                          <Scissors className="w-3.5 h-3.5 shrink-0" />
-                          <span>DRAG TO TEAR</span>
+                        <div className="text-[10px] text-slate-400 font-medium">
+                          24h Prototyping
                         </div>
-                      )}
+                      </div>
+
+                      {/* Barcode Strip */}
+                      <div className="py-1 flex flex-col items-center w-full relative z-10">
+                        <div className="flex items-center justify-center gap-[2.5px] h-8 w-full px-1">
+                          <div className="w-[3px] h-full bg-white rounded-[1px]" />
+                          <div className="w-[1px] h-full bg-white/70" />
+                          <div className="w-[4px] h-full bg-white rounded-[1px]" />
+                          <div className="w-[1.5px] h-full bg-white/60" />
+                          <div className="w-[2px] h-full bg-white" />
+                          <div className="w-[5px] h-full bg-white rounded-[1px]" />
+                          <div className="w-[1px] h-full bg-white/70" />
+                          <div className="w-[3px] h-full bg-white" />
+                          <div className="w-[2px] h-full bg-white/60" />
+                          <div className="w-[4px] h-full bg-white rounded-[1px]" />
+                          <div className="w-[1.5px] h-full bg-white" />
+                          <div className="w-[3px] h-full bg-white/80" />
+                          <div className="w-[2px] h-full bg-white" />
+                        </div>
+                        <div className="text-[9px] font-mono text-slate-400 tracking-wider mt-1 text-center font-semibold">
+                          CEC · {ticketNumber}
+                        </div>
+                      </div>
+
+                      {/* Tear Action Button */}
+                      <div className="pt-2 border-t border-white/10 relative z-10">
+                        {isTorn ? (
+                          <div className="w-full py-1.5 px-2 rounded-md bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-[10px] font-semibold flex items-center justify-center gap-1">
+                            <CheckCheck className="w-3.5 h-3.5 shrink-0" />
+                            <span>CLAIMED</span>
+                          </div>
+                        ) : (
+                          <div className="w-full py-1.5 px-2 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-[10px] font-bold flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgba(255,201,40,0.35)] transition-all cursor-grab active:cursor-grabbing">
+                            <Scissors className="w-3.5 h-3.5 shrink-0" />
+                            <span>DRAG TO TEAR</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                }
-              >
-                {/* Main Ticket Body */}
-                <div className="h-full flex flex-col justify-between p-4 sm:p-5 text-left select-none relative z-10 bg-[#0d1424]">
-                  {/* Top Header */}
-                  <div className="flex items-center justify-between pb-2.5 border-b border-white/10">
-                    <div>
-                      <span className="text-[10px] text-amber-400 uppercase font-semibold tracking-wider block">
-                        IEDC BOOTCAMP CEC
-                      </span>
-                      <h4 className="font-display font-bold text-base sm:text-lg text-white tracking-tight">
-                        IDEA SPRINT 2026
-                      </h4>
+                  }
+                >
+                  {/* Main Ticket Body */}
+                  <div className="h-full flex flex-col justify-between p-4 sm:p-5 text-left select-none relative z-10 bg-gradient-to-br from-[#13223d] via-[#0f1b33] to-[#0a1324] overflow-hidden">
+                    {/* Watermark in background to fill empty space */}
+                    <div
+                      className="absolute right-3 bottom-4 text-7xl sm:text-8xl font-display font-black text-white/[0.04] select-none pointer-events-none tracking-tighter"
+                      aria-hidden="true"
+                    >
+                      IS26
                     </div>
 
-                    <div className="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-slate-300 text-xs font-medium">
-                      {submittedTeam.teamSize} Members
-                    </div>
-                  </div>
+                    {/* Top Header */}
+                    <div className="flex items-center justify-between pb-2.5 border-b border-white/10 relative z-10">
+                      <div>
+                        <span className="text-[10px] text-amber-400 uppercase font-bold tracking-wider block">
+                          IEDC BOOTCAMP CEC
+                        </span>
+                        <h4 className="font-display font-black text-base sm:text-lg text-white tracking-tight">
+                          IDEA SPRINT 2026
+                        </h4>
+                      </div>
 
-                  {/* Middle Section: Team Name & Track */}
-                  <div className="space-y-1 py-1">
-                    <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium block">
-                      TEAM NAME
-                    </span>
-                    <div className="font-display font-bold text-xl sm:text-2xl text-white tracking-tight uppercase truncate">
-                      {submittedTeam.teamName}
+                      <div className="px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-slate-200 text-xs font-semibold backdrop-blur-xs">
+                        {submittedTeam.teamSize} Members
+                      </div>
                     </div>
-                    <div className="inline-flex items-center gap-1.5 text-xs text-amber-300/90 font-medium">
-                      <span className="text-slate-400">Track:</span>
-                      <span className="truncate">{submittedTeam.primaryDomain}</span>
-                    </div>
-                  </div>
 
-                  {/* Footer Section: Team Lead & Venue */}
-                  <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-3 text-xs">
-                    <div>
-                      <span className="text-[10px] uppercase text-slate-400 font-medium block">
-                        TEAM LEADER
-                      </span>
-                      <span className="text-slate-200 font-semibold block truncate max-w-[150px] sm:max-w-[170px]">
-                        {submittedTeam.fullName}
-                      </span>
+                    {/* Middle Section: Team Name & Track Badge */}
+                    <div className="space-y-2 py-1.5 relative z-10">
+                      <div className="space-y-0.5">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">
+                          TEAM NAME
+                        </span>
+                        <div className="font-display font-black text-2xl sm:text-3xl text-white tracking-tight uppercase truncate">
+                          {submittedTeam.teamName}
+                        </div>
+                      </div>
+
+                      {/* Pill Badge for Track */}
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-400/10 border border-amber-400/25 text-xs text-amber-300 font-medium max-w-full">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                        <span className="text-slate-400">Track:</span>
+                        <span className="truncate font-semibold text-white">{submittedTeam.primaryDomain}</span>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <span className="text-[10px] uppercase text-slate-400 font-medium block">
-                        VENUE
-                      </span>
-                      <span className="text-slate-200 font-semibold block truncate max-w-[150px] sm:max-w-[170px]">
-                        CE CHENGANNUR
-                      </span>
+
+                    {/* Footer Section: Team Lead & Venue */}
+                    <div className="pt-2.5 border-t border-white/10 flex items-center justify-between gap-3 text-xs relative z-10">
+                      <div>
+                        <span className="text-[9px] uppercase text-slate-400 font-semibold tracking-wide block">
+                          TEAM LEADER
+                        </span>
+                        <span className="text-slate-200 font-bold block truncate max-w-[150px] sm:max-w-[170px]">
+                          {submittedTeam.fullName}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[9px] uppercase text-slate-400 font-semibold tracking-wide block">
+                          VENUE
+                        </span>
+                        <span className="text-slate-200 font-bold block truncate max-w-[150px] sm:max-w-[170px]">
+                          CE CHENGANNUR
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </TearTicket>
+                </TearTicket>
+              </div>
             </div>
 
             {/* Action Buttons */}
