@@ -281,28 +281,28 @@ Venue:       College of Engineering Chengannur`
                 aria-hidden="true"
               />
 
-              <div className="relative filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)] drop-shadow-[0_0_25px_rgba(255,201,40,0.12)]">
-                <TearTicket
-                  width={isMobile ? 480 : 560}
-                  height={isMobile ? 240 : 250}
-                  stubSize={isMobile ? 145 : 160}
-                  radius={16}
-                  holes={13}
-                  holeSize={6}
-                  notch={5}
-                  background="#101d35"
-                  stubBackground="#0b1426"
-                  color="#ffffff"
-                  border={true}
-                  borderColor="rgba(255, 201, 40, 0.3)"
-                  borderWidth={1.5}
-                  rotate={0}
-                  tilt={true}
-                  tiltMax={6}
-                  tiltReach={260}
-                  onTear={handleTear}
-                  ariaLabel="Tear off the admission ticket stub"
-                  stub={
+              <TearTicket
+                width={isMobile ? 480 : 560}
+                height={isMobile ? 240 : 250}
+                stubSize={isMobile ? 145 : 160}
+                radius={16}
+                holes={13}
+                holeSize={6}
+                notch={5}
+                background="#101d35"
+                stubBackground="#0b1426"
+                color="#ffffff"
+                border={true}
+                borderColor="rgba(255, 201, 40, 0.3)"
+                borderWidth={1.5}
+                rotate={0}
+                tilt={true}
+                tiltMax={6}
+                tiltReach={260}
+                onTear={handleTear}
+                ariaLabel="Tear off the admission ticket stub"
+                className="filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)] drop-shadow-[0_0_25px_rgba(255,201,40,0.12)] mx-auto"
+                stub={
                     /* Ticket Stub */
                     <div className="h-full flex flex-col justify-between p-3.5 sm:p-4 text-left border-l border-white/10 select-none bg-gradient-to-b from-[#0e182e] to-[#080f1d] relative overflow-hidden">
                       {/* Top serial */}
@@ -423,7 +423,6 @@ Venue:       College of Engineering Chengannur`
                     </div>
                   </div>
                 </TearTicket>
-              </div>
             </div>
 
             {/* Action Buttons */}
