@@ -11,26 +11,35 @@ const AnimatedNumber: React.FC<{
   readonly color: string
 }> = ({ value, color }) => {
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const isInView = useInView(ref, { once: false, margin: '-60px' })
   const [display, setDisplay] = useState('0')
 
   useEffect(() => {
-    if (!isInView) return
+    if (!isInView) {
+      setDisplay('0')
+      return
+    }
     const num = parseInt(value, 10)
     if (isNaN(num)) {
       setDisplay(value)
       return
     }
     const duration = 1200
+    let rafId: number
     const start = performance.now()
     const step = (now: number) => {
       const elapsed = now - start
       const progress = Math.min(elapsed / duration, 1)
       const eased = 1 - Math.pow(1 - progress, 3)
       setDisplay(Math.round(eased * num).toString())
-      if (progress < 1) requestAnimationFrame(step)
+      if (progress < 1) {
+        rafId = requestAnimationFrame(step)
+      }
     }
-    requestAnimationFrame(step)
+    rafId = requestAnimationFrame(step)
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId)
+    }
   }, [isInView, value])
 
   return (
@@ -496,7 +505,7 @@ export const About: React.FC = () => {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, margin: '-60px' }}
             transition={{ duration: 0.5 }}
             className="flex flex-wrap items-center justify-center gap-8 sm:gap-12 lg:gap-20 mb-16 sm:mb-24 py-8 sm:py-10"
           >
