@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { AlertCircle, Calendar, ArrowRight, Zap } from 'lucide-react'
 import { Container } from '@/components/common/Container'
 import { Button } from '@/components/common/Button'
@@ -10,7 +10,9 @@ const CountdownDigit: React.FC<{
   readonly value: string
   readonly label: string
   readonly isPending: boolean
-}> = ({ value, label, isPending }) => {
+  readonly glitchSignal: number
+  readonly glitchDelayMs: number
+}> = ({ value, label, isPending, glitchSignal, glitchDelayMs }) => {
   const [scramble, setScramble] = useState<string | null>(null)
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const cardRef = useRef<HTMLDivElement>(null)
@@ -23,12 +25,16 @@ const CountdownDigit: React.FC<{
     }
   }, [])
 
-  // Smooth number scramble on cursor touch - NO vibration, NO color change, perfectly steady
-  const triggerScramble = () => {
-    if (isPending || intervalRef.current !== null) return
+  // Smooth number scramble on cursor touch / scroll entry - NO vibration, NO color change, perfectly steady
+  const triggerScramble = useCallback(() => {
+    if (isPending) return
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
 
     let count = 0
-    const maxCount = 8
+    const maxCount = 10
 
     intervalRef.current = window.setInterval(() => {
       count++
@@ -40,8 +46,19 @@ const CountdownDigit: React.FC<{
         intervalRef.current = null
         setScramble(null)
       }
-    }, 50)
-  }
+    }, 45)
+  }, [isPending])
+
+  // Auto-trigger glitch when section enters viewport
+  useEffect(() => {
+    if (glitchSignal === 0 || isPending) return
+
+    const timer = window.setTimeout(() => {
+      triggerScramble()
+    }, glitchDelayMs)
+
+    return () => clearTimeout(timer)
+  }, [glitchSignal, glitchDelayMs, isPending, triggerScramble])
 
   // Smooth 3D tilt following cursor (~11 deg: noticeable and tactile, but tasteful)
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -150,14 +167,46 @@ export const CountdownSection: React.FC = () => {
     EVENT_CONFIG.isDateAnnounced ? EVENT_CONFIG.startDate : null
   )
   const { scrollTo } = useSmoothScroll()
+  const clockRef = useRef<HTMLDivElement>(null)
+  const [glitchSignal, setGlitchSignal] = useState(0)
+  const hasExitedRef = useRef(true)
+
+  // IntersectionObserver attached directly to the clock container
+  // Triggers glitch when the clock numbers enter the viewport (both scrolling forward & backward, desktop & mobile)
+  useEffect(() => {
+    const el = clockRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        if (!entry) return
+
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
+          if (hasExitedRef.current) {
+            hasExitedRef.current = false
+            setGlitchSignal((prev) => prev + 1)
+          }
+        } else if (!entry.isIntersecting || entry.intersectionRatio <= 0.05) {
+          hasExitedRef.current = true
+        }
+      },
+      {
+        threshold: [0, 0.05, 0.3],
+      }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const formatDigit = (value: number) => value.toString().padStart(2, '0')
 
   const timeUnits = [
-    { label: 'Days', value: isPending ? '--' : formatDigit(days) },
-    { label: 'Hours', value: isPending ? '--' : formatDigit(hours) },
-    { label: 'Minutes', value: isPending ? '--' : formatDigit(minutes) },
-    { label: 'Seconds', value: isPending ? '--' : formatDigit(seconds) },
+    { label: 'Days', value: isPending ? '--' : formatDigit(days), delay: 0 },
+    { label: 'Hours', value: isPending ? '--' : formatDigit(hours), delay: 40 },
+    { label: 'Minutes', value: isPending ? '--' : formatDigit(minutes), delay: 80 },
+    { label: 'Seconds', value: isPending ? '--' : formatDigit(seconds), delay: 120 },
   ]
 
   const handleRegisterClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -218,14 +267,41 @@ export const CountdownSection: React.FC = () => {
           </p>
 
           {/* Flip-clock countdown - clean direct row, zero outer box */}
-          <div className="flex items-start gap-2 sm:gap-4 lg:gap-5 mb-8 sm:mb-12">
-            <CountdownDigit value={timeUnits[0].value} label={timeUnits[0].label} isPending={isPending} />
+          <div
+            ref={clockRef}
+            className="flex items-start gap-2 sm:gap-4 lg:gap-5 mb-8 sm:mb-12"
+          >
+            <CountdownDigit
+              value={timeUnits[0].value}
+              label={timeUnits[0].label}
+              isPending={isPending}
+              glitchSignal={glitchSignal}
+              glitchDelayMs={timeUnits[0].delay}
+            />
             <ColonSeparator />
-            <CountdownDigit value={timeUnits[1].value} label={timeUnits[1].label} isPending={isPending} />
+            <CountdownDigit
+              value={timeUnits[1].value}
+              label={timeUnits[1].label}
+              isPending={isPending}
+              glitchSignal={glitchSignal}
+              glitchDelayMs={timeUnits[1].delay}
+            />
             <ColonSeparator />
-            <CountdownDigit value={timeUnits[2].value} label={timeUnits[2].label} isPending={isPending} />
+            <CountdownDigit
+              value={timeUnits[2].value}
+              label={timeUnits[2].label}
+              isPending={isPending}
+              glitchSignal={glitchSignal}
+              glitchDelayMs={timeUnits[2].delay}
+            />
             <ColonSeparator />
-            <CountdownDigit value={timeUnits[3].value} label={timeUnits[3].label} isPending={isPending} />
+            <CountdownDigit
+              value={timeUnits[3].value}
+              label={timeUnits[3].label}
+              isPending={isPending}
+              glitchSignal={glitchSignal}
+              glitchDelayMs={timeUnits[3].delay}
+            />
           </div>
 
           {/* Date info / pending notice */}
