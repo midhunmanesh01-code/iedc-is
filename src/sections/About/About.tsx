@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { motion, useInView } from 'motion/react'
+import { motion, useInView, useScroll, useSpring } from 'motion/react'
 import { Rocket, Target, Users, Award, Lightbulb, Zap } from 'lucide-react'
 import { Container } from '@/components/common/Container'
 import { SplitText } from '@/components/ui/SplitText'
@@ -69,9 +69,191 @@ const pillars = [
   },
 ]
 
+/* ── Pillar Row with Scroll-Triggered Illumination ── */
+interface PillarRowProps {
+  readonly pillar: (typeof pillars)[number]
+  readonly index: number
+  readonly isLast: boolean
+  readonly dotRef: React.RefObject<HTMLDivElement | null>
+}
+
+const PillarRow: React.FC<PillarRowProps> = ({ pillar, index, isLast, dotRef }) => {
+  const rowRef = useRef<HTMLDivElement>(null)
+  const isRowInCenter = useInView(rowRef, { margin: '0px 0px -50% 0px' })
+  const Icon = pillar.icon
+  const isGold = pillar.accent === '#ffc928'
+
+  return (
+    <motion.div
+      ref={rowRef}
+      initial={{ opacity: 0, x: -30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
+      className="group relative grid grid-cols-[20px_1fr] sm:grid-cols-[20px_auto_1fr] items-start gap-x-4 sm:gap-x-6 lg:gap-x-10"
+    >
+      {/* Node column - centered horizontally on 20px so line passes through center */}
+      <div className="relative flex justify-center self-stretch">
+        <div
+          ref={dotRef}
+          className={`w-3.5 h-3.5 rounded-full border-2 shrink-0 mt-1.5 z-10 transition-all duration-300 ${
+            isRowInCenter ? 'scale-125' : 'group-hover:scale-125'
+          }`}
+          style={{
+            borderColor: isRowInCenter ? pillar.accent : `${pillar.accent}50`,
+            backgroundColor: isRowInCenter ? pillar.accent : '#081526',
+            boxShadow: isRowInCenter
+              ? `0 0 14px ${pillar.accent}, 0 0 28px ${pillar.accent}60`
+              : `0 0 0 3px ${pillar.accent}15`,
+          }}
+        />
+      </div>
+
+      {/* Large number — hidden on small mobile, visible sm+ */}
+      <div className="hidden sm:block">
+        <span
+          className={`font-mono text-6xl lg:text-7xl font-black leading-none tracking-tighter transition-all duration-300 select-none ${
+            isRowInCenter ? 'opacity-70 drop-shadow-[0_0_15px_rgba(89,214,232,0.3)]' : 'opacity-20'
+          }`}
+          style={{ color: pillar.accent }}
+        >
+          {String(index + 1).padStart(2, '0')}
+        </span>
+      </div>
+
+      {/* Content */}
+      <div className={`pb-10 sm:pb-14 ${isLast ? 'pb-0 sm:pb-0' : ''}`}>
+        <div className="flex items-center gap-3 mb-2.5">
+          <div
+            className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-all duration-300 ${
+              isRowInCenter ? 'scale-105' : 'group-hover:scale-110'
+            }`}
+            style={{
+              backgroundColor: `${pillar.accent}15`,
+              border: `1px solid ${isRowInCenter ? pillar.accent : `${pillar.accent}30`}`,
+              boxShadow: isRowInCenter ? `0 0 15px ${pillar.accent}25` : 'none',
+            }}
+          >
+            <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" style={{ color: pillar.accent }} />
+          </div>
+          <h4
+            className={`font-display font-bold text-lg sm:text-xl lg:text-2xl leading-tight transition-colors duration-300 ${
+              isRowInCenter ? 'text-white' : 'text-[#f5f7fa] group-hover:text-white'
+            }`}
+          >
+            {pillar.title}
+          </h4>
+        </div>
+
+        <p className="text-sm sm:text-[15px] text-[#7fa3c4] leading-relaxed max-w-xl group-hover:text-[#9bbad6] transition-colors pl-11 sm:pl-12">
+          {pillar.desc}
+        </p>
+
+        {/* Accent tag */}
+        <div className="mt-3 pl-11 sm:pl-12">
+          <span
+            className="inline-block font-mono text-[10px] uppercase tracking-[0.2em] font-bold px-2.5 py-1 rounded-full border transition-all duration-300 group-hover:border-opacity-50"
+            style={{
+              color: pillar.accent,
+              borderColor: isRowInCenter ? `${pillar.accent}60` : `${pillar.accent}20`,
+              backgroundColor: isRowInCenter ? `${pillar.accent}18` : `${pillar.accent}08`,
+            }}
+          >
+            {isGold ? (index === 0 ? 'Speed & Intensity' : 'Post-Sprint') : (index === 1 ? 'Methodology' : 'Guidance')}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+/* ── Sprint Pillars Timeline with Season-of-Code Scroll Spine ── */
+const SprintPillars: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const dot0Ref = useRef<HTMLDivElement>(null)
+  const dot1Ref = useRef<HTMLDivElement>(null)
+  const dot2Ref = useRef<HTMLDivElement>(null)
+  const dot3Ref = useRef<HTMLDivElement>(null)
+  const dotRefs = [dot0Ref, dot1Ref, dot2Ref, dot3Ref]
+
+  const [lineMetrics, setLineMetrics] = useState({ top: 10, height: 0 })
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start center', 'end center'],
+  })
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 350,
+    damping: 35,
+    restDelta: 0.001,
+  })
+
+  useEffect(() => {
+    const updateMetrics = () => {
+      const container = containerRef.current
+      const first = dot0Ref.current
+      const last = dot3Ref.current
+      if (!container || !first || !last) return
+
+      const cRect = container.getBoundingClientRect()
+      const fRect = first.getBoundingClientRect()
+      const lRect = last.getBoundingClientRect()
+
+      const top = fRect.top - cRect.top + fRect.height / 2
+      const bottom = lRect.top - cRect.top + lRect.height / 2
+      setLineMetrics({
+        top,
+        height: Math.max(0, bottom - top),
+      })
+    }
+
+    updateMetrics()
+    window.addEventListener('resize', updateMetrics)
+    return () => window.removeEventListener('resize', updateMetrics)
+  }, [])
+
+  return (
+    <div ref={containerRef} className="relative">
+      {/* Background Muted Spine Track (runs from center of first dot to center of last dot) */}
+      <div
+        className="absolute left-[10px] w-[2px] -translate-x-1/2 bg-[#59d6e8]/15 rounded-full"
+        style={{
+          top: `${lineMetrics.top}px`,
+          height: `${lineMetrics.height}px`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Animated Glowing Fill Line (Season of Code style scroll-scrubbed line) */}
+      <motion.div
+        className="absolute left-[10px] w-[2px] -translate-x-1/2 bg-gradient-to-b from-[#ffc928] via-[#59d6e8] to-[#ffc928] rounded-full shadow-[0_0_12px_rgba(89,214,232,0.8)]"
+        style={{
+          top: `${lineMetrics.top}px`,
+          height: `${lineMetrics.height}px`,
+          scaleY,
+          transformOrigin: 'top',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Rows */}
+      <div className="space-y-0">
+        {pillars.map((pillar, i) => (
+          <PillarRow
+            key={pillar.title}
+            pillar={pillar}
+            index={i}
+            isLast={i === pillars.length - 1}
+            dotRef={dotRefs[i]!}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export const About: React.FC = () => {
-  const pillarsRef = useRef<HTMLDivElement>(null)
-  const isPillarsInView = useInView(pillarsRef, { once: true, margin: '-40px' })
 
   return (
     <section
@@ -241,8 +423,8 @@ export const About: React.FC = () => {
             ))}
           </motion.div>
 
-          {/* ── Sprint Pillars — editorial vertical list with timeline ── */}
-          <div ref={pillarsRef}>
+          {/* ── Sprint Pillars — editorial vertical list with Season-of-Code style scroll timeline ── */}
+          <div>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -257,79 +439,7 @@ export const About: React.FC = () => {
               <div className="flex-1 h-px bg-[#59d6e8]/10 hidden sm:block" />
             </motion.div>
 
-            <div className="space-y-0">
-              {pillars.map((pillar, i) => {
-                const Icon = pillar.icon
-                const isGold = pillar.accent === '#ffc928'
-                return (
-                  <motion.div
-                    key={pillar.title}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={isPillarsInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.5, delay: i * 0.12, ease: 'easeOut' }}
-                    className="group relative grid grid-cols-[auto_1fr] sm:grid-cols-[auto_auto_1fr] items-start gap-x-4 sm:gap-x-6 lg:gap-x-10"
-                  >
-                    {/* Timeline line + dot */}
-                    <div className="relative flex flex-col items-center self-stretch">
-                      <div
-                        className="w-3 h-3 rounded-full border-2 shrink-0 mt-1 z-10 transition-all duration-300 group-hover:scale-125"
-                        style={{
-                          borderColor: pillar.accent,
-                          backgroundColor: 'transparent',
-                          boxShadow: `0 0 0 3px ${pillar.accent}15`,
-                        }}
-                      />
-                      {i < pillars.length - 1 && (
-                        <div className="w-px flex-1 bg-gradient-to-b from-[#59d6e8]/20 to-[#59d6e8]/5" />
-                      )}
-                    </div>
-
-                    {/* Large number — hidden on small mobile, visible sm+ */}
-                    <div className="hidden sm:block">
-                      <span
-                        className="font-mono text-6xl lg:text-7xl font-black leading-none tracking-tighter transition-colors duration-300"
-                        style={{ color: `${pillar.accent}15` }}
-                      >
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-
-                    {/* Content */}
-                    <div className={`pb-10 sm:pb-14 ${i === pillars.length - 1 ? 'pb-0 sm:pb-0' : ''}`}>
-                      <div className="flex items-center gap-3 mb-2.5">
-                        <div
-                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-                          style={{ backgroundColor: `${pillar.accent}12`, border: `1px solid ${pillar.accent}20` }}
-                        >
-                          <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" style={{ color: pillar.accent }} />
-                        </div>
-                        <h4 className="font-display font-bold text-lg sm:text-xl lg:text-2xl text-[#f5f7fa] group-hover:text-white transition-colors leading-tight">
-                          {pillar.title}
-                        </h4>
-                      </div>
-
-                      <p className="text-sm sm:text-[15px] text-[#7fa3c4] leading-relaxed max-w-xl group-hover:text-[#9bbad6] transition-colors pl-11 sm:pl-12">
-                        {pillar.desc}
-                      </p>
-
-                      {/* Accent tag */}
-                      <div className="mt-3 pl-11 sm:pl-12">
-                        <span
-                          className="inline-block font-mono text-[10px] uppercase tracking-[0.2em] font-bold px-2.5 py-1 rounded-full border transition-all duration-300 group-hover:border-opacity-50"
-                          style={{
-                            color: pillar.accent,
-                            borderColor: `${pillar.accent}20`,
-                            backgroundColor: `${pillar.accent}08`,
-                          }}
-                        >
-                          {isGold ? (i === 0 ? 'Speed & Intensity' : 'Post-Sprint') : (i === 1 ? 'Methodology' : 'Guidance')}
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                )
-              })}
-            </div>
+            <SprintPillars />
           </div>
 
           {/* ── Bottom CTA banner ── */}
