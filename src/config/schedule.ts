@@ -1,9 +1,8 @@
 import type { ScheduleConfig } from '@/types/schedule'
 
 /**
- * Technical Blueprint Flight Manifest for IDEA SPRINT 2026
- * 24-Hour Continuous Engineering Sprint
- * IEDC BOOTCAMP CEC • College of Engineering Chengannur
+ * Event Schedule Configuration for IDEA SPRINT 2026
+ * Concise, non-wordy itinerary for both sprint days.
  */
 export const SCHEDULE_CONFIG: ScheduleConfig = {
   isScheduleFinalized: false,
@@ -11,30 +10,22 @@ export const SCHEDULE_CONFIG: ScheduleConfig = {
     {
       dayNumber: 1,
       dayLabel: 'Day 01',
-      dateLabel: 'Tuesday, 15 Dec 2026',
-      theme: 'Ideation, Architecture & Problem Validation',
-      channelLabel: 'CH-01 // 15 DEC',
-      timeRange: '09:00 AM → 01:30 AM',
+      dateLabel: 'Tuesday, Dec 15',
+      theme: 'Ideation & Problem Validation',
       items: [
         {
           id: 'd1-checkin',
-          time: '09:00 AM',
-          sprintTime: 'T-02:00',
-          trackBadge: 'CHECK-IN',
-          title: 'Squad Verification & Workstation Allocation',
-          description:
-            'Biometric validation, campus ID verification, Wi-Fi credentials issuance, and desk allocation in the main arena.',
-          venue: 'Arena Foyer',
+          time: '09:00 AM – 10:00 AM',
+          title: 'Check-in & Desk Allocation',
+          description: 'Team verification, ID check, kit collection, and workstation setup.',
+          venue: 'Main Foyer',
           category: 'ceremony',
         },
         {
           id: 'd1-opening',
-          time: '10:00 AM',
-          sprintTime: 'T-01:00',
-          trackBadge: 'KEYNOTE',
-          title: 'Inauguration & Problem Statement Release',
-          description:
-            'Official briefing by IEDC BOOTCAMP CEC mentors. Problem statements, rubric weights, and mentor allocation revealed.',
+          time: '10:00 AM – 11:00 AM',
+          title: 'Opening Ceremony & Track Briefing',
+          description: 'Official inauguration, problem statements release, and rubric briefing.',
           venue: 'APJ Auditorium',
           category: 'ceremony',
           isHighlight: true,
@@ -42,57 +33,42 @@ export const SCHEDULE_CONFIG: ScheduleConfig = {
         {
           id: 'd1-hack-start',
           time: '11:00 AM',
-          sprintTime: 'T+00:00',
-          trackBadge: 'SPRINT START',
-          title: '24-Hour Sprint Clock Initiated',
-          description:
-            'The official 24-hour countdown timer begins. Repositories unlocked, problem statements open, and hacking commences.',
+          title: '24-Hour Sprint Commences',
+          description: 'Sprint clock begins. Repositories unlocked and ideation starts.',
           venue: 'Central Innovation Labs',
           category: 'hacking',
           isHighlight: true,
         },
         {
           id: 'd1-lunch',
-          time: '01:30 PM',
-          sprintTime: 'T+02:30',
-          trackBadge: 'FUEL DROP',
-          title: 'Squad Lunch & Architecture Sync',
-          description:
-            'Catered buffet lunch. Squads pause to finalize target personas, user journeys, and technical stack choices.',
-          venue: 'Campus Dining Pavilion',
+          time: '01:30 PM – 02:30 PM',
+          title: 'Lunch & Strategy Sync',
+          description: 'Buffet lunch and squad architecture alignment.',
+          venue: 'Campus Dining Hall',
           category: 'break',
         },
         {
           id: 'd1-mentoring-1',
-          time: '03:30 PM',
-          sprintTime: 'T+04:30',
-          trackBadge: 'CHECKPOINT 01',
-          title: 'Mentorship Audit: Problem-Solution Fit',
-          description:
-            'Mandatory 1-on-1 review with industry founders and alumni. Teams validate core pain points and market defensibility.',
-          venue: 'Mentorship Pods A & B',
+          time: '03:30 PM – 06:00 PM',
+          title: 'Mentorship Checkpoint 01: Concept Fit',
+          description: '1-on-1 mentor reviews for problem-solution fit and validation.',
+          venue: 'Mentorship Pods',
           category: 'mentoring',
           isHighlight: true,
         },
         {
           id: 'd1-dinner',
-          time: '08:30 PM',
-          sprintTime: 'T+09:30',
-          trackBadge: 'FUEL DROP',
-          title: 'Dinner & 24/7 Caffeine Counter Armed',
-          description:
-            'Hot dinner served. Arena unlocks continuous coffee, tea, and energy snack distribution for the overnight build.',
-          venue: 'Campus Dining Pavilion',
+          time: '08:30 PM – 09:30 PM',
+          title: 'Dinner & Midnight Fuel',
+          description: 'Hot dinner served followed by late-night tea and coffee service.',
+          venue: 'Campus Dining Hall',
           category: 'break',
         },
         {
           id: 'd1-midnight-review',
-          time: '11:30 PM',
-          sprintTime: 'T+12:30',
-          trackBadge: 'CHECKPOINT 02',
-          title: 'Midnight Technical & Prototype Audit',
-          description:
-            'Technical architects review code repositories, hardware breadboards, and live API endpoints to sanity-test MVP progress.',
+          time: '11:30 PM – 01:00 AM',
+          title: 'Mentorship Checkpoint 02: Code Audit',
+          description: 'Technical reviews for MVP progress, API stability, and hardware checks.',
           venue: 'Central Innovation Labs',
           category: 'mentoring',
           isHighlight: true,
@@ -102,30 +78,22 @@ export const SCHEDULE_CONFIG: ScheduleConfig = {
     {
       dayNumber: 2,
       dayLabel: 'Day 02',
-      dateLabel: 'Wednesday, 16 Dec 2026',
-      theme: 'Code Freeze, Stage Pitches & Incubation Awards',
-      channelLabel: 'CH-02 // 16 DEC',
-      timeRange: '07:30 AM → 05:00 PM',
+      dateLabel: 'Wednesday, Dec 16',
+      theme: 'Final Build & Grand Pitching',
       items: [
         {
           id: 'd2-breakfast',
-          time: '07:30 AM',
-          sprintTime: 'T+20:30',
-          trackBadge: 'FUEL DROP',
-          title: 'Power Breakfast & Pitch Deck Staging',
-          description:
-            'Morning buffet served. Final 3-hour polish begins: slide design refinements, demo screencasts, and verbal pitch rehearsal.',
-          venue: 'Campus Dining Pavilion',
+          time: '07:30 AM – 08:30 AM',
+          title: 'Breakfast & Pitch Prep',
+          description: 'Breakfast buffet and final stage pitch timing rehearsals.',
+          venue: 'Campus Dining Hall',
           category: 'break',
         },
         {
           id: 'd2-hack-stop',
-          time: '10:30 AM',
-          sprintTime: 'T+23:30',
-          trackBadge: 'REPO LOCK',
+          time: '10:30 AM – 11:00 AM',
           title: 'Submission Buffer & Code Lock',
-          description:
-            'Final submission window. Git commit hashes, demo links, and presentation slide decks must be uploaded to the portal.',
+          description: 'Final repository push and slide deck upload cut-off.',
           venue: 'Central Innovation Labs',
           category: 'hacking',
           isHighlight: true,
@@ -133,46 +101,34 @@ export const SCHEDULE_CONFIG: ScheduleConfig = {
         {
           id: 'd2-clock-stop',
           time: '11:00 AM',
-          sprintTime: 'T+24:00',
-          trackBadge: 'SPRINT ZERO',
-          title: 'Sprint Clock Stops — 24 Hours Complete',
-          description:
-            'Pencils down! The 24-hour countdown clock strikes zero. All portal submissions locked. Arena celebrates 24 hours of build.',
+          title: 'Sprint Clock Stops (24 Hours Complete)',
+          description: '24-hour sprint concludes. All project submissions frozen.',
           venue: 'All Workspaces',
           category: 'hacking',
           isHighlight: true,
         },
         {
           id: 'd2-pitching',
-          time: '11:30 AM',
-          sprintTime: 'FINALE',
-          trackBadge: 'STAGE PITCH',
+          time: '11:30 AM – 02:30 PM',
           title: 'Grand Pitching Arena: Jury Presentations',
-          description:
-            'Top squads deliver 5-minute onstage pitches followed by 3-minute jury cross-examination with venture investors and domain leaders.',
+          description: '5-minute onstage team pitches followed by 3-minute jury Q&A.',
           venue: 'APJ Auditorium',
           category: 'pitch',
           isHighlight: true,
         },
         {
           id: 'd2-deliberation',
-          time: '02:30 PM',
-          sprintTime: 'FINALE',
-          trackBadge: 'NETWORKING',
-          title: 'Jury Deliberation & Networking High Tea',
-          description:
-            'Scores tallied across innovation, execution, and viability while squads network with fellow founders and guests.',
+          time: '02:30 PM – 03:30 PM',
+          title: 'Jury Deliberation & High Tea',
+          description: 'Score collation and networking refreshments.',
           venue: 'Executive Council Lounge',
           category: 'break',
         },
         {
           id: 'd2-valedictory',
-          time: '03:30 PM',
-          sprintTime: 'AWARDS',
-          trackBadge: 'GRAND FINALE',
-          title: 'Valedictory Ceremony & Incubation Grants',
-          description:
-            'Champion announcements, cash awards, KSUM pre-incubation grants, mentor felicitations, and closing address.',
+          time: '03:30 PM – 05:00 PM',
+          title: 'Valedictory Ceremony & Prize Distribution',
+          description: 'Winner announcements, cash prizes, incubation grants, and closing photo.',
           venue: 'APJ Auditorium',
           category: 'ceremony',
           isHighlight: true,

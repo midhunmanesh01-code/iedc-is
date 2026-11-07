@@ -1,129 +1,179 @@
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { Calendar, ChevronDown, Clock, Sparkles } from 'lucide-react'
 import { Container } from '@/components/common/Container'
 import { SCHEDULE_CONFIG } from '@/config/schedule'
-import { sound } from '@/sections/Interactive/soundEngine'
 import { ScheduleDay } from './ScheduleDay'
 
 export const Schedule: React.FC = () => {
-  const [activeDayNumber, setActiveDayNumber] = useState<number>(1)
+  // Track open state for Day 1 and Day 2 independently
+  const [openDays, setOpenDays] = useState<Record<number, boolean>>({
+    1: false,
+    2: false,
+  })
 
-  const activeDay =
-    SCHEDULE_CONFIG.days.find((d) => d.dayNumber === activeDayNumber) ||
-    SCHEDULE_CONFIG.days[0]
-
-  const handleDaySelect = (dayNum: number) => {
-    sound.playKeyClack()
-    setActiveDayNumber(dayNum)
+  const toggleDay = (dayNumber: number) => {
+    setOpenDays((prev) => ({
+      ...prev,
+      [dayNumber]: !prev[dayNumber],
+    }))
   }
+
+  const day1 = SCHEDULE_CONFIG.days[0]
+  const day2 = SCHEDULE_CONFIG.days[1]
 
   return (
     <section
       id="schedule"
       aria-label="Event Schedule"
-      className="relative py-20 sm:py-28 lg:py-32 overflow-hidden border-b border-[#59d6e8]/15 bg-[#06101e]"
+      className="py-16 sm:py-24 lg:py-32 relative border-b border-[#59d6e8]/15 bg-[#07101f]"
     >
-      {/* Background Blueprint Grid Layer */}
+      {/* Background Subtle Ambient Glows */}
       <div
-        className="absolute inset-0 bg-blueprint-grid opacity-20 pointer-events-none"
+        className="absolute top-1/4 left-1/4 w-[500px] h-[400px] bg-[#59d6e8]/5 rounded-full blur-3xl pointer-events-none transform-gpu"
         aria-hidden="true"
       />
-
-      {/* Subtle Ambient Radial Glow */}
       <div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-[#59d6e8]/5 rounded-full blur-3xl pointer-events-none transform-gpu"
+        className="absolute bottom-1/4 right-1/4 w-[450px] h-[350px] bg-[#ffc928]/5 rounded-full blur-3xl pointer-events-none transform-gpu"
         aria-hidden="true"
       />
 
       <Container size="default">
-        <div className="relative z-10 max-w-4xl mx-auto space-y-10 sm:space-y-12">
-          {/* ── Section Header ── */}
-          <div className="text-center space-y-3.5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#102b52]/90 border border-[#59d6e8]/30 backdrop-blur-xs">
-              <span className="w-2 h-2 rounded-full bg-[#ffc928] shadow-[0_0_8px_#ffc928] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[#59d6e8] font-bold">
-                TIMELINE • 24H SPRINT MANIFEST
-              </span>
-            </div>
-
-            <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-white uppercase tracking-tight font-black">
-              Two Days. <span className="text-[#ffc928]">24 Hours.</span>
-            </h2>
-
-            <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto font-sans leading-relaxed">
-              Every milestone engineered. Follow the sprint chronometer from T-02:00 check-in through the midnight code audits to the grand stage finale.
-            </p>
+        {/* ── Centered Section Header ── */}
+        <div className="text-center max-w-2xl mx-auto space-y-3 mb-10 sm:mb-14 relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-semibold tracking-wide uppercase">
+            <Calendar className="w-3.5 h-3.5 text-amber-400" />
+            <span>EVENT TIMELINE</span>
           </div>
 
-          {/* ── Dual Channel Selector (Aerospace / Blueprint Instrument Switcher) ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-1.5 bg-[#081528]/90 border border-[#59d6e8]/25 rounded-2xl backdrop-blur-md shadow-xl">
-            {SCHEDULE_CONFIG.days.map((day) => {
-              const isActive = day.dayNumber === activeDayNumber
+          <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight">
+            Two Days. 24 Hours.
+          </h2>
 
-              return (
+          <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-sans">
+            Milestones, mentor checkpoints, and stage presentations throughout the sprint at College of Engineering Chengannur.
+          </p>
+        </div>
+
+        {/* ── Side-by-Side Notification Layout: Day 1 Left, Day 2 Right (Desktop) ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 items-start relative z-10 max-w-5xl mx-auto">
+          {[day1, day2].map((day) => {
+            if (!day) return null
+            const isOpen = Boolean(openDays[day.dayNumber])
+
+            const previewHighlights =
+              day.dayNumber === 1
+                ? ['Check-in', '24H Sprint Starts', 'Mentorship 01']
+                : ['Breakfast', 'Code Freeze', 'Stage Pitches']
+
+            const timeSpan =
+              day.dayNumber === 1
+                ? '09:00 AM – 01:00 AM · 7 Checkpoints'
+                : '07:30 AM – 05:00 PM · 6 Checkpoints'
+
+            return (
+              <div
+                key={day.dayNumber}
+                className={`rounded-2xl border transition-all duration-300 ${
+                  isOpen
+                    ? 'bg-[#0c182c] border-amber-400/40 shadow-xl shadow-black/40'
+                    : 'bg-[#091426]/85 border-slate-800/90 hover:border-slate-700/80 hover:bg-[#0b172a]'
+                }`}
+              >
+                {/* ── Notification Trigger Header ── */}
                 <button
-                  key={day.dayNumber}
                   type="button"
-                  onClick={() => handleDaySelect(day.dayNumber)}
-                  className={`relative p-3.5 sm:p-4 rounded-xl text-left transition-all duration-200 cursor-pointer min-h-[70px] flex flex-col justify-between overflow-hidden border ${
-                    isActive
-                      ? 'bg-[#102544] border-[#ffc928]/60 shadow-[0_0_20px_rgba(255,201,40,0.12)] text-white'
-                      : 'bg-transparent border-transparent text-slate-400 hover:text-white hover:bg-white/[0.03]'
-                  }`}
-                  aria-pressed={isActive}
+                  onClick={() => toggleDay(day.dayNumber)}
+                  aria-expanded={isOpen}
+                  className="w-full p-4 sm:p-5 text-left cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-2xl"
                 >
-                  {/* Subtle active glow backdrop */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeScheduleChannel"
-                      className="absolute inset-0 bg-gradient-to-r from-[#ffc928]/15 via-[#59d6e8]/5 to-transparent pointer-events-none"
-                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                    />
-                  )}
+                  {/* Notification App Bar */}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-md bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-300">
+                        <Sparkles className="w-3 h-3 text-amber-400" />
+                      </div>
+                      <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-amber-300">
+                        {day.dayLabel} Schedule
+                      </span>
+                    </div>
 
-                  {/* Channel Top Row */}
-                  <div className="relative z-10 flex items-center justify-between gap-2">
-                    <span
-                      className={`font-mono text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded ${
-                        isActive
-                          ? 'bg-[#ffc928] text-[#0b1a30] shadow-[0_0_8px_rgba(255,201,40,0.5)]'
-                          : 'bg-white/5 text-[#7ea5cb]'
+                    <span className="text-[11px] font-mono text-slate-400 bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                      {day.dateLabel}
+                    </span>
+                  </div>
+
+                  {/* Notification Title & Time Range */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-1 min-w-0">
+                      <h3 className="font-display font-bold text-base sm:text-lg text-white group-hover:text-amber-300 transition-colors leading-snug">
+                        {day.theme}
+                      </h3>
+                      <div className="flex items-center gap-1.5 text-xs font-mono text-slate-300">
+                        <Clock className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        <span>{timeSpan}</span>
+                      </div>
+                    </div>
+
+                    {/* Smooth Rotating Chevron Circle */}
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        isOpen
+                          ? 'bg-amber-400 text-slate-950 shadow-[0_0_12px_rgba(255,201,40,0.35)] rotate-180'
+                          : 'bg-white/5 text-slate-400 group-hover:bg-white/10 group-hover:text-white rotate-0'
                       }`}
                     >
-                      {day.channelLabel}
-                    </span>
-                    <span className="font-mono text-[11px] text-[#7ea5cb]">
-                      {day.timeRange}
-                    </span>
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
                   </div>
 
-                  {/* Channel Theme Title */}
-                  <div className="relative z-10 pt-2">
-                    <h3 className="font-display text-sm sm:text-base font-bold text-white tracking-tight">
-                      {day.theme}
-                    </h3>
-                  </div>
+                  {/* Collapsed Highlights Ticker */}
+                  {!isOpen && (
+                    <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+                      <div className="flex items-center gap-1.5 overflow-hidden pr-2">
+                        {previewHighlights.map((hl, hIdx) => (
+                          <span
+                            key={hIdx}
+                            className="inline-flex items-center text-[11px] font-mono text-slate-300 bg-white/[0.03] px-2 py-0.5 rounded border border-white/5 whitespace-nowrap"
+                          >
+                            {hl}
+                          </span>
+                        ))}
+                      </div>
+
+                      <span className="text-amber-300 font-mono text-[11px] font-semibold shrink-0 group-hover:underline">
+                        Expand ↓
+                      </span>
+                    </div>
+                  )}
                 </button>
-              )
-            })}
-          </div>
 
-          {/* ── Active Day Timeline Stream ── */}
-          <div className="relative">
-            <AnimatePresence mode="wait">
-              {activeDay && (
-                <motion.div
-                  key={activeDay.dayNumber}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                {/* ── Buttery Smooth Hardware-Accelerated CSS Grid Expansion ── */}
+                <div
+                  className={`grid transition-[grid-template-rows,opacity] duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                  }`}
                 >
-                  <ScheduleDay day={activeDay} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                  <div className="overflow-hidden">
+                    <div className="px-4 pb-5 sm:px-5 sm:pb-6 pt-1 border-t border-white/10">
+                      <ScheduleDay day={day} />
+
+                      {/* Bottom Collapse Button */}
+                      <div className="pt-4 text-center">
+                        <button
+                          type="button"
+                          onClick={() => toggleDay(day.dayNumber)}
+                          className="inline-flex items-center gap-1 text-xs font-mono text-slate-400 hover:text-amber-300 transition-colors cursor-pointer py-1 px-3 rounded-full hover:bg-white/5"
+                        >
+                          <span>Collapse {day.dayLabel}</span>
+                          <span>↑</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </Container>
     </section>
