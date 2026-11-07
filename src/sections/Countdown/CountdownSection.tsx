@@ -221,42 +221,28 @@ export const CountdownSection: React.FC = () => {
     <section
       id="countdown"
       aria-label="Event Countdown"
-      className="relative py-14 sm:py-24 lg:py-32 border-b border-[#59d6e8]/15 bg-gradient-to-b from-[#102b52] via-[#0e2445] to-[#0b1a30] overflow-hidden"
+      className="relative py-16 sm:py-24 lg:py-28 border-b border-[#59d6e8]/15 bg-gradient-to-b from-[#0e264a] via-[#0c203d] to-[#0b1a30] overflow-hidden"
     >
-      {/* Precision Blueprint Grid Layer - seamlessly continues site theme */}
+      {/* ── Ambient Radial Atmosphere (Seamless Cyan & Gold Glows) ── */}
       <div
-        className="absolute inset-0 bg-blueprint-grid opacity-60 pointer-events-none"
-        aria-hidden="true"
-      />
-
-      {/* Atmospheric Ambient Glows (Drafting Gold & Blueprint Cyan) */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[850px] h-[350px] sm:h-[450px] bg-gradient-to-r from-[#59d6e8]/10 via-[#ffc928]/8 to-transparent rounded-full blur-[130px] pointer-events-none transform-gpu"
+        className="absolute top-1/3 left-1/4 -translate-x-1/2 w-[550px] sm:w-[700px] h-[350px] bg-[#59d6e8]/7 rounded-full blur-[130px] pointer-events-none transform-gpu"
         aria-hidden="true"
       />
       <div
-        className="absolute -top-20 left-10 w-[350px] h-[300px] bg-[#59d6e8]/8 rounded-full blur-[100px] pointer-events-none transform-gpu"
+        className="absolute bottom-1/3 right-1/4 translate-x-1/2 w-[500px] sm:w-[650px] h-[320px] bg-[#ffc928]/6 rounded-full blur-[130px] pointer-events-none transform-gpu"
         aria-hidden="true"
       />
       <div
-        className="absolute -bottom-20 right-10 w-[400px] h-[300px] bg-[#ffc928]/6 rounded-full blur-[110px] pointer-events-none transform-gpu"
-        aria-hidden="true"
-      />
-
-      {/* Top Precision Drafting Accent Line */}
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-px bg-gradient-to-r from-transparent via-[#ffc928]/60 to-transparent"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-gradient-to-r from-[#59d6e8]/4 via-[#ffc928]/4 to-transparent rounded-full blur-[100px] pointer-events-none transform-gpu"
         aria-hidden="true"
       />
 
       <Container size="default">
         <div className="relative z-10 flex flex-col items-center text-center">
-          {/* Minimal tag */}
-          <div className="flex items-center gap-2 mb-4 sm:mb-5">
-            <Zap className="w-3.5 h-3.5 text-[#ffc928]" />
-            <span className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#ffc928] font-bold">
-              {isCompleted ? 'Sprint is Live' : isPending ? 'Date Pending' : 'Launching In'}
-            </span>
+          {/* Section Pill Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-semibold tracking-wide uppercase mb-4 sm:mb-5">
+            <Zap className="w-3.5 h-3.5 text-amber-400" />
+            <span>{isCompleted ? 'Sprint is Live' : isPending ? 'Date Pending' : 'Launching In'}</span>
           </div>
 
           {/* Big title */}
