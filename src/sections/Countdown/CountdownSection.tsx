@@ -156,9 +156,12 @@ const CountdownDigit: React.FC<{
 }
 
 const ColonSeparator: React.FC = () => (
-  <div className="flex flex-col items-center gap-2.5 sm:gap-3.5 pt-4 sm:pt-6 lg:pt-8 self-start">
-    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffc928]" />
-    <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ffc928]" />
+  <div
+    className="h-[88px] sm:h-[120px] lg:h-[150px] flex flex-col items-center justify-center gap-3 sm:gap-4 lg:gap-5 px-0.5 sm:px-1 shrink-0 select-none"
+    aria-hidden="true"
+  >
+    <div className="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 lg:w-3 lg:h-3 rounded-full bg-[#ffc928] shadow-[0_0_10px_rgba(255,201,40,0.9),0_0_20px_rgba(255,201,40,0.5)]" />
+    <div className="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 lg:w-3 lg:h-3 rounded-full bg-[#ffc928] shadow-[0_0_10px_rgba(255,201,40,0.9),0_0_20px_rgba(255,201,40,0.5)]" />
   </div>
 )
 
@@ -218,22 +221,31 @@ export const CountdownSection: React.FC = () => {
     <section
       id="countdown"
       aria-label="Event Countdown"
-      className="relative py-14 sm:py-24 lg:py-32 border-b border-[#59d6e8]/15 bg-gradient-to-b from-[#102b52] via-[#0d213d] to-[#0b1a30] overflow-hidden"
+      className="relative py-14 sm:py-24 lg:py-32 border-b border-[#59d6e8]/15 bg-gradient-to-b from-[#102b52] via-[#0e2445] to-[#0b1a30] overflow-hidden"
     >
-      {/* Background blueprint grid layer - matches site pattern */}
+      {/* Precision Blueprint Grid Layer - seamlessly continues site theme */}
       <div
-        className="absolute inset-0 opacity-[0.035] pointer-events-none"
+        className="absolute inset-0 bg-blueprint-grid opacity-60 pointer-events-none"
         aria-hidden="true"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle 1px, rgba(89,214,232,0.8) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-        }}
       />
 
-      {/* Gold accent line at top */}
+      {/* Atmospheric Ambient Glows (Drafting Gold & Blueprint Cyan) */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-[#ffc928]/60 to-transparent"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[850px] h-[350px] sm:h-[450px] bg-gradient-to-r from-[#59d6e8]/10 via-[#ffc928]/8 to-transparent rounded-full blur-[130px] pointer-events-none transform-gpu"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute -top-20 left-10 w-[350px] h-[300px] bg-[#59d6e8]/8 rounded-full blur-[100px] pointer-events-none transform-gpu"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute -bottom-20 right-10 w-[400px] h-[300px] bg-[#ffc928]/6 rounded-full blur-[110px] pointer-events-none transform-gpu"
+        aria-hidden="true"
+      />
+
+      {/* Top Precision Drafting Accent Line */}
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-px bg-gradient-to-r from-transparent via-[#ffc928]/60 to-transparent"
         aria-hidden="true"
       />
 
