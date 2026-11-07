@@ -90,7 +90,7 @@ const PillarRow: React.FC<PillarRowProps> = ({ pillar, index, isLast, dotRef }) 
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-      className="group relative grid grid-cols-[20px_1fr] sm:grid-cols-[20px_auto_1fr] items-start gap-x-4 sm:gap-x-6 lg:gap-x-10"
+      className="group relative grid grid-cols-[20px_auto_1fr] items-start gap-x-3.5 sm:gap-x-6 lg:gap-x-10"
     >
       {/* Node column - centered horizontally on 20px so line passes through center */}
       <div className="relative flex justify-center self-stretch">
@@ -109,10 +109,10 @@ const PillarRow: React.FC<PillarRowProps> = ({ pillar, index, isLast, dotRef }) 
         />
       </div>
 
-      {/* Large number — hidden on small mobile, visible sm+ */}
-      <div className="hidden sm:block">
+      {/* Standalone number — visible on both mobile and desktop (scaled proportionally) */}
+      <div className="block pt-0.5 sm:pt-0">
         <span
-          className={`font-mono text-6xl lg:text-7xl font-black leading-none tracking-tighter transition-all duration-300 select-none ${
+          className={`font-mono text-3xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tighter transition-all duration-300 select-none block ${
             isRowInCenter ? 'opacity-70 drop-shadow-[0_0_15px_rgba(89,214,232,0.3)]' : 'opacity-20'
           }`}
           style={{ color: pillar.accent }}
@@ -124,8 +124,9 @@ const PillarRow: React.FC<PillarRowProps> = ({ pillar, index, isLast, dotRef }) 
       {/* Content */}
       <div className={`pb-10 sm:pb-14 ${isLast ? 'pb-0 sm:pb-0' : ''}`}>
         <div className="flex items-center gap-3 mb-2.5">
+          {/* Symbol icon box: visible on desktop, removed on mobile */}
           <div
-            className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-all duration-300 ${
+            className={`hidden sm:flex w-8 h-8 sm:w-9 sm:h-9 rounded-lg items-center justify-center transition-all duration-300 ${
               isRowInCenter ? 'scale-105' : 'group-hover:scale-110'
             }`}
             style={{
@@ -145,12 +146,12 @@ const PillarRow: React.FC<PillarRowProps> = ({ pillar, index, isLast, dotRef }) 
           </h4>
         </div>
 
-        <p className="text-sm sm:text-[15px] text-[#7fa3c4] leading-relaxed max-w-xl group-hover:text-[#9bbad6] transition-colors pl-11 sm:pl-12">
+        <p className="text-sm sm:text-[15px] text-[#7fa3c4] leading-relaxed max-w-xl group-hover:text-[#9bbad6] transition-colors sm:pl-12">
           {pillar.desc}
         </p>
 
         {/* Accent tag */}
-        <div className="mt-3 pl-11 sm:pl-12">
+        <div className="mt-3 sm:pl-12">
           <span
             className="inline-block font-mono text-[10px] uppercase tracking-[0.2em] font-bold px-2.5 py-1 rounded-full border transition-all duration-300 group-hover:border-opacity-50"
             style={{
