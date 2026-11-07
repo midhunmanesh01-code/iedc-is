@@ -138,35 +138,43 @@ export const About: React.FC = () => {
             />
           </div>
 
-          {/* ── Mission & Vision cards ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 mb-16 sm:mb-24">
+          {/* ── Mission & Vision cards (ISQIP-style solid dual-layer opposing tilt & hover) ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 mb-16 sm:mb-24 py-2">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6 }}
-              className="relative group rounded-xl p-6 sm:p-8 lg:p-10 overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, #0f2545 0%, #122d55 50%, #0d1f3d 100%)' }}
+              className="relative cursor-pointer group h-full"
             >
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#ffc928]/[0.04] rounded-full blur-[80px] group-hover:bg-[#ffc928]/[0.08] transition-all duration-700 pointer-events-none" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-lg bg-[#ffc928]/10 border border-[#ffc928]/20 flex items-center justify-center">
-                    <Rocket className="w-5 h-5 text-[#ffc928]" />
+              {/* Solid Accent Backdrop Plate - tightly calibrated tilt */}
+              <div
+                className="absolute inset-0 transition-all duration-300 transform rounded-2xl bg-[#ffc928] shadow-md rotate-[0.4deg] sm:rotate-[0.6deg] group-hover:rotate-[0.8deg] sm:group-hover:rotate-[1.2deg] group-hover:shadow-[0_12px_32px_rgba(255,201,40,0.22)] pointer-events-none"
+                aria-hidden="true"
+              />
+
+              {/* Solid Foreground Card - counter-rotates and fills 100% height */}
+              <div
+                className="relative rounded-2xl p-6 sm:p-8 lg:p-10 bg-[#0b1b32] border border-[#ffc928]/30 transition-all duration-300 transform -rotate-[0.4deg] sm:-rotate-[0.6deg] group-hover:-rotate-[0.8deg] sm:group-hover:-rotate-[1.2deg] group-hover:border-[#ffc928]/60 shadow-xl group-hover:shadow-2xl h-full flex flex-col justify-between"
+              >
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-lg bg-[#ffc928]/10 border border-[#ffc928]/25 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                      <Rocket className="w-5 h-5 text-[#ffc928]" />
+                    </div>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#ffc928] font-bold">Our Mission</span>
                   </div>
-                  <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#ffc928] font-bold">Our Mission</span>
+                  <h3 className="text-xl sm:text-2xl font-display font-bold text-[#f5f7fa] mb-4 leading-snug">
+                    Build the launchpad student ideas deserve.
+                  </h3>
+                  <p className="text-sm sm:text-[15px] text-[#9bbad6] leading-relaxed mb-3">
+                    To create a high-intensity environment where student ideas are stress-tested, refined, and transformed into ventures that matter — all within 24 hours of non-stop building.
+                  </p>
+                  <p className="text-xs sm:text-sm text-[#6e94b8] leading-relaxed">
+                    Organized by {EVENT_CONFIG.organizer}, we provide the critical initial catalyst that bridges academic theory and real-world execution.
+                  </p>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-display font-bold text-[#f5f7fa] mb-4 leading-snug">
-                  Build the launchpad student ideas deserve.
-                </h3>
-                <p className="text-sm sm:text-[15px] text-[#9bbad6] leading-relaxed mb-3">
-                  To create a high-intensity environment where student ideas are stress-tested, refined, and transformed into ventures that matter — all within 24 hours of non-stop building.
-                </p>
-                <p className="text-xs sm:text-sm text-[#6e94b8] leading-relaxed">
-                  Organized by {EVENT_CONFIG.organizer}, we provide the critical initial catalyst that bridges academic theory and real-world execution.
-                </p>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-[#ffc928]/40 via-[#ffc928]/10 to-transparent" />
             </motion.div>
 
             <motion.div
@@ -174,28 +182,33 @@ export const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, delay: 0.15 }}
-              className="relative group rounded-xl p-6 sm:p-8 lg:p-10 overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, #0d2040 0%, #102848 50%, #0b1933 100%)' }}
+              className="relative cursor-pointer group h-full"
             >
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#59d6e8]/[0.04] rounded-full blur-[80px] group-hover:bg-[#59d6e8]/[0.08] transition-all duration-700 pointer-events-none" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-lg bg-[#59d6e8]/10 border border-[#59d6e8]/20 flex items-center justify-center">
-                    <Lightbulb className="w-5 h-5 text-[#59d6e8]" />
+              {/* Solid Accent Backdrop Plate - tightly calibrated tilt */}
+              <div
+                className="absolute inset-0 transition-all duration-300 transform rounded-2xl bg-[#59d6e8] shadow-md -rotate-[0.4deg] sm:-rotate-[0.6deg] group-hover:-rotate-[0.8deg] sm:group-hover:-rotate-[1.2deg] group-hover:shadow-[0_12px_32px_rgba(89,214,232,0.22)] pointer-events-none"
+                aria-hidden="true"
+              />
+
+              {/* Solid Foreground Card - counter-rotates and fills 100% height */}
+              <div
+                className="relative rounded-2xl p-6 sm:p-8 lg:p-10 bg-[#0b1b32] border border-[#59d6e8]/30 transition-all duration-300 transform rotate-[0.4deg] sm:rotate-[0.6deg] group-hover:rotate-[0.8deg] sm:group-hover:rotate-[1.2deg] group-hover:border-[#59d6e8]/60 shadow-xl group-hover:shadow-2xl h-full flex flex-col justify-between"
+              >
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-lg bg-[#59d6e8]/10 border border-[#59d6e8]/25 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                      <Lightbulb className="w-5 h-5 text-[#59d6e8]" />
+                    </div>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#59d6e8] font-bold">Our Vision</span>
                   </div>
-                  <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#59d6e8] font-bold">Our Vision</span>
+                  <h3 className="text-xl sm:text-2xl font-display font-bold text-[#f5f7fa] mb-4 leading-snug">
+                    Every student deserves a shot at building something real.
+                  </h3>
+                  <p className="text-sm sm:text-[15px] text-[#9bbad6] leading-relaxed">
+                    A future where every engineering student has the tools, mentorship, and confidence to turn bold ideas into working prototypes — regardless of their background or branch.
+                  </p>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-display font-bold text-[#f5f7fa] mb-4 leading-snug">
-                  Every student deserves a shot at building something real.
-                </h3>
-                <p className="text-sm sm:text-[15px] text-[#9bbad6] leading-relaxed mb-3">
-                  A future where every engineering student has the tools, mentorship, and confidence to turn bold ideas into working prototypes — regardless of their background or branch.
-                </p>
-                <p className="text-xs sm:text-sm text-[#6e94b8] leading-relaxed">
-                  Whether you're engineering IoT devices, AI solutions, sustainable clean-tech, or community platforms — your concept will be pushed beyond surface-level assumptions.
-                </p>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-[#59d6e8]/40 via-[#59d6e8]/10 to-transparent" />
             </motion.div>
           </div>
 
