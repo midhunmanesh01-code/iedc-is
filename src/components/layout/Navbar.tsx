@@ -124,6 +124,8 @@ export const Navbar: React.FC = () => {
                 <img
                   src={iedcLogo}
                   alt="IEDC BOOTCAMP CEC Logo"
+                  width="168"
+                  height="100"
                   className={`w-auto object-contain transition-all duration-300 ease-out group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] ${
                     isScrolled ? 'h-9 sm:h-9 md:h-8.5' : 'h-11 sm:h-11 md:h-10'
                   }`}
@@ -146,7 +148,7 @@ export const Navbar: React.FC = () => {
                       '{NAV_CONFIG.brandSuffix.slice(-2)}
                     </span>
                   </div>
-                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-wider text-zinc-400 whitespace-nowrap">
+                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-wider text-[#9bbad6] whitespace-nowrap">
                     {NAV_CONFIG.organizerBadge}
                   </span>
                 </div>

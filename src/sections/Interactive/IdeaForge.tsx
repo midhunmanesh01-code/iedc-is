@@ -658,7 +658,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
 
                 {/* Stage indicator & Online Pill */}
                 <div className="flex items-center gap-2 sm:gap-2.5 text-[10px] sm:text-[11px] shrink-0">
-                  <span className="text-[#6e94b8] hidden sm:inline font-mono">
+                  <span className="text-[#8bb1d6] hidden sm:inline font-mono">
                     STATUS: {isDone ? 'COMPILED' : `STEP 0${stepIndex + 1}/03`}
                   </span>
                   <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-500/40 text-emerald-400 font-bold tracking-wider text-[9px] sm:text-[10px]">
@@ -671,7 +671,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
               {/* Terminal Interactive Stepper Breadcrumb Header */}
               <div className="relative z-20 px-2.5 sm:px-6 py-2 sm:py-2.5 bg-[#05101d] border-b border-[#59d6e8]/20 flex items-center justify-between gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none touch-pan-x select-none">
                 <div className="flex items-center gap-1 sm:gap-2 text-xs min-w-0">
-                  <span className="text-[#6e94b8] text-[9px] sm:text-[10px] uppercase font-bold tracking-wider shrink-0 hidden sm:inline">
+                  <span className="text-[#8bb1d6] text-[9px] sm:text-[10px] uppercase font-bold tracking-wider shrink-0 hidden sm:inline">
                     PIPELINE:
                   </span>
                   <div className="flex items-center gap-1 sm:gap-1.5">
@@ -696,7 +696,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                                 ? 'border-[#ffc928] bg-[#ffc928]/15 text-[#ffc928] font-bold shadow-[0_0_10px_rgba(255,201,40,0.25)] ring-1 ring-[#ffc928]/40'
                                 : isCompleted
                                 ? 'border-emerald-500/40 bg-emerald-950/40 text-emerald-300 hover:border-emerald-400'
-                                : 'border-[#59d6e8]/15 text-[#6e94b8] opacity-60 hover:opacity-90'
+                                : 'border-[#59d6e8]/15 text-[#8bb1d6] opacity-75 hover:opacity-100'
                             }`}
                           >
                             <span className="text-[9px] sm:text-[10px] opacity-75 font-mono">0{idx + 1}</span>
@@ -754,7 +754,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                     {/* Subtitle Prompt / Live Kernel Stream */}
                     <div className="text-xs pl-2 sm:pl-4 font-semibold min-h-[18px]">
                       {isTyping ? (
-                        <span className="text-[#6e94b8]/75 font-mono text-[10px] sm:text-[11px] tracking-wide">
+                        <span className="text-[#8bb1d6] font-mono text-[10px] sm:text-[11px] tracking-wide">
                           &gt; KERNEL: Compiling choice registers for {activeStage.phase}...
                         </span>
                       ) : (
@@ -877,7 +877,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
 
                               {/* Bottom Telemetry Strip */}
                               <div className="pt-2.5 mt-2.5 border-t border-[#59d6e8]/10 flex items-center justify-between font-mono text-[10px]">
-                                <span className="text-[#6e94b8] group-hover:text-[#59d6e8] transition-colors tracking-tight">
+                                <span className="text-[#8bb1d6] group-hover:text-[#59d6e8] transition-colors tracking-tight">
                                   {opt.telemetry}
                                 </span>
                                 <CornerDownLeft className="w-3.5 h-3.5 text-[#59d6e8]/40 group-hover:text-[#ffc928] transition-colors shrink-0" />
@@ -886,7 +886,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
                           ))}
                         </div>
 
-                        <div className="text-[10px] sm:text-[11px] text-[#6e94b8] pl-1 pt-1 flex items-center gap-1.5 select-none">
+                        <div className="text-[10px] sm:text-[11px] text-[#8bb1d6] pl-1 pt-1 flex items-center gap-1.5 select-none">
                           <CornerDownLeft className="w-3.5 h-3.5 text-[#ffc928] shrink-0" />
                           <span className="sm:hidden">Tap any option card to select & proceed.</span>
                           <span className="hidden sm:inline">Click any box or press [1, 2, 3] on your keyboard.</span>
@@ -1060,7 +1060,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
           </div>
 
           {/* Terminal Bottom Status Bar */}
-          <div className="relative z-30 bg-gradient-to-r from-[#071628] via-[#091a2e] to-[#071628] border-t border-[#59d6e8]/20 px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-[11px] text-[#6e94b8] flex items-center justify-between gap-2 select-none">
+          <div className="relative z-30 bg-gradient-to-r from-[#071628] via-[#091a2e] to-[#071628] border-t border-[#59d6e8]/20 px-3 sm:px-4 py-2 sm:py-2.5 text-[10px] sm:text-[11px] text-[#8bb1d6] flex items-center justify-between gap-2 select-none">
             {/* Subtle top edge luminous line */}
             <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#59d6e8]/30 to-transparent pointer-events-none" />
 
@@ -1075,7 +1075,7 @@ Compiled at IEDC IDEA FORGE // Verified for 24H Sprint Build`
             </div>
 
             {/* Keyboard controls guide: shown on desktop */}
-            <div className="hidden lg:flex items-center gap-2 text-[10px] text-[#6e94b8]">
+            <div className="hidden lg:flex items-center gap-2 text-[10px] text-[#8bb1d6]">
               <span>KEYBOARD:</span>
               <span className="text-[#d4e4f5] bg-[#0c233c] px-1.5 py-0.5 rounded-xs border border-[#59d6e8]/20">[1, 2, 3]</span>
               <span>SELECT</span>

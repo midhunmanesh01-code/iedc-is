@@ -259,6 +259,10 @@ export const Footer: React.FC = () => {
                 <img
                   src={iedcLogo}
                   alt="IEDC BOOTCAMP CEC Logo"
+                  width="168"
+                  height="100"
+                  loading="lazy"
+                  decoding="async"
                   className={`h-10 sm:h-10 w-auto object-contain transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 ${
                     isDocked
                       ? 'drop-shadow-[0_0_24px_rgba(255,201,40,0.45)] scale-100 translate-y-0'
@@ -474,7 +478,7 @@ export const Footer: React.FC = () => {
           <div className="order-1 sm:order-2 flex items-center justify-between sm:justify-end gap-3 sm:gap-6 w-full sm:w-auto">
             <span className="text-[11px] sm:text-xs text-zinc-400 font-mono inline-flex items-center gap-1.5 whitespace-nowrap">
               <span>Built with</span>
-              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline shrink-0" aria-label="love" />
+              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 inline shrink-0" role="img" aria-label="love" />
               <span>by</span>
               <span className="text-zinc-200 font-medium hover:text-[#ffc928] transition-colors">
                 Midhun Manesh

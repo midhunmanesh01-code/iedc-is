@@ -518,7 +518,7 @@ Venue:       College of Engineering Chengannur`
                     value={formData.teamName}
                     onChange={handleChange}
                     placeholder="e.g. Apex Pioneers"
-                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
+                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
                       errors.teamName
                         ? 'border-rose-500/80 bg-rose-500/[0.04]'
                         : 'border-slate-700/80 hover:border-slate-600'
@@ -592,7 +592,7 @@ Venue:       College of Engineering Chengannur`
                     htmlFor="reg-ideaSummary"
                     className="block text-xs font-medium text-slate-300 mb-1.5"
                   >
-                    Project Idea <span className="text-slate-500 font-normal">(Optional)</span>
+                    Project Idea <span className="text-slate-400 font-normal">(Optional)</span>
                   </label>
                   <input
                     id="reg-ideaSummary"
@@ -601,7 +601,7 @@ Venue:       College of Engineering Chengannur`
                     value={formData.ideaSummary}
                     onChange={handleChange}
                     placeholder="e.g. Smart assistive hardware or IoT system"
-                    className="w-full bg-[#050b14] border border-slate-700/80 text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-500 hover:border-slate-600 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20"
+                    className="w-full bg-[#050b14] border border-slate-700/80 text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-400 hover:border-slate-600 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20"
                   />
                 </div>
               </div>
@@ -630,8 +630,8 @@ Venue:       College of Engineering Chengannur`
                     required
                     value={formData.fullName}
                     onChange={handleChange}
-                    placeholder="e.g. Maya Chen"
-                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
+                    placeholder="e.g. Sarin MS"
+                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
                       errors.fullName
                         ? 'border-rose-500/80 bg-rose-500/[0.04]'
                         : 'border-slate-700/80 hover:border-slate-600'
@@ -661,8 +661,8 @@ Venue:       College of Engineering Chengannur`
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="e.g. maya@example.com"
-                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
+                    placeholder="e.g. sarin@ceconline.edu"
+                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
                       errors.email
                         ? 'border-rose-500/80 bg-rose-500/[0.04]'
                         : 'border-slate-700/80 hover:border-slate-600'
@@ -693,7 +693,7 @@ Venue:       College of Engineering Chengannur`
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="10-digit number"
-                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
+                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
                       errors.phone
                         ? 'border-rose-500/80 bg-rose-500/[0.04]'
                         : 'border-slate-700/80 hover:border-slate-600'
@@ -733,7 +733,7 @@ Venue:       College of Engineering Chengannur`
                     value={formData.institution}
                     onChange={handleChange}
                     placeholder="e.g. CE Chengannur"
-                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
+                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
                       errors.institution
                         ? 'border-rose-500/80 bg-rose-500/[0.04]'
                         : 'border-slate-700/80 hover:border-slate-600'
@@ -763,7 +763,7 @@ Venue:       College of Engineering Chengannur`
                     value={formData.department}
                     onChange={handleChange}
                     placeholder="e.g. Computer Science"
-                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
+                    className={`w-full bg-[#050b14] border text-white text-sm px-3.5 py-2.5 rounded-lg transition-colors placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 ${
                       errors.department
                         ? 'border-rose-500/80 bg-rose-500/[0.04]'
                         : 'border-slate-700/80 hover:border-slate-600'

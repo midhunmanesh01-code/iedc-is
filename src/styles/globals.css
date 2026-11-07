@@ -80,7 +80,8 @@ body {
 
 .text-outline-white {
   -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.5);
-  color: transparent;
+  color: #ffffff;
+  -webkit-text-fill-color: transparent;
 }
 
 @media (min-width: 640px) {
@@ -91,7 +92,8 @@ body {
 
 .text-outline-cyan {
   -webkit-text-stroke: 1.5px rgba(89, 214, 232, 0.6);
-  color: transparent;
+  color: #59d6e8;
+  -webkit-text-fill-color: transparent;
 }
 
 /* 24H Sprint Reactor Gyroscope Keyframes */

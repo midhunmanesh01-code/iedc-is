@@ -350,7 +350,7 @@ const PipelineFlow: React.FC = () => {
               <span
                 className="block font-mono text-[10px] uppercase tracking-wider transition-colors duration-300 select-none"
                 style={{
-                  color: isGlow ? '#f5f7fa' : '#6e94b8',
+                  color: isGlow ? '#f5f7fa' : '#8bb1d6',
                   fontWeight: isGlow ? 700 : 500,
                 }}
               >
@@ -463,7 +463,7 @@ export const About: React.FC = () => {
                   <p className="text-sm sm:text-[15px] text-[#9bbad6] leading-relaxed mb-3">
                     To create a high-intensity environment where student ideas are stress-tested, refined, and transformed into ventures that matter — all within 24 hours of non-stop building.
                   </p>
-                  <p className="text-xs sm:text-sm text-[#6e94b8] leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#8bb1d6] leading-relaxed">
                     Organized by {EVENT_CONFIG.organizer}, we provide the critical initial catalyst that bridges academic theory and real-world execution.
                   </p>
                 </div>
@@ -527,7 +527,7 @@ export const About: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <div className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#6e94b8] mt-1.5">
+                <div className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#8bb1d6] mt-1.5">
                   {stat.label}
                 </div>
               </div>
