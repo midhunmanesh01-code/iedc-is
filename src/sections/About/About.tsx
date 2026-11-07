@@ -11,19 +11,24 @@ const AnimatedNumber: React.FC<{
   readonly color: string
 }> = ({ value, color }) => {
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: false, margin: '-60px' })
-  const [display, setDisplay] = useState('0')
+  const num = parseInt(value, 10)
+  const isNumeric = !isNaN(num)
+
+  // Trigger when entering view, only reset when completely off-screen so user never sees it snap
+  const isInView = useInView(ref, { once: false, amount: 0.1 })
+  const [display, setDisplay] = useState<string>(() => (isNumeric ? '0' : value))
 
   useEffect(() => {
+    if (!isNumeric) {
+      setDisplay(value)
+      return
+    }
+
     if (!isInView) {
       setDisplay('0')
       return
     }
-    const num = parseInt(value, 10)
-    if (isNaN(num)) {
-      setDisplay(value)
-      return
-    }
+
     const duration = 1200
     let rafId: number
     const start = performance.now()
@@ -40,12 +45,11 @@ const AnimatedNumber: React.FC<{
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
     }
-  }, [isInView, value])
+  }, [isInView, isNumeric, num, value])
 
   return (
     <div ref={ref} className={`font-mono text-3xl sm:text-4xl lg:text-5xl font-black ${color}`}>
-      {isInView ? display : '0'}
-      {isInView && value.replace(/[0-9]/g, '')}
+      {isNumeric ? (isInView ? display : '0') : value}
     </div>
   )
 }
@@ -505,7 +509,7 @@ export const About: React.FC = () => {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: false, margin: '-60px' }}
+            viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.5 }}
             className="flex flex-wrap items-center justify-center gap-8 sm:gap-12 lg:gap-20 mb-16 sm:mb-24 py-8 sm:py-10"
           >
