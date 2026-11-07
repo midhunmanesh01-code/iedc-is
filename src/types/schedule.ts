@@ -1,17 +1,8 @@
-export type ScheduleCategory =
-  | 'ceremony'
-  | 'hacking'
-  | 'workshop'
-  | 'mentoring'
-  | 'pitch'
-  | 'break'
-
 export interface ScheduleItem {
   readonly id: string
   readonly time: string
   readonly title: string
   readonly description: string
-  readonly category: ScheduleCategory
   readonly venue: string
   readonly isHighlight?: boolean
 }
@@ -21,6 +12,7 @@ export interface ScheduleDay {
   readonly dayLabel: string
   readonly dateLabel: string
   readonly theme: string
+  readonly timeRange: string
   readonly items: readonly ScheduleItem[]
 }
 
