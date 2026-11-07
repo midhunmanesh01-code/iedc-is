@@ -49,6 +49,14 @@ function cleanupLenis() {
   }
 }
 
+export interface ScrollOptions {
+  offset?: number
+  duration?: number
+  immediate?: boolean
+  lock?: boolean
+  onComplete?: () => void
+}
+
 export function useSmoothScroll() {
   useEffect(() => {
     subscriberCount++
@@ -62,14 +70,39 @@ export function useSmoothScroll() {
     }
   }, [])
 
-  const scrollTo = (target: string | HTMLElement, offset: number = -70) => {
+  const scrollTo = (
+    target: string | HTMLElement,
+    optionsOrOffset: number | ScrollOptions = -70
+  ) => {
+    const options: ScrollOptions =
+      typeof optionsOrOffset === 'number'
+        ? { offset: optionsOrOffset }
+        : optionsOrOffset
+
+    const offset = options.offset ?? -70
+
     if (sharedLenis) {
-      sharedLenis.scrollTo(target, { offset })
+      sharedLenis.scrollTo(target, {
+        offset,
+        duration: options.duration,
+        immediate: options.immediate,
+        lock: options.lock,
+        onComplete: options.onComplete ? () => options.onComplete!() : undefined,
+      })
     } else {
       const element = typeof target === 'string' ? document.querySelector(target) : target
       if (element) {
         const top = element.getBoundingClientRect().top + window.scrollY + offset
-        window.scrollTo({ top, behavior: 'smooth' })
+        window.scrollTo({ top, behavior: options.immediate ? 'instant' : 'smooth' })
+        if (options.onComplete) {
+          if (options.immediate) {
+            options.onComplete()
+          } else {
+            setTimeout(options.onComplete, (options.duration ?? 0.4) * 1000)
+          }
+        }
+      } else if (options.onComplete) {
+        options.onComplete()
       }
     }
   }

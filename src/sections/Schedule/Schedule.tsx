@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { Calendar, ChevronDown, Clock, Bell, ArrowRight } from 'lucide-react'
 import { Container } from '@/components/common/Container'
 import { SCHEDULE_CONFIG } from '@/config/schedule'
@@ -8,9 +9,9 @@ import { ScheduleDay } from './ScheduleDay'
 export const Schedule: React.FC = () => {
   const { scrollTo } = useSmoothScroll()
 
-  // Track open state for Day 1 and Day 2 independently
+  // Day 1 open by default so the timeline is already visible when accessing the section
   const [openDays, setOpenDays] = useState<Record<number, boolean>>({
-    1: false,
+    1: true,
     2: false,
   })
 
@@ -18,19 +19,16 @@ export const Schedule: React.FC = () => {
   const card1Ref = useRef<HTMLDivElement>(null)
   const card2Ref = useRef<HTMLDivElement>(null)
 
-  const toggleDay = (dayNumber: number) => {
-    const isClosing = Boolean(openDays[dayNumber])
-    const cardEl = dayNumber === 1 ? card1Ref.current : card2Ref.current
-
-    // If closing from the header and user has scrolled down into the card,
-    // anchor back to the card header smoothly
-    if (isClosing && cardEl) {
-      const rect = cardEl.getBoundingClientRect()
-      if (rect.top < 80) {
-        scrollTo(cardEl, -90)
-      }
+  // Listen for navigation clicks to auto-expand schedule
+  React.useEffect(() => {
+    const handleOpenSchedule = () => {
+      setOpenDays((prev) => ({ ...prev, 1: true }))
     }
+    window.addEventListener('iedc:open-schedule', handleOpenSchedule)
+    return () => window.removeEventListener('iedc:open-schedule', handleOpenSchedule)
+  }, [])
 
+  const toggleDay = (dayNumber: number) => {
     setOpenDays((prev) => ({
       ...prev,
       [dayNumber]: !prev[dayNumber],
@@ -42,8 +40,25 @@ export const Schedule: React.FC = () => {
     const cardEl = dayNumber === 1 ? card1Ref.current : card2Ref.current
     if (cardEl) {
       const rect = cardEl.getBoundingClientRect()
-      if (rect.top < 80) {
-        scrollTo(cardEl, -90)
+      // If user has scrolled down and the card header is above or near the top
+      if (rect.top < 60) {
+        let collapsed = false
+        const collapseOnce = () => {
+          if (!collapsed) {
+            collapsed = true
+            setOpenDays((prev) => ({ ...prev, [dayNumber]: false }))
+          }
+        }
+
+        scrollTo(cardEl, {
+          offset: -85,
+          duration: 0.38,
+          onComplete: collapseOnce,
+        })
+
+        // Safety fallback: ensure collapse occurs even if scroll animation is interrupted
+        setTimeout(collapseOnce, 450)
+        return
       }
     }
     setOpenDays((prev) => ({ ...prev, [dayNumber]: false }))
@@ -56,7 +71,7 @@ export const Schedule: React.FC = () => {
     <section
       id="schedule"
       aria-label="Event Schedule"
-      className="py-16 sm:py-24 lg:py-32 relative border-b border-[#59d6e8]/15 bg-[#07101f] min-h-[580px]"
+      className="py-16 sm:py-24 lg:py-32 relative border-b border-[#59d6e8]/15 bg-[#07101f] min-h-[580px] [overflow-anchor:none]"
     >
       {/* Background Subtle Ambient Glows */}
       <div
@@ -101,7 +116,7 @@ export const Schedule: React.FC = () => {
               <div
                 key={day.dayNumber}
                 ref={cardRef}
-                className={`rounded-2xl border transition-colors duration-200 overflow-hidden ${
+                className={`rounded-2xl border transition-colors duration-200 overflow-hidden [overflow-anchor:none] ${
                   isOpen
                     ? 'bg-[#0c182c] border-amber-400/40 shadow-xl shadow-black/40'
                     : 'bg-[#091426]/85 border-slate-800/90 hover:border-slate-700/80 hover:bg-[#0b172a]'
@@ -112,6 +127,7 @@ export const Schedule: React.FC = () => {
                   type="button"
                   onClick={() => toggleDay(day.dayNumber)}
                   aria-expanded={isOpen}
+                  aria-controls={`schedule-day-${day.dayNumber}-details`}
                   className="w-full p-4 sm:p-5 text-left cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 select-none"
                 >
                   {/* Top Notification Bar */}
@@ -143,73 +159,107 @@ export const Schedule: React.FC = () => {
                     </div>
 
                     {/* Smooth Rotating Chevron Indicator */}
-                    <div
-                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    <motion.div
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0 transition-colors duration-200 ${
                         isOpen
-                          ? 'bg-amber-400 text-slate-950 shadow-[0_0_12px_rgba(255,201,40,0.35)] rotate-180'
-                          : 'bg-white/5 text-slate-400 group-hover:bg-white/10 group-hover:text-white rotate-0'
+                          ? 'bg-amber-400 text-slate-950 shadow-[0_0_12px_rgba(255,201,40,0.35)]'
+                          : 'bg-white/5 text-slate-400 group-hover:bg-white/10 group-hover:text-white'
                       }`}
                     >
                       <ChevronDown className="w-4 h-4" />
-                    </div>
+                    </motion.div>
                   </div>
 
-                  {/* Collapsed Highlights Preview Strip */}
-                  {!isOpen && (
-                    <div className="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
-                      <div className="flex items-center gap-1.5 overflow-hidden pr-2">
-                        {previewHighlights.map((hl, hIdx) => (
-                          <span
-                            key={hIdx}
-                            className="inline-flex items-center text-[11px] font-mono text-slate-300 bg-white/[0.03] px-2 py-0.5 rounded border border-white/5 whitespace-nowrap"
-                          >
-                            {hl}
-                          </span>
-                        ))}
-                      </div>
+                  {/* Collapsed Highlights Preview Strip with Buttery Smooth Transition */}
+                  <AnimatePresence initial={false}>
+                    {!isOpen && (
+                      <motion.div
+                        key={`preview-${day.dayNumber}`}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.28, ease: [0.25, 1, 0.5, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-3 pt-2.5 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+                          <div className="flex items-center gap-1.5 overflow-hidden pr-2">
+                            {previewHighlights.map((hl, hIdx) => (
+                              <span
+                                key={hIdx}
+                                className="inline-flex items-center text-[11px] font-mono text-slate-300 bg-white/[0.03] px-2 py-0.5 rounded border border-white/5 whitespace-nowrap"
+                              >
+                                {hl}
+                              </span>
+                            ))}
+                          </div>
 
-                      <span className="inline-flex items-center gap-1 text-amber-300 font-mono text-[11px] font-semibold shrink-0 group-hover:translate-x-0.5 transition-transform">
-                        <span>View</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  )}
+                          <span className="inline-flex items-center gap-1 text-amber-300 font-mono text-[11px] font-semibold shrink-0 group-hover:translate-x-0.5 transition-transform">
+                            <span>View</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </button>
 
-                {/* ── Refined Hardware-Accelerated Expansion & Dissolve on Close ── */}
-                <div
-                  className="grid overflow-hidden"
-                  style={{
-                    gridTemplateRows: isOpen ? '1fr' : '0fr',
-                    transition: isOpen
-                      ? 'grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1)'
-                      : 'grid-template-rows 0.28s cubic-bezier(0.25, 1, 0.5, 1)',
-                  }}
-                >
-                  <div className="min-h-0 overflow-hidden">
-                    <div
-                      className={`p-4 sm:p-5 pt-3 border-t border-white/[0.08] ${
-                        isOpen
-                          ? 'opacity-100 translate-y-0 transition-all duration-300 delay-75 ease-out'
-                          : 'opacity-0 -translate-y-2 transition-all duration-150 ease-in pointer-events-none'
-                      }`}
+                {/* ── Buttery Smooth Expand & Collapse Disclosure ── */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key={`details-${day.dayNumber}`}
+                      id={`schedule-day-${day.dayNumber}-details`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.38, ease: [0.25, 1, 0.5, 1] }}
+                      className="overflow-hidden"
                     >
-                      <ScheduleDay day={day} />
+                      <div className="p-4 sm:p-5 pt-3 border-t border-white/[0.08]">
+                        <ScheduleDay day={day} />
 
-                      {/* Bottom Collapse Button */}
-                      <div className="pt-3 text-center">
-                        <button
-                          type="button"
-                          onClick={() => handleBottomCollapse(day.dayNumber)}
-                          className="inline-flex items-center gap-1 text-xs font-mono text-slate-400 hover:text-amber-300 transition-colors cursor-pointer py-1 px-3 rounded-full hover:bg-white/5"
-                        >
-                          <span>Collapse {day.dayLabel}</span>
-                          <span>↑</span>
-                        </button>
+                        {/* Bottom Action Strip */}
+                        <div className="pt-3.5 mt-2 flex items-center justify-between gap-2 border-t border-white/[0.06]">
+                          <button
+                            type="button"
+                            onClick={() => handleBottomCollapse(day.dayNumber)}
+                            className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-amber-300 transition-colors cursor-pointer py-1.5 px-3 rounded-full hover:bg-white/5"
+                          >
+                            <span>Fold {day.dayLabel}</span>
+                            <span aria-hidden="true">↑</span>
+                          </button>
+
+                          {day.dayNumber === 1 ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setOpenDays((prev) => ({ ...prev, 2: true }))
+                                if (card2Ref.current) {
+                                  scrollTo(card2Ref.current, -85)
+                                }
+                              }}
+                              className="inline-flex items-center gap-1.5 text-xs font-mono text-amber-300 hover:text-white bg-amber-400/10 hover:bg-amber-400/25 border border-amber-400/30 transition-all py-1.5 px-3.5 rounded-full cursor-pointer shadow-sm shadow-amber-400/10"
+                            >
+                              <span>View Day 02 Schedule</span>
+                              <span aria-hidden="true">→</span>
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => scrollTo('#register', -85)}
+                              className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-300 hover:text-white bg-cyan-400/10 hover:bg-cyan-400/25 border border-cyan-400/30 transition-all py-1.5 px-3.5 rounded-full cursor-pointer shadow-sm shadow-cyan-400/10"
+                            >
+                              <span>Proceed to Register</span>
+                              <span aria-hidden="true">→</span>
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )
           })}

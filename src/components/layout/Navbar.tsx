@@ -65,6 +65,9 @@ export const Navbar: React.FC = () => {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
+    if (href === '#schedule') {
+      window.dispatchEvent(new CustomEvent('iedc:open-schedule'))
+    }
     if (isMobileMenuOpen) {
       setClickedHref(href)
       setTimeout(() => {

@@ -34,6 +34,7 @@ export const Hero: React.FC<HeroProps> = ({ isReady = false }) => {
 
   const handleScheduleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
+    window.dispatchEvent(new CustomEvent('iedc:open-schedule'))
     scrollTo('#schedule')
   }
 
