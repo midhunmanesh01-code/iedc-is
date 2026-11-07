@@ -71,7 +71,7 @@ export function useSmoothScroll() {
   }, [])
 
   const scrollTo = (
-    target: string | HTMLElement,
+    target: string | HTMLElement | number,
     optionsOrOffset: number | ScrollOptions = -70
   ) => {
     const options: ScrollOptions =
@@ -90,10 +90,8 @@ export function useSmoothScroll() {
         onComplete: options.onComplete ? () => options.onComplete!() : undefined,
       })
     } else {
-      const element = typeof target === 'string' ? document.querySelector(target) : target
-      if (element) {
-        const top = element.getBoundingClientRect().top + window.scrollY + offset
-        window.scrollTo({ top, behavior: options.immediate ? 'instant' : 'smooth' })
+      if (typeof target === 'number') {
+        window.scrollTo({ top: target, behavior: options.immediate ? 'instant' : 'smooth' })
         if (options.onComplete) {
           if (options.immediate) {
             options.onComplete()
@@ -101,8 +99,21 @@ export function useSmoothScroll() {
             setTimeout(options.onComplete, (options.duration ?? 0.4) * 1000)
           }
         }
-      } else if (options.onComplete) {
-        options.onComplete()
+      } else {
+        const element = typeof target === 'string' ? document.querySelector(target) : target
+        if (element) {
+          const top = element.getBoundingClientRect().top + window.scrollY + offset
+          window.scrollTo({ top, behavior: options.immediate ? 'instant' : 'smooth' })
+          if (options.onComplete) {
+            if (options.immediate) {
+              options.onComplete()
+            } else {
+              setTimeout(options.onComplete, (options.duration ?? 0.4) * 1000)
+            }
+          }
+        } else if (options.onComplete) {
+          options.onComplete()
+        }
       }
     }
   }

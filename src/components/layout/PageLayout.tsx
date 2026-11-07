@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
+import { ScrollSpine } from './ScrollSpine'
 
 export interface PageLayoutProps {
   readonly children: React.ReactNode
@@ -34,6 +35,9 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
       />
 
       <Navbar />
+
+      {/* Season of Code Inspired Right-Side Floating Scroll Spine */}
+      <ScrollSpine />
 
       <main id="main-content" className="flex-1 relative z-10 pt-16 sm:pt-20">
         {children}
