@@ -210,7 +210,7 @@ The styling foundation is defined using Tailwind CSS v4 design tokens in [`src/s
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/iedc-bootcamp-cec/iedc-is.git
+   git clone https://github.com/midhunmanesh01-code/iedc-is.git
    cd iedc-is
    ```
 
