@@ -253,6 +253,103 @@ const SprintPillars: React.FC = () => {
   )
 }
 
+/* ── Campus to Market Pipeline Steps (Ideate -> Build -> Launch) ── */
+interface PipelineStepItem {
+  readonly icon: React.FC<{ className?: string; style?: React.CSSProperties }>
+  readonly label: string
+  readonly color: string
+}
+
+const PIPELINE_STEPS: readonly PipelineStepItem[] = [
+  { icon: Lightbulb, label: 'Ideate', color: '#59d6e8' },
+  { icon: Zap, label: 'Build', color: '#ffc928' },
+  { icon: Target, label: 'Launch', color: '#59d6e8' },
+]
+
+const PipelineFlow: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(containerRef, { margin: '-60px 0px -60px 0px', amount: 0.2 })
+  const [activeStep, setActiveStep] = useState(0)
+
+  useEffect(() => {
+    if (!isInView) {
+      setActiveStep(0)
+      return
+    }
+
+    // Natural snappy rhythm: Ideate (0) -> Build (1) -> Launch (2) every 600ms
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % 3)
+    }, 600)
+
+    return () => clearInterval(interval)
+  }, [isInView])
+
+  return (
+    <div ref={containerRef} className="shrink-0 flex items-center gap-3 select-none">
+      {PIPELINE_STEPS.map((step, i) => {
+        const Icon = step.icon
+        const isGlow = isInView && activeStep === i
+
+        return (
+          <React.Fragment key={step.label}>
+            {i > 0 && (
+              <div className="flex items-center gap-1">
+                <div
+                  className={`w-1 h-1 rounded-full transition-colors duration-300 ${
+                    isInView && activeStep >= i ? 'bg-[#59d6e8]/60' : 'bg-[#59d6e8]/25'
+                  }`}
+                />
+                <div
+                  className={`w-4 h-px transition-colors duration-300 ${
+                    isInView && activeStep >= i ? 'bg-[#59d6e8]/50' : 'bg-[#59d6e8]/15'
+                  }`}
+                />
+                <div
+                  className={`w-1 h-1 rounded-full transition-colors duration-300 ${
+                    isInView && activeStep >= i ? 'bg-[#59d6e8]/60' : 'bg-[#59d6e8]/25'
+                  }`}
+                />
+              </div>
+            )}
+
+            <div className="text-center">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-1.5 transition-all duration-300 ease-out"
+                style={{
+                  backgroundColor: isGlow ? `${step.color}1e` : `${step.color}0a`,
+                  border: `1px solid ${isGlow ? `${step.color}80` : `${step.color}18`}`,
+                  boxShadow: isGlow
+                    ? `0 0 14px ${step.color}50, 0 0 28px ${step.color}20`
+                    : 'none',
+                  transform: isGlow ? 'scale(1.06)' : 'scale(1)',
+                }}
+              >
+                <Icon
+                  className="w-4 h-4 transition-all duration-300 ease-out"
+                  style={{
+                    color: step.color,
+                    filter: isGlow ? `drop-shadow(0 0 6px ${step.color})` : 'none',
+                  }}
+                />
+              </div>
+              <span
+                className="block font-mono text-[10px] uppercase tracking-wider transition-colors duration-300 select-none"
+                style={{
+                  color: isGlow ? '#f5f7fa' : '#6e94b8',
+                  fontWeight: isGlow ? 700 : 500,
+                }}
+              >
+                {step.label}
+              </span>
+            </div>
+          </React.Fragment>
+        )
+      })}
+    </div>
+  )
+}
+
 export const About: React.FC = () => {
 
   return (
@@ -442,13 +539,13 @@ export const About: React.FC = () => {
             <SprintPillars />
           </div>
 
-          {/* ── Bottom CTA banner ── */}
+          {/* ── Bottom CTA banner (Desktop view; completely removed in mobile view) ── */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.6 }}
-            className="mt-16 sm:mt-24 relative rounded-xl overflow-hidden"
+            className="hidden md:block mt-16 sm:mt-24 relative rounded-xl overflow-hidden"
           >
             <div
               className="absolute inset-0"
@@ -459,47 +556,24 @@ export const About: React.FC = () => {
               style={{ background: 'radial-gradient(ellipse 60% 80% at 0% 50%, rgba(255,201,40,0.08) 0%, transparent 60%)' }}
             />
 
-            <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8 p-6 sm:p-8 lg:p-10">
-              <div className="shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ffc928]/20 to-[#ffc928]/5 border border-[#ffc928]/20 flex items-center justify-center">
-                <Rocket className="w-7 h-7 text-[#ffc928]" />
+            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-8 p-6 md:p-8 lg:p-10">
+              <div className="flex items-center gap-5 sm:gap-6 flex-1 min-w-0 pr-2 lg:pr-6">
+                <div className="shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ffc928]/20 to-[#ffc928]/5 border border-[#ffc928]/20 flex items-center justify-center">
+                  <Rocket className="w-7 h-7 text-[#ffc928]" />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-display font-bold text-lg sm:text-xl text-[#f5f7fa] mb-1.5">
+                    From Campus to Market
+                  </h4>
+                  <p className="text-sm text-[#8aacc8] leading-relaxed">
+                    Engineers, designers, and strategists unite to form balanced squads. Winning teams receive direct support from {EVENT_CONFIG.organizer}, prototype grants, and priority access to state innovation pipelines.
+                  </p>
+                </div>
               </div>
 
-              <div className="flex-1">
-                <h4 className="font-display font-bold text-lg sm:text-xl text-[#f5f7fa] mb-1.5">
-                  From Campus to Market
-                </h4>
-                <p className="text-sm text-[#8aacc8] leading-relaxed">
-                  Engineers, designers, and strategists unite to form balanced squads. Winning teams receive direct support from {EVENT_CONFIG.organizer}, prototype grants, and priority access to state innovation pipelines.
-                </p>
-              </div>
-
-              {/* Pipeline — desktop only */}
-              <div className="shrink-0 hidden lg:flex items-center gap-3">
-                {[
-                  { icon: Lightbulb, label: 'Ideate', color: '#59d6e8' },
-                  { icon: Zap, label: 'Build', color: '#ffc928' },
-                  { icon: Target, label: 'Launch', color: '#59d6e8' },
-                ].map((step, i) => (
-                  <React.Fragment key={step.label}>
-                    {i > 0 && (
-                      <div className="flex items-center gap-1">
-                        <div className="w-1 h-1 rounded-full bg-[#59d6e8]/30" />
-                        <div className="w-4 h-px bg-[#59d6e8]/20" />
-                        <div className="w-1 h-1 rounded-full bg-[#59d6e8]/30" />
-                      </div>
-                    )}
-                    <div className="text-center">
-                      <div
-                        className="w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-1.5"
-                        style={{ backgroundColor: `${step.color}10`, border: `1px solid ${step.color}15` }}
-                      >
-                        <step.icon className="w-4 h-4" style={{ color: step.color }} />
-                      </div>
-                      <span className="font-mono text-[10px] text-[#6e94b8] uppercase tracking-wider">{step.label}</span>
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
+              {/* Pipeline — Ideate, Build, Launch glow sequentially */}
+              <PipelineFlow />
             </div>
           </motion.div>
         </div>
